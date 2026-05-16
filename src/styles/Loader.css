@@ -1,0 +1,182 @@
+/* ===== LOADER OVERLAY ===== */
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0f1c;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.loader-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* ===== CONTENT CARD ===== */
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.2rem;
+  z-index: 1;
+}
+
+/* ===== LOGO ===== */
+.loader-logo {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loader-logo-text {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ff5722, #e64a19);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: pulse-logo 1.8s ease-in-out infinite;
+}
+
+.loader-logo-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  border-top-color: #ff5722;
+  border-right-color: rgba(255, 87, 34, 0.3);
+  animation: spin 1s linear infinite;
+}
+
+/* Secondary glow ring */
+.loader-logo::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 87, 34, 0.12);
+  animation: spin-reverse 2.5s linear infinite;
+}
+
+/* ===== NAME ===== */
+.loader-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  animation: fadeSlideUp 0.6s ease 0.3s both;
+}
+
+/* ===== PROGRESS BAR ===== */
+.loader-bar-track {
+  width: 200px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 100px;
+  overflow: hidden;
+  animation: fadeSlideUp 0.6s ease 0.4s both;
+}
+
+.loader-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #ff5722, #ff8a65);
+  border-radius: 100px;
+  transition: width 0.05s linear;
+  position: relative;
+}
+
+/* Shimmer on fill */
+.loader-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4));
+  animation: shimmer 0.8s linear infinite;
+}
+
+/* ===== PERCENT ===== */
+.loader-percent {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 87, 34, 0.7);
+  letter-spacing: 0.12em;
+  animation: fadeSlideUp 0.6s ease 0.5s both;
+  min-width: 3ch;
+  text-align: center;
+}
+
+/* ===== DECORATIVE BLOBS ===== */
+.loader-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+.loader-blob-1 {
+  width: 400px;
+  height: 400px;
+  background: #ff5722;
+  top: -100px;
+  right: -100px;
+  animation: blobMove1 8s ease-in-out infinite alternate;
+}
+
+.loader-blob-2 {
+  width: 300px;
+  height: 300px;
+  background: #e64a19;
+  bottom: -80px;
+  left: -60px;
+  animation: blobMove2 10s ease-in-out infinite alternate;
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  to { transform: rotate(-360deg); }
+}
+
+@keyframes pulse-logo {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.7; }
+}
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(100%); }
+}
+
+@keyframes blobMove1 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(-40px, 60px) scale(1.1); }
+}
+
+@keyframes blobMove2 {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(50px, -30px) scale(1.15); }
+}

@@ -1,0 +1,141 @@
+.easter-egg-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(10px);
+}
+
+.terminal-container {
+  width: 90%;
+  max-width: 600px;
+  background: #1a1a1a;
+  border: 2px solid #00ff41;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+  font-family: 'Courier New', Courier, monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+  padding-bottom: 10px;
+}
+
+.terminal-title {
+  color: #00ff41;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.close-button {
+  background: transparent;
+  border: 1px solid #00ff41;
+  color: #00ff41;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.close-button:hover {
+  background: #00ff41;
+  color: #000;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  grid-template-rows: repeat(20, 1fr);
+  background: #000;
+  border: 1px solid #333;
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+
+.grid-cell {
+  border: 0.1px solid rgba(255, 255, 255, 0.05);
+}
+
+.snake-cell {
+  background: #00ff41;
+  box-shadow: 0 0 5px #00ff41;
+  border-radius: 2px;
+}
+
+.snake-head {
+  background: #fff;
+  z-index: 2;
+}
+
+.food-cell {
+  background: #ff0055;
+  box-shadow: 0 0 10px #ff0055;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+}
+
+.game-info {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  color: #00ff41;
+}
+
+.game-overlay {
+  position: absolute;
+  top: 50px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #00ff41;
+  z-index: 10;
+}
+
+.start-btn {
+  background: #00ff41;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+
+.instructions {
+  margin-top: 20px;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+@media (max-width: 480px) {
+  .terminal-container {
+    padding: 10px;
+  }
+  .game-info {
+    font-size: 0.8rem;
+  }
+}

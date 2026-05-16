@@ -1,0 +1,170 @@
+.skills-section {
+  position: relative;
+  background: var(--bg-secondary);
+}
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(180px, auto);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.bento-item {
+  position: relative;
+  border-radius: 2rem;
+  padding: 2.5rem;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 1px solid var(--border-color);
+}
+
+.bento-item.large {
+  grid-column: span 2;
+  grid-row: span 2;
+  background: linear-gradient(135deg, rgba(255, 87, 34, 0.05), rgba(0, 0, 0, 0));
+}
+
+.bento-item.medium {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+.bento-item.small {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+.bento-item:hover {
+  transform: translateY(-5px) scale(1.01);
+  border-color: rgba(255, 87, 34, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.bento-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  background: var(--accent-gradient);
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 8px 16px rgba(255, 87, 34, 0.2);
+}
+
+.skill-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.bento-item h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.skill-tag {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+.tech-logo {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  /* Filter to make icons slightly brighter/white on dark mode if needed, 
+     but Simple Icons usually look good as they are or can be colored via URL. 
+     We'll use standard colors for now. */
+}
+
+.bento-item:hover .skill-tag {
+  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+}
+
+.bento-bg-glow {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, var(--accent-primary) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(80px);
+}
+
+.bento-item:hover .bento-bg-glow {
+  opacity: 0.08;
+}
+
+.bento-content {
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+  .bento-item.large, .bento-item.medium, .bento-item.small {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+  .bento-item {
+    padding: 2rem;
+  }
+}
+
+.section-header {
+    margin-bottom: 3rem;
+}
+
+.section-subtitle {
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin-top: -2rem;
+}
+
+@media (max-width: 768px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}

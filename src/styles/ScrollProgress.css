@@ -1,0 +1,32 @@
+.scroll-progress-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px; /* Thin, elegant line */
+  background: transparent;
+  z-index: 10000; /* Extremely high to sit above navbar */
+  pointer-events: none;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: var(--accent-gradient);
+  width: 0%;
+  position: relative;
+  transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.scroll-progress-glow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 100%;
+  background: #fff;
+  box-shadow: 0 0 10px 4px var(--accent-primary), 0 0 20px 8px var(--accent-primary);
+  opacity: 0.8;
+  border-radius: 50%;
+}

@@ -1,0 +1,31 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.jsx';
+import Hero from '../sections/Hero.astro';
+import About from '../sections/About.astro';
+import Skills from '../sections/Skills.astro';
+import Projects from '../sections/Projects.astro';
+import Certifications from '../components/Certifications.jsx';
+import Contact from '../sections/Contact.astro';
+import { translations } from '../constants/translations';
+
+const lang = 'fr';
+---
+
+<Layout title="Bhilal CHITOU | Développeur Full-Stack & Mobile" lang={lang}>
+	<Navbar client:load lang={lang} translations={translations[lang]} />
+	<main>
+		<Hero lang={lang} />
+		<About lang={lang} />
+		<Skills lang={lang} />
+		<Projects lang={lang} />
+		<Certifications client:load t={translations[lang].certifications} />
+		<Contact lang={lang} />
+	</main>
+	
+	<footer style={{ textAlign: 'center', padding: '2rem', borderTop: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+		<div class="container">
+			<p>&copy; {new Date().getFullYear()} Bhilal CHITOU. All rights reserved.</p>
+		</div>
+	</footer>
+</Layout>

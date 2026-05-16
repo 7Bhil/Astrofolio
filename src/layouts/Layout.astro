@@ -1,0 +1,127 @@
+---
+interface Props {
+	title: string;
+	description?: string;
+	lang?: string;
+}
+
+import ScrollProgress from '../components/ScrollProgress.jsx';
+
+const { 
+	title, 
+	description = "Portfolio de Bhilal CHITOU, Développeur Full-Stack & Mobile basé au Bénin. Expert en React, Node.js, Django et React Native.",
+	lang = "fr" 
+} = Astro.props;
+
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang={lang} data-theme="dark">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/png" href="/favicon.png" />
+		<meta name="generator" content={Astro.generator} />
+		
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		
+		<!-- SEO Meta Tags -->
+		<meta name="author" content="Bhilal CHITOU" />
+		<meta name="keywords" content="Bhilal CHITOU, Développeur Full-Stack, Porto-Novo, Parakou, Bénin, React, React Native, Node.js, Django, Laravel, Cybersécurité, Freelance Bénin" />
+
+		<!-- Open Graph / Facebook -->
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:image" content="/og-image.png" />
+
+		<!-- Twitter -->
+		<meta property="twitter:card" content="summary_large_image" />
+		<meta property="twitter:title" content={title} />
+		<meta property="twitter:description" content={description} />
+		<meta property="twitter:image" content="/og-image.png" />
+
+		<meta name="theme-color" content="#0f172a" />
+
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Person",
+			"name": "Bhilal CHITOU",
+			"url": "https://7bhil.github.io/Bhilal/",
+			"image": "https://7bhil.github.io/Bhilal/me.jpeg",
+			"jobTitle": "Développeur Full-Stack & Mobile",
+			"address": {
+				"@type": "PostalAddress",
+				"addressLocality": "Porto-Novo",
+				"addressRegion": "Ouémé",
+				"addressCountry": "BJ"
+			},
+			"sameAs": [
+				"https://github.com/7Bhil/",
+				"https://www.linkedin.com/in/bhilal-chitou/",
+				"https://web.facebook.com/7Bhil",
+				"https://gitlab.com/7Bhil"
+			],
+			"description": "Développeur Full-Stack & Mobile basé au Bénin, expert en React, Node.js, Django et React Native."
+		}
+		</script>
+	</head>
+	<body>
+		<ScrollProgress client:load />
+		<slot />
+		<script>
+			// Intersection Observer for scroll animations
+			const observerCallback = (entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						entry.target.classList.add('active');
+					}
+				});
+			};
+
+			const observerOptions = {
+				root: null,
+				rootMargin: '0px',
+				threshold: 0.15
+			};
+
+			const observer = new IntersectionObserver(observerCallback, observerOptions);
+			
+			// Select all elements with the 'reveal' class
+			const elementsToObserve = document.querySelectorAll('.reveal');
+			elementsToObserve.forEach(el => observer.observe(el));
+		</script>
+	</body>
+</html>
+<style is:global>
+	:root {
+		--accent: 136, 58, 234;
+		--accent-light: 224, 204, 250;
+		--accent-dark: 49, 10, 101;
+		--accent-gradient: linear-gradient(
+			45deg,
+			rgb(var(--accent)),
+			rgb(var(--accent-light)) 30%,
+			white 60%
+		);
+	}
+	html {
+		font-family: system-ui, sans-serif;
+		background: #13151a;
+		background-size: 224px;
+	}
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+</style>

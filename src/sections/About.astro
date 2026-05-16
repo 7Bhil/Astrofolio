@@ -1,0 +1,76 @@
+---
+import { getTranslations } from '../utils/t';
+import '../styles/About.css';
+
+const { lang = 'fr' } = Astro.props;
+const t = getTranslations(lang);
+---
+
+<section id="about" class="section-padding about-section">
+  <div class="container">
+    <div class="about-header reveal">
+      <h2 class="section-title">{t('about.title')}</h2>
+    </div>
+
+    <div class="about-grid">
+      {/* Left Column: Bio */}
+      <div class="about-bio reveal reveal-stagger-1">
+        <div class="bio-block">
+          <div class="accent-line"></div>
+          <p class="about-text">
+            {t('about.bio1')}
+          </p>
+        </div>
+        
+        <p class="about-text mt-4">
+          {t('about.bio2')}
+        </p>
+      </div>
+
+      {/* Right Column: Experience & Education */}
+      <div class="about-timeline">
+        
+        {/* Experience Group */}
+        <div class="timeline-group reveal reveal-stagger-2">
+          <div class="timeline-label">
+            <span class="label-number">01</span>
+            <h3>{t('about.experience')}</h3>
+          </div>
+          
+          <div class="timeline-cards">
+            <div class="timeline-card glass-panel">
+              <span class="timeline-date">2025 — 2026</span>
+              <h4 class="timeline-role">{t('about.exp1_title')}</h4>
+              <span class="timeline-company">{t('about.exp1_company')}</span>
+              <p class="timeline-desc">{t('about.exp1_desc')}</p>
+            </div>
+            
+            <div class="timeline-card glass-panel">
+              <span class="timeline-date">2023 — 2025</span>
+              <h4 class="timeline-role">{t('about.exp2_title')}</h4>
+              <span class="timeline-company">{t('about.exp2_company')}</span>
+              <p class="timeline-desc">{t('about.exp2_desc')}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Education Group */}
+        <div class="timeline-group reveal reveal-stagger-3 mt-12">
+          <div class="timeline-label">
+            <span class="label-number">02</span>
+            <h3>{t('about.education')}</h3>
+          </div>
+          
+          <div class="timeline-cards">
+            <div class="timeline-card glass-panel">
+              <span class="timeline-date">{t('about.edu1_year')}</span>
+              <h4 class="timeline-role">{t('about.edu1_title')}</h4>
+              <span class="timeline-company">{t('about.edu1_school')}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

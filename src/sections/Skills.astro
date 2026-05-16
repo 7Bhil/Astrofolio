@@ -1,0 +1,106 @@
+---
+import { Layout, Server, Smartphone, ShieldCheck } from 'lucide-react';
+import { getTranslations } from '../utils/t';
+import '../styles/Skills.css';
+
+const { lang = 'fr' } = Astro.props;
+const t = getTranslations(lang);
+
+const skillCategories = [
+  {
+    id: 'frontend',
+    title: t('skills.frontend'),
+    icon: Layout,
+    skills: [
+      { name: 'React', icon: 'react' },
+      { name: 'Next.js', icon: 'nextdotjs' },
+      { name: 'Electron', icon: 'electron' },
+      { name: 'JavaScript', icon: 'javascript' },
+      { name: 'Tailwind CSS', icon: 'tailwindcss' },
+      { name: 'HTML5', icon: 'html5' },
+      { name: 'CSS3', icon: 'css3' }
+    ],
+    size: 'large'
+  },
+  {
+    id: 'backend',
+    title: t('skills.backend'),
+    icon: Server,
+    skills: [
+      { name: 'Node.js', icon: 'nodedotjs' },
+      { name: 'Express', icon: 'express' },
+      { name: 'Django', icon: 'django' },
+      { name: 'PostgreSQL', icon: 'postgresql' },
+      { name: 'MongoDB', icon: 'mongodb' },
+      { name: 'Supabase', icon: 'supabase' },
+      { name: 'PHP', icon: 'php' }
+    ],
+    size: 'medium'
+  },
+  {
+    id: 'mobile',
+    title: t('skills.mobile'),
+    icon: Smartphone,
+    skills: [
+      { name: 'React Native', icon: 'react' }
+    ],
+    size: 'small'
+  },
+  {
+    id: 'tools_security',
+    title: t('skills.tools_security'),
+    icon: ShieldCheck,
+    skills: [
+      { name: 'Kali Linux', icon: 'kalilinux' },
+      { name: 'Git', icon: 'git' },
+      { name: 'Docker', icon: 'docker' },
+      { name: 'Linux', icon: 'linux' }
+    ],
+    size: 'medium'
+  }
+];
+
+const getIconUrl = (slug) => `https://cdn.simpleicons.org/${slug}`;
+---
+
+<section id="skills" class="section-padding skills-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">{t('skills.title')}</h2>
+      <p class="section-subtitle">{t('skills.subtitle')}</p>
+    </div>
+
+    <div class="bento-grid">
+      {skillCategories.map((category, index) => (
+        <div 
+          class={`bento-item ${category.size} glass-panel reveal`} 
+          style={{ transitionDelay: `${index * 0.1}s` }}
+        >
+          <div class="bento-content">
+            <div class="bento-header">
+              <div class="icon-wrapper">
+                <category.icon class="skill-icon" />
+              </div>
+              <h3>{category.title}</h3>
+            </div>
+            
+            <div class="skill-tags">
+              {category.skills.map((skill) => (
+                <span class="skill-tag">
+                  <img 
+                    src={getIconUrl(skill.icon)} 
+                    alt={skill.name} 
+                    class="tech-logo"
+                    loading="lazy"
+                  />
+                  {skill.name}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div class="bento-bg-glow"></div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

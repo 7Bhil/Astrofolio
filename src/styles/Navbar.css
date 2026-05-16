@@ -1,0 +1,241 @@
+.navbar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 1.5rem 0;
+}
+
+.navbar-wrapper.scrolled {
+  padding: 1rem 0;
+  background: transparent; /* Remove full-width background, the pill provides the background */
+  backdrop-filter: none;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  max-width: 100%;
+  padding: 0 4rem;
+}
+
+@media (max-width: 1024px) {
+  .nav-container {
+    padding: 0 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-container {
+    padding: 0 1.25rem;
+  }
+}
+
+.logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0);
+  z-index: 10;
+}
+
+@media (min-width: 1025px) {
+  .logo-scrolled {
+    transform: translateX(20vw);
+  }
+}
+
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  /* Add base transitions in case we move it, though the pill is usually centered */
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The central pill itself acts as the background when scrolled */
+.floating-pill {
+  padding: 0.75rem 2.5rem;
+  border-radius: 9999px;
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all 0.5s ease;
+}
+
+.navbar-wrapper.scrolled .floating-pill {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.nav-link {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  opacity: 1;
+  color: white;
+}
+
+/* Specific light mode fix for hovered link on the floating pill */
+.navbar-wrapper.scrolled .nav-link:hover {
+  color: var(--accent-primary);
+}
+
+.nav-actions-desktop {
+  display: flex;
+  align-items: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0); /* Start at the far right edge of the container */
+  z-index: 10;
+}
+
+@media (min-width: 1025px) {
+  .actions-scrolled {
+    transform: translateX(-20vw);
+  }
+}
+
+.btn-sm {
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+}
+
+.rounded-pill {
+  border-radius: 9999px;
+}
+
+/* Mobile Nav */
+.nav-mobile-toggle {
+  display: none;
+  align-items: center;
+}
+
+.menu-toggle {
+  color: var(--text-primary);
+}
+
+.nav-mobile {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.nav-mobile.open {
+  max-height: 400px;
+  padding: 1rem 0;
+  box-shadow: var(--shadow-lg);
+}
+
+.nav-mobile-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.nav-mobile-link {
+  display: block;
+  padding: 0.5rem 0;
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.nav-mobile-link:hover {
+  color: var(--accent-primary);
+}
+
+.text-accent {
+  color: var(--accent-primary);
+}
+
+/* Navbar Controls (Theme & Lang) Highlighted */
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 1.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-color);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.nav-controls:hover {
+  border-color: var(--accent-primary);
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  opacity: 0.8;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 50%;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+  background: rgba(128, 128, 128, 0.1);
+  color: var(--accent-primary);
+}
+
+.lang-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-left: 0.4rem;
+}
+
+.nav-mobile-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+@media (max-width: 768px) {
+  .nav-desktop, .nav-actions-desktop {
+    display: none;
+  }
+  .nav-mobile-toggle {
+    display: flex;
+  }
+}

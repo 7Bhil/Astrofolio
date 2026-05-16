@@ -1,0 +1,53 @@
+---
+import { ExternalLink, Github } from 'lucide-react';
+import '../styles/ProjectCard.css';
+
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  image: string | any;
+  githubUrl?: string;
+  liveUrl?: string;
+}
+
+const { title, description, tags, image, githubUrl, liveUrl } = Astro.props;
+const imageSrc = typeof image === 'string' ? image : image?.src;
+---
+
+<div class="project-card glass-panel">
+  <div class="project-image-container">
+    {imageSrc ? (
+      <img src={imageSrc} alt={title} class="project-image" loading="lazy" />
+    ) : (
+      <div class="project-image-placeholder">
+        <span>Project Image</span>
+      </div>
+    )}
+    <div class="project-links-overlay">
+      {githubUrl && (
+        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="GitHub Repository">
+          <Github size={20} />
+        </a>
+      )}
+      {liveUrl && (
+        <a href={liveUrl} target="_blank" rel="noopener noreferrer" class="project-link-btn" aria-label="Live Demo">
+          <ExternalLink size={20} />
+        </a>
+      )}
+    </div>
+  </div>
+  
+  <div class="project-content">
+    <h3 class="project-title">{title}</h3>
+    <p class="project-description">{description}</p>
+    
+    <div class="project-tags">
+      {tags.map((tag) => (
+        <span class="project-tag">
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>

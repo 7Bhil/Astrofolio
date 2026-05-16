@@ -1,0 +1,142 @@
+.about-section {
+  position: relative;
+  background: var(--bg-primary); /* Use primary very dark blue */
+}
+
+.about-header {
+  margin-bottom: 4rem;
+}
+
+.about-header .section-title {
+  color: var(--accent-primary);
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 0;
+}
+
+.about-header .section-title::after {
+  display: none; /* Hide the default underline to match screenshot */
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: flex-start;
+}
+
+/* Left Bio */
+.about-bio {
+  display: flex;
+  flex-direction: column;
+}
+
+.bio-block {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.accent-line {
+  width: 4px;
+  background-color: var(--accent-primary);
+  border-radius: 2px;
+  flex-shrink: 0;
+  /* Adjust height automatically to content */
+}
+
+.about-text {
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.mt-4 { margin-top: 1.5rem; }
+.mt-12 { margin-top: 3rem; }
+
+/* Right Timeline */
+.about-timeline {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.timeline-label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.label-number {
+  background-color: rgba(255, 87, 34, 0.15); /* Orange transparent */
+  color: var(--accent-primary);
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.timeline-label h3 {
+  font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.timeline-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.timeline-card {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  transition: all 0.3s ease;
+}
+
+.timeline-card:hover {
+  border-color: rgba(255, 87, 34, 0.3);
+  transform: translateX(5px);
+}
+
+.timeline-date {
+  color: var(--accent-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.timeline-role {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.timeline-company {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  font-style: italic;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.timeline-desc {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 968px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 4rem;
+  }
+}
