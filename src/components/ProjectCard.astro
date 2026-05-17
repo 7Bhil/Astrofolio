@@ -1,5 +1,6 @@
 ---
 import { ExternalLink, Github } from 'lucide-react';
+import { Image } from 'astro:assets';
 import '../styles/ProjectCard.css';
 
 interface Props {
@@ -12,13 +13,12 @@ interface Props {
 }
 
 const { title, description, tags, image, githubUrl, liveUrl } = Astro.props;
-const imageSrc = typeof image === 'string' ? image : image?.src;
 ---
 
 <div class="project-card glass-panel">
   <div class="project-image-container">
-    {imageSrc ? (
-      <img src={imageSrc} alt={title} class="project-image" loading="lazy" />
+    {image ? (
+      <Image src={image} alt={title} class="project-image" width={800} height={450} />
     ) : (
       <div class="project-image-placeholder">
         <span>Project Image</span>

@@ -2,6 +2,7 @@
 import { ArrowRight, Download, Github, Linkedin, Mail, Facebook, Gitlab } from 'lucide-react';
 import '../styles/Hero.css';
 import { getTranslations } from '../utils/t';
+import { Image } from 'astro:assets';
 import profileImg from '../assets/images/me.jpeg';
 
 const { lang = 'fr' } = Astro.props;
@@ -60,7 +61,7 @@ const t = getTranslations(lang);
            </div>
          </div>
          
-         <img src={profileImg.src} alt="Bhilal CHITOU" class="profile-img" />
+         <Image src={profileImg} alt="Bhilal CHITOU" class="profile-img" width={400} height={400} loading="eager" />
          <div class="profile-glow"></div>
       </div>
     </div>
