@@ -100,7 +100,7 @@ const Navbar = ({ lang, translations }) => {
             <Globe size={18} />
             <span className="lang-text">{lang.toUpperCase()}</span>
           </a>
-          <button onClick={toggleTheme} className="icon-btn">
+          <button onClick={toggleTheme} className="icon-btn" aria-label="Toggle theme">
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>

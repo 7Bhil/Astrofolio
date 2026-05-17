@@ -11,7 +11,7 @@ export const translations = {
       available: "Available for new opportunities",
       welcome: "Hi, I'm",
       role: "Full-Stack & Mobile Developer.",
-      description: "Based in Porto-Novo, I craft modern, robust, and scalable web and mobile applications using React, Node.js, Django, and React Native.",
+      description: "Based in Porto-Novo, I craft modern, robust, and scalable web and mobile applications using React, Node.js, Laravel, Django, and React Native.",
       viewWork: "View My Work",
       downloadCV: "Download CV"
     },
@@ -57,8 +57,8 @@ export const translations = {
         description: "A modern and elegant frontend for a restaurant, built with React. Features a responsive menu, smooth animations, and a focus on premium user experience."
       },
       vitch: {
-        title: "Vitch",
-        description: "A comprehensive platform that enables users to purchase credit cards and perform secure online payments."
+        title: "Vitch (Demo)",
+        description: "A comprehensive platform that enables users to purchase credit cards and perform secure online payments. Note: This is a demo version."
       }
     },
     contact: {
@@ -99,7 +99,7 @@ export const translations = {
       available: "Disponible pour de nouvelles opportunités",
       welcome: "Salut, je suis",
       role: "Développeur Full-Stack & Mobile.",
-      description: "Basé à Porto-Novo, je conçois des applications web et mobiles modernes, robustes et évolutives avec React, Node.js, Django et React Native.",
+      description: "Basé à Porto-Novo, je conçois des applications web et mobiles modernes, robustes et évolutives avec React, Node.js, Laravel, Django et React Native.",
       viewWork: "Voir mes travaux",
       downloadCV: "Télécharger mon CV"
     },
@@ -145,8 +145,8 @@ export const translations = {
         description: "Un frontend moderne et élégant pour un restaurant, développé avec React. Propose un menu responsive, des animations fluides et met l'accent sur une expérience utilisateur premium."
       },
       vitch: {
-        title: "Vitch",
-        description: "Un système qui permet d'acheter des cartes de crédit et de faire des paiements en ligne de manière sécurisée."
+        title: "Vitch (Démo)",
+        description: "Un système qui permet d'acheter des cartes de crédit et de faire des paiements en ligne de manière sécurisée. Note : Il s'agit d'une version de démonstration."
       }
     },
     contact: {
