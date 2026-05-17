@@ -1,6 +1,7 @@
 ---
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { getTranslations } from '../utils/t';
+import { translations } from '../constants/translations';
 import ContactForm from '../components/ContactForm';
 import '../styles/Contact.css';
 
@@ -48,7 +49,7 @@ const t = getTranslations(lang);
         <div class="contact-shape"></div>
       </div>
       
-      <ContactForm client:load t={t} />
+      <ContactForm client:load translations={translations[lang].contact} />
     </div>
   </div>
 </section>

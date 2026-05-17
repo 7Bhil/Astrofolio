@@ -21,12 +21,13 @@
   flex-direction: column;
   justify-content: space-between;
   border: 1px solid var(--border-color);
+  background: var(--bg-primary);
 }
 
 .bento-item.large {
   grid-column: span 2;
   grid-row: span 2;
-  background: linear-gradient(135deg, rgba(255, 87, 34, 0.05), rgba(0, 0, 0, 0));
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(0, 0, 0, 0));
 }
 
 .bento-item.medium {
@@ -40,8 +41,8 @@
 }
 
 .bento-item:hover {
-  transform: translateY(-5px) scale(1.01);
-  border-color: rgba(255, 87, 34, 0.4);
+  transform: translateY(-8px);
+  border-color: var(--accent-primary);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
 }
 
@@ -56,21 +57,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 54px;
-  background: var(--accent-gradient);
-  border-radius: 16px;
+  width: 60px;
+  height: 60px;
+  background: var(--accent-primary); /* Solid blue for better contrast */
+  border-radius: 18px;
   color: white;
-  box-shadow: 0 8px 16px rgba(255, 87, 34, 0.2);
+  box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
 }
 
 .skill-icon {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
+  color: white; /* Ensure icons are white */
 }
 
 .bento-item h3 {
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-primary);
 }
@@ -98,14 +100,11 @@
   width: 18px;
   height: 18px;
   object-fit: contain;
-  /* Filter to make icons slightly brighter/white on dark mode if needed, 
-     but Simple Icons usually look good as they are or can be colored via URL. 
-     We'll use standard colors for now. */
 }
 
 .bento-item:hover .skill-tag {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.05);
   color: var(--text-primary);
 }
 
@@ -124,7 +123,7 @@
 }
 
 .bento-item:hover .bento-bg-glow {
-  opacity: 0.08;
+  opacity: 0.12;
 }
 
 .bento-content {
@@ -149,22 +148,5 @@
   }
   .bento-item {
     padding: 2rem;
-  }
-}
-
-.section-header {
-    margin-bottom: 3rem;
-}
-
-.section-subtitle {
-    color: var(--text-secondary);
-    font-size: 1.125rem;
-    max-width: 600px;
-    margin-top: -2rem;
-}
-
-@media (max-width: 768px) {
-  .skills-grid {
-    grid-template-columns: 1fr;
   }
 }

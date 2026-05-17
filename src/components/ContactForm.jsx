@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 import '../styles/Contact.css';
 
-const ContactForm = ({ t }) => {
+const ContactForm = ({ translations }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -51,13 +51,13 @@ const ContactForm = ({ t }) => {
   return (
     <form className="contact-form" onSubmit={handleSubmit}>
       <div className="form-group">
-        <label htmlFor="name" className="form-label">{t('contact.formName')}</label>
+        <label htmlFor="name" className="form-label">{translations.formName}</label>
         <input 
           type="text" 
           id="name" 
           name="name" 
           className="form-input" 
-          placeholder={t('contact.formName')}
+          placeholder={translations.formName}
           value={formData.name}
           onChange={handleChange}
           required 
@@ -65,13 +65,13 @@ const ContactForm = ({ t }) => {
       </div>
       
       <div className="form-group">
-        <label htmlFor="email" className="form-label">{t('contact.formEmail')}</label>
+        <label htmlFor="email" className="form-label">{translations.formEmail}</label>
         <input 
           type="email" 
           id="email" 
           name="email" 
           className="form-input" 
-          placeholder={t('contact.formEmail')}
+          placeholder={translations.formEmail}
           value={formData.email}
           onChange={handleChange}
           required 
@@ -79,12 +79,12 @@ const ContactForm = ({ t }) => {
       </div>
       
       <div className="form-group form-group-full">
-        <label htmlFor="message" className="form-label">{t('contact.formMessage')}</label>
+        <label htmlFor="message" className="form-label">{translations.formMessage}</label>
         <textarea 
           id="message" 
           name="message" 
           className="form-textarea" 
-          placeholder={t('contact.formMessage')}
+          placeholder={translations.formMessage}
           rows="5"
           value={formData.message}
           onChange={handleChange}
@@ -99,9 +99,9 @@ const ContactForm = ({ t }) => {
           className={`btn btn-primary ${status === 'success' ? 'btn-success' : status === 'error' ? 'btn-error' : ''}`}
         >
           {status === 'loading' ? 'Envoi en cours...' : 
-           status === 'success' ? t('contact.successMsg') : 
+           status === 'success' ? translations.successMsg : 
            status === 'error' ? 'Erreur lors de l\'envoi' : 
-           t('contact.formSubmit')}
+           translations.formSubmit}
           {status === 'idle' && <Send size={18} />}
         </button>
       </div>
