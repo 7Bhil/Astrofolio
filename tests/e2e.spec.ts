@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.describe('Astrofolio E2E Tests', () => {
   test('should load the home page in French', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle(/Bhilal CHITOU/);
+    await expect(page).toHaveTitle(/7Bhil/);
     await expect(page.getByRole('heading', { level: 1, name: /Bhilal CHITOU/i })).toBeVisible();
   });
 

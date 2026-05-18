@@ -27,7 +27,7 @@
 .bento-item.large {
   grid-column: span 2;
   grid-row: span 2;
-  background: linear-gradient(135deg, rgba(56, 189, 248, 0.05), rgba(0, 0, 0, 0));
+  background: linear-gradient(135deg, var(--accent-glow), transparent);
 }
 
 .bento-item.medium {
@@ -59,10 +59,10 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  background: var(--accent-primary); /* Solid blue for better contrast */
+  background: var(--accent-primary);
   border-radius: 18px;
   color: white;
-  box-shadow: 0 8px 20px rgba(56, 189, 248, 0.4);
+  box-shadow: 0 8px 20px var(--accent-glow);
 }
 
 .skill-icon {
@@ -103,8 +103,8 @@
 }
 
 .bento-item:hover .skill-tag {
-  border-color: rgba(56, 189, 248, 0.3);
-  background: rgba(56, 189, 248, 0.05);
+  border-color: rgba(0, 180, 216, 0.3);
+  background: rgba(0, 180, 216, 0.05);
   color: var(--text-primary);
 }
 

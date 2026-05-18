@@ -13,25 +13,25 @@ export default defineConfig({
       registerType: 'autoUpdate',
       injectRegister: 'auto',
       manifest: {
-        name: 'Bhilal CHITOU - Portfolio',
-        short_name: 'Astrofolio',
+        name: '7Bhil',
+        short_name: '7Bhil',
         description: 'Portfolio de Bhilal CHITOU, Développeur Full-Stack & Mobile',
         theme_color: '#0f172a',
         background_color: '#020617',
         display: 'standalone',
         icons: [
           {
-            src: '/favicon.png',
+            src: '/icon-192.png',
             sizes: '192x192',
             type: 'image/png'
           },
           {
-            src: '/favicon.png',
+            src: '/icon-512.png',
             sizes: '512x512',
             type: 'image/png'
           },
           {
-            src: '/favicon.png',
+            src: '/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
