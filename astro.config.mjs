@@ -15,7 +15,7 @@ export default defineConfig({
       manifest: {
         name: '7Bhil',
         short_name: '7Bhil',
-        description: 'Portfolio de Bhilal CHITOU, Développeur Full-Stack & Mobile',
+        description: 'Portfolio de Bhilal CHITOU, Spécialiste Fintech & Sécurité',
         theme_color: '#0f172a',
         background_color: '#020617',
         display: 'standalone',
