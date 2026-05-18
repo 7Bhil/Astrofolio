@@ -11,7 +11,9 @@ const Navbar = ({ lang, translations }) => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setTheme(savedTheme);
     document.documentElement.setAttribute('data-theme', savedTheme);
+  }, []);
 
+  useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -46,9 +48,7 @@ const Navbar = ({ lang, translations }) => {
     { name: t('nav.skills'), href: '#skills' },
   ];
 
-  const otherLang = lang === 'fr' ? 'en' : 'fr';
   const otherLangUrl = lang === 'fr' ? '/en/' : '/';
-
   return (
     <header className={`navbar-wrapper ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
