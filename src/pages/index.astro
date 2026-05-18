@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.jsx';
 import Hero from '../sections/Hero.astro';
+import Services from '../sections/Services.astro';
 import About from '../sections/About.astro';
 import Skills from '../sections/Skills.astro';
 import Projects from '../sections/Projects.astro';
@@ -16,6 +17,7 @@ const lang = 'fr';
 	<Navbar client:load lang={lang} translations={translations[lang]} />
 	<main>
 		<Hero lang={lang} />
+		<Services lang={lang} />
 		<About lang={lang} />
 		<Skills lang={lang} />
 		<Projects lang={lang} />

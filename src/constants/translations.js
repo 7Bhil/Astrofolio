@@ -11,33 +11,33 @@ export const translations = {
       available: "Available for new opportunities",
       welcome: "Hi, I'm",
       role: "Fintech & Security Specialist.",
-      description: "Based in Porto-Novo, I craft modern, secure, and scalable fintech solutions using React, Node.js, Laravel, Django, and React Native.",
+      description: "I design web and mobile systems that automate your processes, digitalize your payments and secure your data — for companies that want to dominate their market.",
       viewWork: "View My Work",
       downloadCV: "Download CV"
     },
     about: {
       title: "About me",
-      bio1: "Based in Porto-Novo (currently in Parakou), I am a curious and detail-oriented developer who cares as much about usability and performance as I do about code quality. My goal is simple: create digital products that are both efficient and meaningful.",
+      bio1: "Full-Stack & Mobile Developer with a dual background in computer science and financial management. I don't just build apps — I build systems that solve real business problems and generate measurable value. Creator of the Bhilal programming language, available remote worldwide.",
       bio2: "Expert in the React ecosystem and backend technologies like Node.js and Django, I deliver secure, scalable, and high-performance financial systems from end to end.",
       experience: "Professional Experience",
       education: "Education",
       present: "Present",
-      exp1_title: "IT Bachelor Student & Developer",
-      exp1_company: "Studies & Freelance (Porto-Novo/Parakou)",
-      exp1_desc: "Pursuing a Bachelor's Degree in Computer Science while building modern applications with React and Django.",
-      exp2_title: "Fintech & Full-Stack Developer (Freelance)",
-      exp2_company: "Various Clients",
-      exp2_desc: "End-to-end development of secure web, mobile, and fintech applications using React, Django, and React Native.",
+      exp1_title: "Full-Stack & Mobile Developer (Freelance)",
+      exp1_company: "Remote · Various Clients",
+      exp1_desc: "Design and delivery of complete web and mobile applications. Autonomous management of the full cycle: architecture, development, deployment.",
+      exp2_title: "Bachelor's Degree in Computer Science",
+      exp2_company: "IUT of Parakou, Benin",
+      exp2_desc: "Specialization in software development, networks and cybersecurity.",
       edu1_title: "Bachelor's Degree in Computer Science",
       edu1_school: "University of Parakou",
-      edu1_year: "2025 — 2026"
+      edu1_year: "2024 — Present"
     },
     projects: {
       title: "Featured Projects",
       subtitle: "A selection of my best work across web and mobile platforms.",
       bhilal: {
         title: "Bhilal Language v1.2.0",
-        description: "A modern programming language with built-in cybersecurity tools. Engineered with Node.js and Go, featuring a clean syntax, full OOP support, Interactive Mode (REPL) and advanced networking capabilities like port scanning and directory bruteforcing."
+        description: "Bilingual French/English programming language transpiling to JavaScript. Full OOP, interactive REPL mode and native network security tools. Designed for French-speaking developers."
       },
       bhilcours: {
         title: "Bhil Cours",
@@ -45,7 +45,7 @@ export const translations = {
       },
       arrondissement: {
         title: "Bloc Républicain - Arrondissement",
-        description: "A presentation website developed for the 'Bloc Républicain', a major political party in Benin. Built with React to showcase the party's local district initiatives and information."
+        description: "Institutional web application for a national-audience organization. Interactive communication interface and initiative management."
       },
 
       challenge: {
@@ -58,7 +58,7 @@ export const translations = {
       },
       vitch: {
         title: "Vitch (Demo)",
-        description: "A comprehensive platform that enables users to purchase credit cards and perform secure online payments. Note: This is a demo version."
+        description: "Secure electronic wallet with virtual card issuance and real-time transaction management."
       }
     },
     contact: {
@@ -99,33 +99,33 @@ export const translations = {
       available: "Disponible pour de nouvelles opportunités",
       welcome: "Salut, je suis",
       role: "Spécialiste Fintech & Sécurité.",
-      description: "Basé à Porto-Novo, je conçois des solutions fintech et des systèmes sécurisés, modernes et robustes avec React, Node.js, Laravel, Django et React Native.",
+      description: "Je conçois des systèmes web et mobile qui automatisent vos processus, digitalisent vos paiements et sécurisent vos données — pour des entreprises qui veulent dominer leur marché.",
       viewWork: "Voir mes travaux",
       downloadCV: "Télécharger mon CV"
     },
     about: {
       title: "À propos",
-      bio1: "Basé à Porto-Novo (actuellement à Parakou), je suis curieux de nature et soucieux du détail. J'accorde autant d'importance à l'utilisabilité et à la performance qu'à la qualité du code. Mon objectif est simple : créer des produits numériques à la fois efficaces et significatifs.",
+      bio1: "Développeur Full-Stack & Mobile avec une double formation en informatique et gestion financière. Je ne construis pas juste des applications — je construis des systèmes qui résolvent des problèmes business réels et génèrent de la valeur mesurable. Créateur du langage de programmation Bhilal, disponible en remote worldwide.",
       bio2: "Expert dans l'écosystème React et les technologies backend comme Node.js et Django, je livre des infrastructures fintech sécurisées et évolutives de bout en bout.",
       experience: "Expérience Professionnelle",
       education: "Éducation",
       present: "Présent",
-      exp1_title: "Étudiant en Licence & Développeur",
-      exp1_company: "Formation & Freelance (Porto-Novo/Parakou)",
-      exp1_desc: "Préparation d'une Licence en Informatique tout en concevant des applications modernes avec React et Django.",
-      exp2_title: "Développeur Fintech & Full-Stack (Freelance)",
-      exp2_company: "Clients divers",
-      exp2_desc: "Développement de bout en bout d'infrastructures fintech et d'applications mobiles utilisant React, Django et React Native.",
+      exp1_title: "Développeur Full-Stack & Mobile (Freelance)",
+      exp1_company: "Remote · Clients divers",
+      exp1_desc: "Conception et livraison d'applications web et mobile complètes. Gestion autonome du cycle complet : architecture, développement, déploiement.",
+      exp2_title: "Licence en Informatique",
+      exp2_company: "IUT de Parakou, Bénin",
+      exp2_desc: "Spécialisation développement logiciel, réseaux et cybersécurité.",
       edu1_title: "Licence en Informatique",
       edu1_school: "Institut Universitaire de Technologie de Parakou, Benin",
-      edu1_year: "2025 — 2026"
+      edu1_year: "2024 — Présent"
     },
     projects: {
       title: "Projets à la une",
       subtitle: "Une sélection de mes meilleurs travaux sur plateformes web et mobiles.",
       bhilal: {
         title: "Bhilal Language v1.2.0",
-        description: "Un langage de programmation moderne avec outils de cybersécurité intégrés (Node.js + Go). Syntaxe épurée, POO complète, mode interactif (REPL), et fonctions de sécurité avancées comme le scan de ports et le bruteforce."
+        description: "Langage de programmation bilingue français/anglais transpilant vers JavaScript. POO complète, REPL interactif et outils natifs de sécurité réseau. Conçu pour les développeurs francophones."
       },
       bhilcours: {
         title: "Bhil Cours",
@@ -133,7 +133,7 @@ export const translations = {
       },
       arrondissement: {
         title: "Bloc Républicain - Arrondissement",
-        description: "Un site vitrine développé en React pour le 'Bloc Républicain', un parti politique béninois majeur, destiné à présenter les initiatives et informations de l'arrondissement."
+        description: "Application web institutionnelle pour une organisation à audience nationale. Interface interactive de communication et gestion des initiatives."
       },
 
       challenge: {
@@ -146,7 +146,7 @@ export const translations = {
       },
       vitch: {
         title: "Vitch (Démo)",
-        description: "Un système qui permet d'acheter des cartes de crédit et de faire des paiements en ligne de manière sécurisée. Note : Il s'agit d'une version de démonstration."
+        description: "Portefeuille électronique sécurisé avec émission de cartes virtuelles et gestion de transactions en temps réel."
       }
     },
     contact: {
