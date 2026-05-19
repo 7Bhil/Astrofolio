@@ -3,8 +3,8 @@ export const translations = {
     nav: {
       home: "Home",
       about: "About me",
-      projects: "Projets",
-      skills: "Compétences",
+      projects: "Projects",
+      skills: "Skills",
       contact: "Contact"
     },
     hero: {
