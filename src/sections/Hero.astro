@@ -7,6 +7,8 @@ import profileImg from '../assets/images/me.jpeg';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
+const cvFile = lang === 'en' ? '/Bhilal CV en.pdf' : '/Bhilal CV fr.pdf';
+const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.pdf';
 ---
 
 <section id="home" class="hero-section">
@@ -32,7 +34,7 @@ const t = getTranslations(lang);
           {t('hero.viewWork')}
           <ArrowRight size={18} />
         </a>
-        <a href="/CV.pdf" class="btn btn-outline" download="Bhilal_CHITOU_CV.pdf">
+        <a href={cvFile} class="btn btn-outline" download={cvName}>
           {t('hero.downloadCV')}
           <Download size={18} />
         </a>
