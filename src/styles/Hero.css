@@ -25,10 +25,10 @@
   width: 100%;
   height: 60%;
   background: url('/cityscape.png') center bottom / cover no-repeat;
-  /* Masque très léger uniquement sur le haut pour fondre l'image, opaque en bas */
-  mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 70%, transparent 100%);
-  opacity: 0.4;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 60%, transparent 100%);
+  mix-blend-mode: screen;
+  opacity: 1;
   z-index: 1;
 }
 
