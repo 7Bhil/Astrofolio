@@ -1,4 +1,5 @@
 ---
+import { ExpandableProjects } from '../components/ExpandableProjects';
 import ProjectCard from '../components/ProjectCard.astro';
 import { getTranslations } from '../utils/t';
 import '../styles/Projects.css';
@@ -66,18 +67,12 @@ const featuredProjects = [
 ---
 
 <section id="projects" class="section-padding projects-section">
-  <div class="container">
-    <div class="section-header reveal">
-      <h2 class="section-title">{t('projects.title')}</h2>
-      <p class="section-subtitle">{t('projects.subtitle')}</p>
+  <div class="container mx-auto px-4">
+    <div class="section-header reveal mb-16">
+      <h2 class="section-title text-4xl font-bold mb-4">{t('projects.title')}</h2>
+      <p class="section-subtitle text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl">{t('projects.subtitle')}</p>
     </div>
     
-    <div class="projects-grid">
-      {featuredProjects.map((project, index) => (
-        <div class="project-wrapper reveal" style={{ transitionDelay: `${index * 0.05}s` }}>
-          <ProjectCard {...project} />
-        </div>
-      ))}
-    </div>
+    <ExpandableProjects projects={featuredProjects} client:load />
   </div>
 </section>
