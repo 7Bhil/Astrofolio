@@ -85,6 +85,22 @@ export const translations = {
       title: "Certifications",
       subtitle: "My technical certifications and achievements.",
       viewFull: "View Full Certificate"
+    },
+    services: {
+      title: "Expertise & Services",
+      subtitle: "High-value digital solutions to accelerate your growth and secure your assets.",
+      fintech: {
+        title: "Fintech & Payment",
+        description: "Transaction digitalization, mobile payments and secure electronic wallets."
+      },
+      automation: {
+        title: "Automation",
+        description: "Transforming manual processes into automated, robust and scalable systems."
+      },
+      security: {
+        title: "Secure Systems",
+        description: "Security by design architecture, data protection and compliance."
+      }
     }
   },
   fr: {
@@ -174,6 +190,22 @@ export const translations = {
       title: "Certifications",
       subtitle: "Mes certifications techniques et accomplissements.",
       viewFull: "Voir le certificat complet"
+    },
+    services: {
+      title: "Expertise & Services",
+      subtitle: "Des solutions digitales à haute valeur ajoutée pour accélérer votre croissance et sécuriser vos actifs.",
+      fintech: {
+        title: "Fintech & Paiement",
+        description: "Digitalisation des transactions, paiements mobiles et portefeuilles électroniques sécurisés."
+      },
+      automation: {
+        title: "Automatisation",
+        description: "Transformation des processus manuels en systèmes automatisés, robustes et évolutifs."
+      },
+      security: {
+        title: "Systèmes sécurisés",
+        description: "Architecture sécurisée dès la conception, protection des données et conformité."
+      }
     }
   }
 };

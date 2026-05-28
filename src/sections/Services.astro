@@ -3,49 +3,58 @@ import { CreditCard, Zap, ShieldCheck } from 'lucide-react';
 import { getTranslations } from '../utils/t';
 
 const { lang = 'fr' } = Astro.props;
+const t = getTranslations(lang);
 
 const services = [
   {
+    id: 'fintech',
     icon: CreditCard,
-    titleFr: "Fintech & Paiement",
-    titleEn: "Fintech & Payment",
-    descFr: "Digitalisation des transactions, paiements mobiles et portefeuilles électroniques sécurisés.",
-    descEn: "Transaction digitalization, mobile payments and secure electronic wallets.",
-    gradient: "linear-gradient(135deg, #2962FF 0%, #1E40AF 100%)",
+    title: t('services.fintech.title'),
+    desc: t('services.fintech.description'),
+    gradient: "linear-gradient(135deg, #2962FF 0%, #7C3AED 100%)",
+    size: 'large'
   },
   {
+    id: 'automation',
     icon: Zap,
-    titleFr: "Automatisation",
-    titleEn: "Automation",
-    descFr: "Transformation des processus manuels en systèmes automatisés, robustes et évolutifs.",
-    descEn: "Transforming manual processes into automated, robust and scalable systems.",
+    title: t('services.automation.title'),
+    desc: t('services.automation.description'),
     gradient: "linear-gradient(135deg, #7C3AED 0%, #4C1D95 100%)",
+    size: 'small'
   },
   {
+    id: 'security',
     icon: ShieldCheck,
-    titleFr: "Systèmes sécurisés",
-    titleEn: "Secure Systems",
-    descFr: "Architecture sécurisée dès la conception, protection des données et conformité.",
-    descEn: "Security by design architecture, data protection and compliance.",
+    title: t('services.security.title'),
+    desc: t('services.security.description'),
     gradient: "linear-gradient(135deg, #0EA5E9 0%, #1E40AF 100%)",
+    size: 'small'
   },
 ];
 ---
 
 <section id="services" class="services-section section-padding">
   <div class="container">
-    <div class="services-grid">
+    <div class="section-header reveal">
+      <h2 class="section-title">{t('services.title')}</h2>
+      <p class="section-subtitle">{t('services.subtitle')}</p>
+    </div>
+
+    <div class="services-bento">
       {services.map((service) => {
         const Icon = service.icon;
-        const title = lang === 'fr' ? service.titleFr : service.titleEn;
-        const desc = lang === 'fr' ? service.descFr : service.descEn;
         return (
-          <div class="service-card glass-panel reveal">
-            <div class="service-icon-wrapper" style={`background: ${service.gradient}`}>
-              <Icon size={28} color="white" />
+          <div class={`service-card glass-panel ${service.size} reveal`}>
+            <div class="service-content">
+              <div class="service-icon-wrapper" style={`background: ${service.gradient}`}>
+                <Icon size={32} color="white" />
+              </div>
+              <div class="service-text">
+                <h3 class="service-title">{service.title}</h3>
+                <p class="service-desc">{service.desc}</p>
+              </div>
             </div>
-            <h3 class="service-title">{title}</h3>
-            <p class="service-desc">{desc}</p>
+            <div class="service-glow" style={`background: ${service.gradient}`}></div>
           </div>
         );
       })}
@@ -56,58 +65,126 @@ const services = [
 <style>
 .services-section {
   background: var(--bg-primary);
-  padding-bottom: 0;
+  position: relative;
+  overflow: hidden;
 }
 
-.services-grid {
+.services-bento {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, minmax(160px, auto));
   gap: 1.5rem;
+  margin-top: 3rem;
 }
 
 .service-card {
-  padding: 2.5rem 2rem;
-  border-radius: 1.5rem;
+  position: relative;
+  border-radius: 2rem;
+  padding: 2.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: default;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.service-card.large {
+  grid-column: span 2;
+  grid-row: span 2;
+  justify-content: space-between;
+}
+
+.service-card.small {
+  grid-column: span 2;
+  grid-row: span 1;
+  flex-direction: row;
+  align-items: center;
 }
 
 .service-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 40px var(--accent-glow);
+  transform: translateY(-8px);
   border-color: var(--accent-primary);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.service-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.small .service-content {
+  flex-direction: row;
+  align-items: center;
+  gap: 2rem;
 }
 
 .service-icon-wrapper {
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
+  width: 70px;
+  height: 70px;
+  min-width: 70px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px var(--accent-glow);
+  box-shadow: 0 10px 25px var(--accent-glow);
 }
 
 .service-title {
-  font-size: 1.2rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
   color: var(--text-primary);
-  margin: 0;
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.small .service-title {
+  font-size: 1.4rem;
+  margin-bottom: 0.5rem;
 }
 
 .service-desc {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   color: var(--text-secondary);
-  line-height: 1.7;
-  margin: 0;
+  line-height: 1.6;
 }
 
-@media (max-width: 768px) {
-  .services-grid {
+.service-glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  height: 150%;
+  filter: blur(80px);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.service-card:hover .service-glow {
+  opacity: 0.1;
+}
+
+@media (max-width: 1024px) {
+  .services-bento {
     grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+  .service-card.large, .service-card.small {
+    grid-column: span 1;
+    grid-row: span 1;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .small .service-content {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>
