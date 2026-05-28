@@ -23,7 +23,7 @@
 }
 
 .contact-info {
-  background: var(--accent-primary); /* Solid Blue to avoid any violet look */
+  background: var(--accent-gradient);
   padding: 3.5rem;
   color: white;
   position: relative;

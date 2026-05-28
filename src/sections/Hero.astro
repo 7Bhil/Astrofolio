@@ -22,7 +22,7 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
       <h1 class="hero-title reveal reveal-stagger-2">
         {t('hero.welcome')} <span class="text-accent">Bhilal CHITOU</span>
         <br />
-        {t('hero.role')}
+        <span class="typewriter-text" data-text={t('hero.role')}></span><span class="typewriter-cursor">|</span>
       </h1>
       
       <p class="hero-description reveal reveal-stagger-3">
@@ -69,3 +69,27 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
     </div>
   </div>
 </section>
+
+<script>
+  function startTypewriter() {
+    const el = document.querySelector('.typewriter-text') as HTMLElement | null;
+    if (!el) return;
+
+    const text = el.getAttribute('data-text') || '';
+    let i = 0;
+    el.textContent = '';
+
+    // Delay start by 800ms so the page reveal animation settles first
+    setTimeout(() => {
+      const interval = setInterval(() => {
+        el.textContent += text[i];
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, 55);
+    }, 800);
+  }
+
+  // Run on first load and on Astro view transitions
+  document.addEventListener('DOMContentLoaded', startTypewriter);
+  document.addEventListener('astro:page-load', startTypewriter);
+</script>

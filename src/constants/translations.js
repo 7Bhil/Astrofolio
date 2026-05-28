@@ -8,7 +8,6 @@ export const translations = {
       contact: "Contact"
     },
     hero: {
-      available: "Available for new opportunities",
       welcome: "Hi, I'm",
       role: "Fintech & Security Specialist.",
       description: "I design web and mobile systems that automate your processes, digitalize your payments and secure your data — for companies that want to dominate their market.",
@@ -17,6 +16,7 @@ export const translations = {
     },
     about: {
       title: "About me",
+      subtitle: "My journey, experience and expertise.",
       bio1: "Full-Stack & Mobile Developer with a dual background in computer science and financial management. I don't just build apps — I build systems that solve real business problems and generate measurable value. Creator of the Bhilal programming language, available remote worldwide.",
       bio2: "Expert in the React ecosystem and backend technologies like Node.js and Django, I deliver secure, scalable, and high-performance financial systems from end to end.",
       experience: "Professional Experience",
@@ -105,6 +105,7 @@ export const translations = {
     },
     about: {
       title: "À propos",
+      subtitle: "Mon parcours, mon expérience et mon expertise.",
       bio1: "Développeur Full-Stack & Mobile avec une double formation en informatique et gestion financière. Je ne construis pas juste des applications — je construis des systèmes qui résolvent des problèmes business réels et génèrent de la valeur mesurable. Créateur du langage de programmation Bhilal, disponible en remote worldwide.",
       bio2: "Expert dans l'écosystème React et les technologies backend comme Node.js et Django, je livre des infrastructures fintech sécurisées et évolutives de bout en bout.",
       experience: "Expérience Professionnelle",

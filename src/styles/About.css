@@ -8,20 +8,22 @@
 }
 
 .about-header .section-title {
-  color: var(--accent-primary);
   font-size: 2.5rem;
   font-weight: 800;
   margin-bottom: 0;
 }
 
-.about-header .section-title::after {
-  display: none; /* Hide the default underline to match screenshot */
+.about-header .section-subtitle {
+  margin-top: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+  line-height: 1.7;
 }
 
 .about-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6rem;
+  gap: 4rem;
   align-items: flex-start;
 }
 
