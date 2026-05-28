@@ -44,12 +44,18 @@
   .custom-cursor-outer.hover {
     width: 65px;
     height: 65px;
-    background-color: rgba(255, 87, 34, 0.1); /* fallback */
+    background-color: var(--accent-glow);
     border-color: transparent;
     opacity: 1;
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
-    box-shadow: 0 0 20px rgba(255, 87, 34, 0.3);
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+
+  .custom-cursor-dot.clicking,
+  .custom-cursor-outer.clicking {
+    transform: translate(-50%, -50%) scale(0.8);
+    background-color: var(--accent-secondary);
   }
 }
 
