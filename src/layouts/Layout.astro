@@ -7,8 +7,6 @@ interface Props {
 
 import ScrollProgress from '../components/ScrollProgress.jsx';
 
-import CustomCursor from '../components/CustomCursor.jsx';
-
 const { 
 	title, 
 	description = "Portfolio de Bhilal CHITOU, Spécialiste Fintech & Sécurité basé au Bénin. Expert en systèmes sécurisés avec React, Node.js, Django et React Native.",
@@ -77,7 +75,6 @@ import '../styles/global.css';
 		</script>
 	</head>
 	<body>
-		<CustomCursor client:load />
 		<ScrollProgress client:load />
 		<slot />
 		<script>
