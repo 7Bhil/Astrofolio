@@ -201,27 +201,36 @@
   100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
 }
 
-/* Saturn Rings Social Icons with improved visibility */
+/* Atomic/Electron Social Icons Style */
 .saturn-rings {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 480px;
-  height: 480px;
-  border-radius: 50%;
-  border: 1px dashed var(--glass-border);
+  width: 520px;
+  height: 520px;
   z-index: 1;
   pointer-events: none;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
-.orbiting-icons {
+.orbit-path {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(41, 98, 255, 0.2);
+  transform-style: preserve-3d;
+  pointer-events: none;
 }
+
+/* Three distinct paths for the "Electron" look */
+.path-1 { transform: rotateX(65deg) rotateY(0deg); }
+.path-2 { transform: rotateX(65deg) rotateY(120deg); }
+.path-3 { transform: rotateX(65deg) rotateY(240deg); }
 
 .orbit-icon {
   position: absolute;
@@ -230,7 +239,6 @@
   width: 54px;
   height: 54px;
   margin: -27px 0 0 -27px;
-  --radius: 240px;
   background: var(--bg-secondary);
   border: 1px solid var(--glass-border);
   border-radius: 50%;
@@ -241,44 +249,46 @@
   pointer-events: auto;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 3;
+  --radius: 260px;
 }
 
 .orbit-icon:hover {
-  animation-play-state: paused !important;
   color: white;
   background: var(--accent-primary);
   border-color: var(--accent-primary);
   box-shadow: 0 0 25px var(--accent-primary);
-  transform: scale(1.2);
-  z-index: 10;
+  transform: scale(1.2) rotateX(-65deg); /* Counteract parent tilt on hover */
+  z-index: 20;
 }
 
-/* Animation durations for orbits */
-.orbit-icon.icon-1 { animation: orbit1 30s linear infinite; }
-.orbit-icon.icon-2 { animation: orbit2 30s linear infinite; }
-.orbit-icon.icon-3 { animation: orbit3 30s linear infinite; }
-.orbit-icon.icon-4 { animation: orbit4 30s linear infinite; }
-.orbit-icon.icon-5 { animation: orbit5 30s linear infinite; }
+/* Animation logic: One shared orbit animation, icons offset by timing */
+.path-1 .orbit-icon.icon-1 { animation: orbit-electron 12s linear infinite; }
+.path-1 .orbit-icon.icon-2 { animation: orbit-electron 12s linear infinite -6s; }
 
-@keyframes orbit1 {
-  0%   { transform: rotate(0deg) translate(var(--radius)) rotate(0deg); }
-  100% { transform: rotate(360deg) translate(var(--radius)) rotate(-360deg); }
+.path-2 .orbit-icon.icon-3 { animation: orbit-electron 15s linear infinite; }
+.path-2 .orbit-icon.icon-4 { animation: orbit-electron 15s linear infinite -7.5s; }
+
+.path-3 .orbit-icon.icon-5 { animation: orbit-electron 18s linear infinite; }
+
+@keyframes orbit-electron {
+  0% { transform: rotate(0deg) translateX(var(--radius)) rotateX(-65deg) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(var(--radius)) rotateX(-65deg) rotate(-360deg); }
 }
-@keyframes orbit2 {
-  0%   { transform: rotate(72deg) translate(var(--radius)) rotate(-72deg); }
-  100% { transform: rotate(432deg) translate(var(--radius)) rotate(-432deg); }
-}
-@keyframes orbit3 {
-  0%   { transform: rotate(144deg) translate(var(--radius)) rotate(-144deg); }
-  100% { transform: rotate(504deg) translate(var(--radius)) rotate(-504deg); }
-}
-@keyframes orbit4 {
-  0%   { transform: rotate(216deg) translate(var(--radius)) rotate(-216deg); }
-  100% { transform: rotate(576deg) translate(var(--radius)) rotate(-576deg); }
-}
-@keyframes orbit5 {
-  0%   { transform: rotate(288deg) translate(var(--radius)) rotate(-288deg); }
-  100% { transform: rotate(648deg) translate(var(--radius)) rotate(-648deg); }
+
+@media (max-width: 968px) {
+  .saturn-rings {
+    width: 320px;
+    height: 320px;
+  }
+  .orbit-icon {
+    --radius: 160px;
+    width: 42px;
+    height: 42px;
+    margin: -21px 0 0 -21px;
+  }
+  .orbit-icon:hover {
+     transform: scale(1.2) rotateX(-65deg);
+  }
 }
 
 @media (max-width: 968px) {
