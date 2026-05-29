@@ -172,7 +172,7 @@
   animation: morph 8s ease-in-out infinite;
   box-shadow: 0 0 50px var(--accent-glow);
   position: relative;
-  z-index: 2;
+  z-index: 1; /* Lowered so orbit icons can pass over it */
   transition: all 0.5s ease;
 }
 
@@ -192,7 +192,7 @@
   background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
   filter: blur(40px);
   opacity: 0.6;
-  z-index: 1;
+  z-index: 0;
 }
 
 @keyframes morph {
@@ -209,7 +209,7 @@
   transform: translate(-50%, -50%);
   width: 520px;
   height: 520px;
-  z-index: 1;
+  z-index: 10;
   pointer-events: none;
   perspective: 1000px;
   transform-style: preserve-3d;
