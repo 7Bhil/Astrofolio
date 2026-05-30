@@ -89,7 +89,13 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
       const interval = setInterval(() => {
         el.textContent += text[i];
         i++;
-        if (i >= text.length) clearInterval(interval);
+        if (i >= text.length) {
+          clearInterval(interval);
+          const cursor = el.nextElementSibling as HTMLElement | null;
+          if (cursor && cursor.classList.contains('typewriter-cursor')) {
+            cursor.style.display = 'none';
+          }
+        }
       }, 55);
     }, 800);
   }

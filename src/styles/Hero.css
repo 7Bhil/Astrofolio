@@ -249,6 +249,7 @@
 }
 
 .orbit-icon:hover {
+  animation-play-state: paused;
   color: white;
   background: var(--accent-primary);
   border-color: var(--accent-primary);

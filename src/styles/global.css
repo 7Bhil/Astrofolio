@@ -12,6 +12,7 @@
   
   --accent-primary: #2962FF; /* Electric Blue */
   --accent-secondary: #7C3AED; /* Purple/Violet */
+  --accent-cyan: #00f2ff; /* Added Cyan */
   --accent-glow: rgba(41, 98, 255, 0.25);
   --accent-gradient: linear-gradient(135deg, #2962FF 0%, #7C3AED 100%);
   
@@ -102,6 +103,10 @@ button {
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
+}
+
+.text-cyan {
+  color: var(--accent-cyan);
 }
 
 .text-accent {

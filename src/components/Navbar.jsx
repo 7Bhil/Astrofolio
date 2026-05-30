@@ -53,7 +53,7 @@ const Navbar = ({ lang, translations }) => {
     <header className={`navbar-wrapper ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
         <a href="#home" className={`logo ${isScrolled ? 'logo-scrolled' : ''}`}>
-          Bhil<span className="text-gradient">$</span>
+          <span className="text-cyan">7</span>Bhil
         </a>
 
         {/* Desktop Navigation */}
