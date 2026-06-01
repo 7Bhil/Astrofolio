@@ -3,7 +3,6 @@ import { ArrowRight, Download, Github, Linkedin, Mail, Facebook, Gitlab } from '
 import '../styles/Hero.css';
 import { getTranslations } from '../utils/t';
 import { Image } from 'astro:assets';
-import profileImg from '../assets/images/me.jpeg';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
@@ -73,7 +72,7 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
             </div>
          </div>
          
-         <Image src={profileImg} alt="Bhilal CHITOU" class="profile-img" width={400} height={400} loading="eager" />
+         <img src="/pro.png" alt="Bhilal CHITOU" class="profile-img" width="400" height="400" loading="eager" />
          <div class="profile-glow"></div>
       </div>
     </div>
