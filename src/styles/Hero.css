@@ -156,11 +156,35 @@
   justify-content: center;
 }
 
+/* ─── 3D Orbit System ─────────────────────────────────────────────────────── */
+/*
+ * The orbit scene uses CSS 3D perspective so icons truly pass behind the
+ * profile image.  JavaScript drives the per-frame position; CSS only
+ * defines the visual appearance of each element.
+ */
+
+/* Outer container: perspective origin */
+.orbit-scene {
+  position: relative;
+  width: 350px;
+  height: 350px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The profile image sits in the exact centre of the scene and defines
+ * the "equatorial plane" that orbit icons cross in front of / behind. */
 .profile-image-wrapper {
   position: relative;
   width: 350px;
   height: 350px;
-  z-index: 2;
+  /* z-index layers:
+       0  → profile-glow  (background glow)
+       1  → profile-img   (the image itself)
+       2  → orbit icons in FRONT half  (JS sets this)
+      -1  → orbit icons in BACK half   (JS sets this)
+  */
 }
 
 .profile-img {
@@ -172,8 +196,10 @@
   animation: morph 8s ease-in-out infinite;
   box-shadow: 0 0 50px var(--accent-glow);
   position: relative;
-  z-index: 1; /* Lowered so orbit icons can pass over it */
+  z-index: 1;            /* Icons in front: z-index 2; behind: z-index 0 */
   transition: all 0.5s ease;
+  /* Prevent the image from creating a new stacking context that would
+     trap the orbit icons.  We keep it in the same context as .orbit-scene */
 }
 
 .profile-image-wrapper:hover .profile-img {
@@ -196,12 +222,12 @@
 }
 
 @keyframes morph {
-  0% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
-  50% { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
+  0%   { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
+  50%  { border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%; }
   100% { border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%; }
 }
 
-/* Atomic/Electron Social Icons Style */
+/* ─── Orbit tracks (visual ellipses) ─────────────────────────────────────── */
 .saturn-rings {
   position: absolute;
   top: 50%;
@@ -209,32 +235,43 @@
   transform: translate(-50%, -50%);
   width: 520px;
   height: 520px;
-  z-index: 10;
   pointer-events: none;
+  /* Must NOT create a stacking context – no z-index here */
 }
 
 .orbit-path {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  border: 1.5px solid rgba(41, 98, 255, 0.2);
-}
-
-/* Simulate the 3 paths by rotating the 2D plane of the ellipse */
-.path-1 { transform: rotate(0deg) scaleY(0.4); }
-.path-2 { transform: rotate(60deg) scaleY(0.4); }
-.path-3 { transform: rotate(120deg) scaleY(0.4); }
-
-.orbit-icon {
-  position: absolute;
   top: 50%;
   left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1.5px solid rgba(41, 98, 255, 0.18);
+}
+
+/* Each path is an ellipse tilted to simulate a 3-D ring */
+.path-1 {
+  width: 460px;
+  height: 185px;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+.path-2 {
+  width: 460px;
+  height: 185px;
+  transform: translate(-50%, -50%) rotate(60deg);
+}
+.path-3 {
+  width: 460px;
+  height: 185px;
+  transform: translate(-50%, -50%) rotate(120deg);
+}
+
+/* ─── Orbit icons ─────────────────────────────────────────────────────────── */
+.orbit-icon {
+  position: absolute;
+  /* JS sets top / left / z-index each frame */
   width: 54px;
   height: 54px;
-  margin: -27px 0 0 -27px;
+  margin: -27px 0 0 -27px;          /* centre the icon on its position point */
   background: var(--bg-secondary);
   border: 1px solid var(--glass-border);
   border-radius: 50%;
@@ -243,20 +280,28 @@
   justify-content: center;
   color: var(--text-secondary);
   pointer-events: auto;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  z-index: 3;
-  --radius: 260px;
+  transition:
+    color      0.3s ease,
+    background 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow  0.3s ease;
+  /* Scale feedback when "behind" the image (JS adds .is-behind class) */
+}
+
+/* Dim icons that are behind the image so the depth effect reads clearly */
+.orbit-icon.is-behind {
+  opacity: 0.45;
+  filter: brightness(0.6);
 }
 
 .orbit-icon:hover {
-  animation-play-state: paused !important;
   color: white;
   background: var(--accent-primary);
   border-color: var(--accent-primary);
   box-shadow: 0 0 25px var(--accent-primary);
-  z-index: 20;
 }
 
+/* ─── Tooltip ─────────────────────────────────────────────────────────────── */
 .icon-tooltip {
   position: absolute;
   top: -42px;
@@ -275,6 +320,7 @@
   border: 1px solid var(--accent-primary);
   box-shadow: 0 4px 15px rgba(41, 98, 255, 0.3);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 100;
 }
 
 .orbit-icon:hover .icon-tooltip {
@@ -283,106 +329,45 @@
   transform: translateX(-50%) translateY(0);
 }
 
-/* Icon animations: they rotate inside the elliptical path container */
-.path-1 .orbit-icon.icon-1 { animation: orbit-2d 12s linear infinite; }
-.path-1 .orbit-icon.icon-2 { animation: orbit-2d 12s linear infinite -6s; }
-
-.path-2 .orbit-icon.icon-3 { animation: orbit-2d 15s linear infinite; }
-.path-2 .orbit-icon.icon-4 { animation: orbit-2d 15s linear infinite -7.5s; }
-
-.path-3 .orbit-icon.icon-5 { animation: orbit-2d 18s linear infinite; }
-
-@keyframes orbit-2d {
-  0% { 
-    transform: rotate(0deg) translateX(var(--radius)) rotate(0deg) scaleY(2.5) rotate(0deg); 
-  }
-  100% { 
-    transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg) scaleY(2.5) rotate(-0deg); 
-  }
-}
-
-/* Specific path adjustments to keep icons upright */
-.path-1 .orbit-icon { animation-name: orbit-path-1; }
-.path-2 .orbit-icon { animation-name: orbit-path-2; }
-.path-3 .orbit-icon { animation-name: orbit-path-3; }
-
-@keyframes orbit-path-1 {
-  0%   { transform: rotate(0deg) translateX(var(--radius)) rotate(-0deg) scaleY(2.5) rotate(0deg); }
-  100% { transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg) scaleY(2.5) rotate(0deg); }
-}
-
-@keyframes orbit-path-2 {
-  0%   { transform: rotate(0deg) translateX(var(--radius)) rotate(-0deg) scaleY(2.5) rotate(-60deg); }
-  100% { transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg) scaleY(2.5) rotate(-60deg); }
-}
-
-@keyframes orbit-path-3 {
-  0%   { transform: rotate(0deg) translateX(var(--radius)) rotate(-0deg) scaleY(2.5) rotate(-120deg); }
-  100% { transform: rotate(360deg) translateX(var(--radius)) rotate(-360deg) scaleY(2.5) rotate(-120deg); }
-}
-
-@media (max-width: 968px) {
-  .saturn-rings {
-    width: 320px;
-    height: 320px;
-  }
-  .orbit-icon {
-    --radius: 160px;
-    width: 42px;
-    height: 42px;
-    margin: -21px 0 0 -21px;
-  }
-}
-
-@media (max-width: 968px) {
-  .saturn-rings {
-    width: 320px;
-    height: 320px;
-  }
-  .orbit-icon {
-    --radius: 160px;
-    width: 42px;
-    height: 42px;
-    margin: -21px 0 0 -21px;
-  }
-  .orbit-icon:hover {
-     transform: scale(1.2) rotateX(-65deg);
-  }
-}
-
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 968px) {
   .hero-container {
     grid-template-columns: 1fr;
     text-align: center;
     gap: 2rem;
   }
-  
+
   .hero-description {
     margin: 0 auto 2.5rem;
   }
-  
+
   .hero-actions {
     justify-content: center;
   }
-  
+
   .hero-visual {
     height: 400px;
     margin-top: 1rem;
     order: -1;
   }
 
+  .orbit-scene,
   .profile-image-wrapper {
     width: 240px;
     height: 240px;
   }
 
   .saturn-rings {
-    width: 320px;
-    height: 320px;
+    width: 330px;
+    height: 330px;
+  }
+
+  .path-1, .path-2, .path-3 {
+    width: 300px;
+    height: 120px;
   }
 
   .orbit-icon {
-    --radius: 160px;
     width: 44px;
     height: 44px;
     margin: -22px 0 0 -22px;

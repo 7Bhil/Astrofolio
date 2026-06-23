@@ -83,15 +83,13 @@ const ContactForm = ({ translations }) => {
 
     setStatus('loading');
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          access_key: '409f18c0-89b7-49a1-b700-3cb71f989740',
           name: formData.name,
           email: formData.email,
           message: formData.message,
-          subject: `Nouveau message de ${formData.name} via Portfolio`,
         }),
       });
       const result = await response.json();
@@ -99,7 +97,8 @@ const ContactForm = ({ translations }) => {
       setStatus(nextStatus);
       if (result.success) setFormData(EMPTY_FORM);
       setTimeout(() => setStatus('idle'), RESET_DELAY_MS);
-    } catch {
+    } catch (err) {
+      console.error('Send error', err);
       setStatus('error');
       setTimeout(() => setStatus('idle'), RESET_DELAY_MS);
     }

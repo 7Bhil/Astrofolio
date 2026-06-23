@@ -6,42 +6,42 @@ const certificationsList = [
   {
     id: 'html-css',
     title: 'HTML & CSS',
-    image: '/Certifications/certification html && css.png'
+    image: '/Certifications/certification html && css.webp'
   },
   {
     id: 'js',
     title: 'JavaScript',
-    image: '/Certifications/certification js.png'
+    image: '/Certifications/certification js.webp'
   },
   {
     id: 'php-mysql',
     title: 'PHP & MySQL',
-    image: '/Certifications/certification php && Mysql.png'
+    image: '/Certifications/certification php && Mysql.webp'
   },
   {
     id: 'python',
     title: 'Python',
-    image: '/Certifications/certification python.png'
+    image: '/Certifications/certification python.webp'
   },
   {
     id: 'c',
     title: 'C Programming',
-    image: '/Certifications/certification C.png'
+    image: '/Certifications/certification C.webp'
   },
   {
     id: 'linux',
     title: 'Linux',
-    image: '/Certifications/certification linux.png'
+    image: '/Certifications/certification linux.webp'
   },
   {
     id: 'reseau1',
     title: 'Networking Concepts',
-    image: '/Certifications/certification reseau.png'
+    image: '/Certifications/certification reseau.webp'
   },
   {
     id: 'reseau2',
     title: 'Advanced Networking',
-    image: '/Certifications/certification reseau2.png'
+    image: '/Certifications/certification reseau2.webp'
   }
 ];
 

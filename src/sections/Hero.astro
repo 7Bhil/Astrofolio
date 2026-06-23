@@ -2,7 +2,6 @@
 import { ArrowRight, Download, Github, Linkedin, Mail, Facebook, Gitlab } from 'lucide-react';
 import '../styles/Hero.css';
 import { getTranslations } from '../utils/t';
-import { Image } from 'astro:assets';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
@@ -42,53 +41,88 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
     </div>
     
     <div class="hero-visual reveal" style={{ animationDelay: '0.2s' }}>
-      <div class="profile-image-wrapper">
-          <div class="saturn-rings">
-            <div class="orbit-path path-1">
-              <a href="https://github.com/7Bhil/" target="_blank" rel="noopener noreferrer" class="orbit-icon icon-1">
-                <Github size={22} />
-                <span class="icon-tooltip">Profil GitHub</span>
-              </a>
-              <a href="https://gitlab.com/7Bhil" target="_blank" rel="noopener noreferrer" class="orbit-icon icon-2">
-                <Gitlab size={22} />
-                <span class="icon-tooltip">Code source GitLab</span>
-              </a>
-            </div>
-            <div class="orbit-path path-2">
-              <a href="https://www.linkedin.com/in/bhilal-chitou/" target="_blank" rel="noopener noreferrer" class="orbit-icon icon-3">
-                <Linkedin size={22} />
-                <span class="icon-tooltip">Réseau LinkedIn</span>
-              </a>
-              <a href="https://web.facebook.com/7Bhil" target="_blank" rel="noopener noreferrer" class="orbit-icon icon-4">
-                <Facebook size={22} />
-                <span class="icon-tooltip">Page Facebook</span>
-              </a>
-            </div>
-            <div class="orbit-path path-3">
-              <a href="mailto:7bhilal.chitou7@gmail.com" class="orbit-icon icon-5">
-                <Mail size={22} />
-                <span class="icon-tooltip">Me contacter</span>
-              </a>
-            </div>
-         </div>
-         
-         <img src="/pro.png" alt="Bhilal CHITOU" class="profile-img" width="400" height="400" loading="eager" />
-         <div class="profile-glow"></div>
-      </div>
+      <!--
+        .orbit-scene  → sets the stacking context for all children
+        .saturn-rings → visual ellipse tracks (purely decorative, no pointer events)
+        .profile-image-wrapper → the profile image (z-index: 1)
+        .orbit-icon   → JS sets z-index: 2 (front) or 0 (behind)
+      -->
+      <div class="orbit-scene" id="orbit-scene">
+
+        <!-- Visual orbit tracks (decorative ellipses) -->
+        <div class="saturn-rings" aria-hidden="true">
+          <div class="orbit-path path-1"></div>
+          <div class="orbit-path path-2"></div>
+          <div class="orbit-path path-3"></div>
+        </div>
+
+        <!-- Profile image (z-index: 1 — the "equator" between front and back) -->
+        <div class="profile-image-wrapper">
+          <picture>
+            <source srcset="/pro.webp" type="image/webp" />
+            <img
+              src="/pro.png"
+              alt="Bhilal CHITOU"
+              class="profile-img"
+              width="400"
+              height="400"
+              loading="eager"
+              fetchpriority="high"
+              decoding="async"
+            />
+          </picture>
+          <div class="profile-glow"></div>
+        </div>
+
+        <!-- Orbit icons — positioned absolutely inside .orbit-scene by JS -->
+        <a href="https://github.com/7Bhil/" target="_blank" rel="noopener noreferrer"
+           class="orbit-icon" id="oi-github"
+           data-orbit="0" data-phase="0">
+          <Github size={22} client:load />
+          <span class="icon-tooltip">Profil GitHub</span>
+        </a>
+
+        <a href="https://gitlab.com/7Bhil" target="_blank" rel="noopener noreferrer"
+           class="orbit-icon" id="oi-gitlab"
+           data-orbit="0" data-phase="0.5">
+          <Gitlab size={22} client:load />
+          <span class="icon-tooltip">Code source GitLab</span>
+        </a>
+
+        <a href="https://www.linkedin.com/in/bhilal-chitou/" target="_blank" rel="noopener noreferrer"
+           class="orbit-icon" id="oi-linkedin"
+           data-orbit="1" data-phase="0">
+          <Linkedin size={22} client:load />
+          <span class="icon-tooltip">Réseau LinkedIn</span>
+        </a>
+
+        <a href="https://web.facebook.com/7Bhil" target="_blank" rel="noopener noreferrer"
+           class="orbit-icon" id="oi-facebook"
+           data-orbit="1" data-phase="0.5">
+          <Facebook size={22} client:load />
+          <span class="icon-tooltip">Page Facebook</span>
+        </a>
+
+        <a href="mailto:7bhilal.chitou7@gmail.com"
+           class="orbit-icon" id="oi-mail"
+           data-orbit="2" data-phase="0">
+          <Mail size={22} client:load />
+          <span class="icon-tooltip">Me contacter</span>
+        </a>
+
+      </div><!-- /.orbit-scene -->
     </div>
   </div>
 </section>
 
 <script>
+  // ─── Typewriter ────────────────────────────────────────────────────────────
   function startTypewriter() {
     const el = document.querySelector('.typewriter-text') as HTMLElement | null;
     if (!el) return;
-
     const text = el.getAttribute('data-text') || '';
     let i = 0;
     el.textContent = '';
-
-    // Delay start by 800ms so the page reveal animation settles first
     setTimeout(() => {
       const interval = setInterval(() => {
         el.textContent += text[i];
@@ -104,57 +138,35 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
     }, 800);
   }
 
-  // Run on first load and on Astro view transitions
-  document.addEventListener('DOMContentLoaded', () => {
-    startTypewriter();
-    initParticles();
-  });
-  document.addEventListener('astro:page-load', () => {
-    startTypewriter();
-    initParticles();
-  });
-
+  // ─── Particles ────────────────────────────────────────────────────────────
   function initParticles() {
     const canvas = document.getElementById('particles-canvas') as HTMLCanvasElement | null;
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-
     let particles: any[] = [];
     const particleCount = 60;
-
     function resize() {
-      canvas!.width = canvas!.offsetWidth;
+      canvas!.width  = canvas!.offsetWidth;
       canvas!.height = canvas!.offsetHeight;
     }
-
     window.addEventListener('resize', resize);
     resize();
-
     class Particle {
-      x: number;
-      y: number;
-      vx: number;
-      vy: number;
-      size: number;
-
+      x: number; y: number; vx: number; vy: number; size: number;
       constructor() {
-        this.x = Math.random() * canvas!.width;
-        this.y = Math.random() * canvas!.height;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
+        this.x    = Math.random() * canvas!.width;
+        this.y    = Math.random() * canvas!.height;
+        this.vx   = (Math.random() - 0.5) * 0.5;
+        this.vy   = (Math.random() - 0.5) * 0.5;
         this.size = Math.random() * 2 + 1;
       }
-
       update() {
         this.x += this.vx;
         this.y += this.vy;
-
-        if (this.x < 0 || this.x > canvas!.width) this.vx *= -1;
-        if (this.y < 0 || this.y > canvas!.height) this.vy *= -1;
+        if (this.x < 0 || this.x > canvas!.width)  this.vx *= -1;
+        if (this.y < 0 || this.y > canvas!.height)  this.vy *= -1;
       }
-
       draw() {
         ctx!.beginPath();
         ctx!.arc(this.x, this.y, this.size, 0, Math.PI * 2);
@@ -162,25 +174,17 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
         ctx!.fill();
       }
     }
-
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
-    }
-
+    for (let i = 0; i < particleCount; i++) particles.push(new Particle());
     function animate() {
       ctx!.clearRect(0, 0, canvas!.width, canvas!.height);
-
       for (let i = 0; i < particles.length; i++) {
         const p1 = particles[i];
         p1.update();
         p1.draw();
-
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
-          const dx = p1.x - p2.x;
-          const dy = p1.y - p2.y;
+          const dx = p1.x - p2.x, dy = p1.y - p2.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-
           if (dist < 150) {
             ctx!.beginPath();
             ctx!.moveTo(p1.x, p1.y);
@@ -191,10 +195,137 @@ const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.
           }
         }
       }
-
       requestAnimationFrame(animate);
     }
-
     animate();
   }
+
+  // ─── 3-D Orbit engine ─────────────────────────────────────────────────────
+  //
+  // Each icon travels on a tilted elliptical path.
+  // The scene centre is the profile image.
+  //
+  // Math:
+  //   angle θ increases linearly with time.
+  //   x = cx + rx · cos(θ)
+  //   y = cy + ry · sin(θ)          (ry = rx * tilt)
+  //
+  //   depth = sin(θ)  → +1 = fully in front, -1 = fully behind
+  //   z-index:  depth > 0  → 2 (in front of image z-index:1)
+  //             depth ≤ 0  → 0 (behind  the image z-index:1)
+  //
+  // Three orbits share the same ellipse radii but are rotated by 0°, 60°, 120°.
+  // This is achieved by rotating the (x,y) vector by the orbit tilt angle.
+
+  function initOrbits() {
+    const scene = document.getElementById('orbit-scene');
+    if (!scene) return;
+
+    // Orbit configuration
+    const orbits = [
+      { tiltDeg: 0,   speed: 0.00045, rx: 220, ry: 88  },   // path-1
+      { tiltDeg: 60,  speed: 0.00036, rx: 220, ry: 88  },   // path-2
+      { tiltDeg: 120, speed: 0.00028, rx: 220, ry: 88  },   // path-3
+    ];
+
+    // Mobile: smaller radii
+    const isMobile = () => window.innerWidth <= 968;
+    const getRxRy  = () => isMobile()
+      ? { rx: 140, ry: 56 }
+      : { rx: 220, ry: 88 };
+
+    // Collect all orbit icons
+    const icons = Array.from(
+      scene.querySelectorAll<HTMLElement>('.orbit-icon')
+    );
+
+    // scene centre (icons are positioned absolute inside .orbit-scene)
+    const sceneSize = () => {
+      const r = scene.getBoundingClientRect();
+      return { cx: r.width / 2, cy: r.height / 2 };
+    };
+
+    // Per-icon state: angle in radians (starts at phase * 2π)
+    const state = icons.map(icon => {
+      const orbitIdx = parseInt(icon.dataset.orbit ?? '0', 10);
+      const phase    = parseFloat(icon.dataset.phase  ?? '0');
+      return {
+        el:      icon,
+        orbit:   orbits[orbitIdx] ?? orbits[0],
+        angle:   phase * 2 * Math.PI,
+        paused:  false,
+      };
+    });
+
+    // Pause on hover so the user can click easily
+    icons.forEach((icon, idx) => {
+      icon.addEventListener('mouseenter', () => { state[idx].paused = true; });
+      icon.addEventListener('mouseleave', () => { state[idx].paused = false; });
+    });
+
+    let last = 0;
+    function tick(now: number) {
+      const dt = now - last;
+      last = now;
+      const { cx, cy } = sceneSize();
+      const { rx, ry } = getRxRy();
+      const tiltRad = (deg: number) => (deg * Math.PI) / 180;
+
+      for (const s of state) {
+        if (!s.paused) s.angle += s.orbit.speed * dt;
+
+        const θ = s.angle;
+        // Local ellipse coords (un-tilted)
+        const lx = rx * Math.cos(θ);
+        const ly = ry * Math.sin(θ);
+
+        // Rotate by orbit tilt
+        const tilt = tiltRad(s.orbit.tiltDeg);
+        const cosT = Math.cos(tilt);
+        const sinT = Math.sin(tilt);
+        const wx   = lx * cosT - ly * sinT;
+        const wy   = lx * sinT + ly * cosT;
+
+        // "depth": how far in front/behind the icon is.
+        // We use the un-rotated ly (vertical component of the ellipse)
+        // mapped through the tilt angle.
+        // A simpler, robust proxy: sin(θ) relative to the orbit's own plane.
+        // We want: depth > 0 → front, depth < 0 → behind.
+        // The vertical component of the tilted ellipse gives depth.
+        // depth = sin(θ) (positive = top-of-ellipse = "coming towards viewer")
+        const depth = Math.sin(θ);
+
+        // Position
+        s.el.style.left    = `${cx + wx}px`;
+        s.el.style.top     = `${cy + wy}px`;
+
+        // Layering: front = z-index 2, behind = z-index 0
+        if (depth > 0) {
+          s.el.style.zIndex = '2';
+          s.el.classList.remove('is-behind');
+        } else {
+          s.el.style.zIndex = '0';
+          s.el.classList.add('is-behind');
+        }
+
+        // Subtle scale for depth feel (optional polish)
+        const scale = 0.85 + 0.15 * ((depth + 1) / 2);
+        s.el.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame((now) => { last = now; tick(now); });
+  }
+
+  // ─── Bootstrap ────────────────────────────────────────────────────────────
+  function init() {
+    startTypewriter();
+    initParticles();
+    initOrbits();
+  }
+
+  document.addEventListener('DOMContentLoaded', init);
+  document.addEventListener('astro:page-load', init);
 </script>
