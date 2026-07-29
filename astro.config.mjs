@@ -7,7 +7,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://7bhil.github.io/Bhilal/',
+  site: 'https://7bhil.vercel.app/',
   integrations: [react(), sitemap(), AstroPWA({
     registerType: 'autoUpdate',
     injectRegister: 'auto',
