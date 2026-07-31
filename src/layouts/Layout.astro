@@ -6,6 +6,7 @@ interface Props {
 }
 
 import ScrollProgress from '../components/ScrollProgress.jsx';
+import Chatbot from '../components/Chatbot.jsx';
 
 const { 
 	title, 
@@ -79,6 +80,7 @@ import '../styles/global.css';
 	<body>
 		<ScrollProgress client:load />
 		<slot />
+		<Chatbot client:load lang={lang} />
 		<script>
 			// Intersection Observer for scroll animations
 			const observerCallback = (entries) => {
