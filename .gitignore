@@ -25,6 +25,10 @@ pnpm-debug.log*
 # astro
 .astro/
 
+# test artifacts
+playwright-report/
+test-results/
+
 # IDEs
 .vscode/
 .idea/

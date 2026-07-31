@@ -5,7 +5,10 @@ export const translations = {
       about: "About me",
       projects: "Projects",
       skills: "Skills",
-      contact: "Contact"
+      contact: "Contact",
+      switchLanguage: "Switch language",
+      toggleTheme: "Toggle theme",
+      openMenu: "Open menu"
     },
     hero: {
       welcome: "Hi, I'm",
@@ -59,19 +62,19 @@ export const translations = {
       vitch: {
         title: "Vitch (Demo)",
         description: "Secure electronic wallet with virtual card issuance and real-time transaction management."
-      }
+      },
+      demo: "Demo",
+      viewDetails: "View details"
     },
     contact: {
       title: "Get In Touch",
       subtitle: "Have a project in mind or want to discuss opportunities? Let's talk.",
       infoTitle: "Contact Information",
       infoDesc: "Feel free to reach out for collaborations or just a friendly hello!",
-      formName: "Full Name",
-      formEmail: "Email Address",
-      formSubject: "Subject",
-      formMessage: "Tell me about your project",
-      formSubmit: "Send Message",
-      successMsg: "Message sent! I'll get back to you soon."
+      whatsappTitle: "Let's talk on WhatsApp",
+      whatsappDesc: "No form to fill out. Send me a direct message and I will reply as soon as possible.",
+      whatsappCta: "Contact me on WhatsApp",
+      whatsappAria: "Contact Bhilal CHITOU on WhatsApp"
     },
     skills: {
       title: "My Skills",
@@ -84,7 +87,11 @@ export const translations = {
     certifications: {
       title: "Certifications",
       subtitle: "My technical certifications and achievements.",
-      viewFull: "View Full Certificate"
+      viewFull: "View Full Certificate",
+      closeModal: "Close modal"
+    },
+    footer: {
+      rights: "All rights reserved."
     },
     services: {
       title: "Expertise & Services",
@@ -109,7 +116,10 @@ export const translations = {
       about: "À propos",
       projects: "Projets",
       skills: "Compétences",
-      contact: "Me contacter"
+      contact: "Me contacter",
+      switchLanguage: "Changer de langue",
+      toggleTheme: "Changer de thème",
+      openMenu: "Ouvrir le menu"
     },
     hero: {
       available: "Disponible pour de nouvelles opportunités",
@@ -164,19 +174,19 @@ export const translations = {
       vitch: {
         title: "Vitch (Démo)",
         description: "Portefeuille électronique sécurisé avec émission de cartes virtuelles et gestion de transactions en temps réel."
-      }
+      },
+      demo: "Démo",
+      viewDetails: "Voir les détails"
     },
     contact: {
       title: "Contactez-moi",
       subtitle: "Vous avez un projet en tête ou souhaitez discuter d'opportunités ? Parlons-en.",
       infoTitle: "Informations de Contact",
       infoDesc: "N'hésitez pas à me contacter pour des collaborations ou simplement pour dire bonjour !",
-      formName: "Nom Complet",
-      formEmail: "Adresse E-mail",
-      formSubject: "Sujet",
-      formMessage: "Parlez-moi de votre projet",
-      formSubmit: "Envoyer le message",
-      successMsg: "Message envoyé ! Je vous répondrai bientôt."
+      whatsappTitle: "Discutons sur WhatsApp",
+      whatsappDesc: "Plus besoin de remplir un formulaire. Envoyez-moi un message direct et je vous répondrai dès que possible.",
+      whatsappCta: "Me contacter sur WhatsApp",
+      whatsappAria: "Contacter Bhilal CHITOU sur WhatsApp"
     },
     skills: {
       title: "Mes Compétences",
@@ -189,7 +199,11 @@ export const translations = {
     certifications: {
       title: "Certifications",
       subtitle: "Mes certifications techniques et accomplissements.",
-      viewFull: "Voir le certificat complet"
+      viewFull: "Voir le certificat complet",
+      closeModal: "Fermer la fenêtre"
+    },
+    footer: {
+      rights: "Tous droits réservés."
     },
     services: {
       title: "Expertise & Services",

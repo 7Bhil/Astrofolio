@@ -69,11 +69,11 @@ const Navbar = ({ lang, translations }) => {
         
         <div className={`nav-actions-desktop ${isScrolled ? 'actions-scrolled' : ''}`}>
           <div className="nav-controls">
-            <a href={otherLangUrl} className="icon-btn" aria-label="Toggle language">
+            <a href={otherLangUrl} className="icon-btn" aria-label={t('nav.switchLanguage')}>
               <Globe size={18} />
               <span className="lang-text">{lang.toUpperCase()}</span>
             </a>
-            <button onClick={toggleTheme} className="icon-btn" aria-label="Toggle theme">
+            <button onClick={toggleTheme} className="icon-btn" aria-label={t('nav.toggleTheme')}>
               {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
             </button>
           </div>
@@ -87,6 +87,7 @@ const Navbar = ({ lang, translations }) => {
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="menu-toggle"
+            aria-label={t('nav.openMenu')}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -100,7 +101,7 @@ const Navbar = ({ lang, translations }) => {
             <Globe size={18} />
             <span className="lang-text">{lang.toUpperCase()}</span>
           </a>
-          <button onClick={toggleTheme} className="icon-btn" aria-label="Toggle theme">
+          <button onClick={toggleTheme} className="icon-btn" aria-label={t('nav.toggleTheme')}>
             {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>

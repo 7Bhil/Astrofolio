@@ -104,7 +104,7 @@ const Certifications = ({ t }) => {
         onClick={closeModal}
       >
         <div className="cert-modal-content" onClick={(e) => e.stopPropagation()}>
-          <button className="cert-modal-close" onClick={closeModal} aria-label="Close modal">
+          <button className="cert-modal-close" onClick={closeModal} aria-label={t.closeModal || 'Close modal'}>
             <X size={32} />
           </button>
           {selectedCert && (

@@ -5,7 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../hooks/use-outside-click";
 import { ExternalLink, Github } from 'lucide-react';
 
-export function ExpandableProjects({ projects }) {
+export function ExpandableProjects({ projects, labels = {} }) {
   const [active, setActive] = useState(null);
   const id = useId();
   const ref = useRef(null);
@@ -95,6 +95,7 @@ export function ExpandableProjects({ projects }) {
                         exit={{ opacity: 0 }}
                         href={active.githubUrl}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="p-3 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-800 dark:text-neutral-200 hover:scale-110 transition-transform"
                         title="GitHub"
                       >
@@ -109,9 +110,10 @@ export function ExpandableProjects({ projects }) {
                         exit={{ opacity: 0 }}
                         href={active.liveUrl}
                         target="_blank"
+                        rel="noopener noreferrer"
                         className="px-6 py-3 rounded-full font-bold bg-blue-600 text-white hover:bg-blue-700 shadow-lg shadow-blue-500/20 transition-all flex items-center gap-2"
                       >
-                        <span>Demo</span>
+                        <span>{labels.demo || "Demo"}</span>
                         <ExternalLink size={18} />
                       </motion.a>
                     )}
@@ -136,9 +138,17 @@ export function ExpandableProjects({ projects }) {
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.map((card) => (
           <motion.div
+            role="button"
+            tabIndex={0}
             layoutId={`card-${card.title}-${id}`}
             key={card.title}
             onClick={() => setActive(card)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setActive(card);
+              }
+            }}
             className="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:shadow-2xl transition-all duration-300"
           >
             <motion.div 
@@ -171,7 +181,7 @@ export function ExpandableProjects({ projects }) {
               
               <div className="flex justify-between items-center mt-4">
                 <span className="text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                  View details <ExternalLink size={14} />
+                  {labels.viewDetails || "View details"} <ExternalLink size={14} />
                 </span>
               </div>
             </div>

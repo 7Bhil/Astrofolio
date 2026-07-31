@@ -73,6 +73,10 @@ const featuredProjects = [
       <p class="section-subtitle text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl">{t('projects.subtitle')}</p>
     </div>
     
-    <ExpandableProjects projects={featuredProjects} client:load />
+    <ExpandableProjects
+      projects={featuredProjects}
+      labels={{ demo: t('projects.demo'), viewDetails: t('projects.viewDetails') }}
+      client:load
+    />
   </div>
 </section>

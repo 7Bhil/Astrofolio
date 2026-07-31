@@ -15,11 +15,11 @@ test.describe('Astrofolio E2E Tests', () => {
     await expect(html).toHaveAttribute('data-theme', 'dark');
     
     // Click theme toggle (using first() to avoid ambiguity if two buttons exist)
-    await page.getByLabel('Toggle theme').first().click();
+    await page.getByLabel(/theme|thème/i).first().click();
     await expect(html).toHaveAttribute('data-theme', 'light');
     
     // Click again to return to dark
-    await page.getByLabel('Toggle theme').first().click();
+    await page.getByLabel(/theme|thème/i).first().click();
     await expect(html).toHaveAttribute('data-theme', 'dark');
   });
 
@@ -27,27 +27,18 @@ test.describe('Astrofolio E2E Tests', () => {
     await page.goto('/');
     
     // Click language toggle
-    await page.getByLabel('Toggle language').first().click();
+    await page.getByLabel(/langue|language/i).first().click();
     
     // Should be on /en/
     await expect(page).toHaveURL(/\/en\//);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
   });
 
-  test('should show validation errors on contact form', async ({ page }) => {
+  test('should expose WhatsApp contact link', async ({ page }) => {
     await page.goto('/#contact');
-    
-    // Wait for the button to be ready
-    const submitBtn = page.locator('button[type="submit"]');
-    await expect(submitBtn).toBeVisible();
-    
-    // Scroll and click
-    await submitBtn.scrollIntoViewIfNeeded();
-    await submitBtn.click();
-    
-    // Check for error messages (wait for them to appear)
-    await expect(page.locator('#name-error')).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('#email-error')).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('#message-error')).toBeVisible({ timeout: 10000 });
+
+    const whatsappLink = page.getByRole('link', { name: /whatsapp/i });
+    await expect(whatsappLink).toBeVisible();
+    await expect(whatsappLink).toHaveAttribute('href', /wa\.me\/2290144242964/);
   });
 });

@@ -11,6 +11,7 @@ import Contact from '../../sections/Contact.astro';
 import { translations } from '../../constants/translations';
 
 const lang = 'en';
+const footerText = translations[lang].footer.rights;
 ---
 
 <Layout title="Bhilal CHITOU | Fintech & Security Specialist" lang={lang}>
@@ -27,7 +28,7 @@ const lang = 'en';
 	
 	<footer style={{ textAlign: 'center', padding: '2rem', borderTop: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
 		<div class="container">
-			<p>&copy; {new Date().getFullYear()} Bhilal CHITOU. All rights reserved.</p>
+			<p>&copy; {new Date().getFullYear()} Bhilal CHITOU. {footerText}</p>
 		</div>
 	</footer>
 </Layout>

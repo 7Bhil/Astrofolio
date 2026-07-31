@@ -1,12 +1,15 @@
 ---
-import { MapPin, Phone, Mail } from 'lucide-react';
+import { MapPin, Mail, MessageCircle, Phone } from 'lucide-react';
 import { getTranslations } from '../utils/t';
-import { translations } from '../constants/translations';
-import ContactForm from '../components/ContactForm';
 import '../styles/Contact.css';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
+const whatsappNumber = '2290144242964';
+const whatsappText = lang === 'en'
+  ? 'Hello Bhilal, I would like to discuss a project with you.'
+  : 'Bonjour Bhilal, je souhaite discuter d\'un projet avec vous.';
+const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
 ---
 
 <section id="contact" class="section-padding contact-section">
@@ -26,7 +29,12 @@ const t = getTranslations(lang);
         </p>
         
         <div class="info-items">
-
+          <div class="info-item">
+            <div class="info-icon">
+              <Phone size={20} />
+            </div>
+            <span>+229 01 44 24 29 64</span>
+          </div>
           <div class="info-item">
             <div class="info-icon">
               <Mail size={20} />
@@ -43,8 +51,28 @@ const t = getTranslations(lang);
         
         <div class="contact-shape"></div>
       </div>
-      
-      <ContactForm client:load translations={translations[lang].contact} />
+
+      <div class="whatsapp-contact">
+        <div class="whatsapp-card">
+          <div class="whatsapp-icon" aria-hidden="true">
+            <MessageCircle size={34} />
+          </div>
+          <div class="whatsapp-copy">
+            <h3>{t('contact.whatsappTitle')}</h3>
+            <p>{t('contact.whatsappDesc')}</p>
+          </div>
+          <a
+            class="btn whatsapp-btn"
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t('contact.whatsappAria')}
+          >
+            <MessageCircle size={20} />
+            <span>{t('contact.whatsappCta')}</span>
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
