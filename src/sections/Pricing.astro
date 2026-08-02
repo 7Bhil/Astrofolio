@@ -1,0 +1,222 @@
+---
+const { lang = 'fr' } = Astro.props;
+
+const pricing = lang === 'en' ? {
+  title: 'Visible offers',
+  subtitle: 'Clear starting prices to frame the discussion before we go deeper.',
+  note: 'Every project is scoped before kickoff. The prices below are entry points, not ceilings.',
+  cta: 'Discuss my project',
+  plans: [
+    {
+      name: 'Discovery / Audit',
+      price: 'From 25,000 FCFA',
+      duration: '1 to 2 days',
+      description: 'For a concrete diagnosis, scope clarification and the best technical path.',
+      bullets: ['Problem framing', 'Tech recommendation', 'Action plan'],
+      featured: false
+    },
+    {
+      name: 'Landing page / Showcase site',
+      price: 'From 60,000 FCFA',
+      duration: '3 to 7 days',
+      description: 'For a polished site that sells, explains and captures leads quickly.',
+      bullets: ['Responsive design', 'Conversion copy', 'Deployment included'],
+      featured: true
+    },
+    {
+      name: 'Custom web or mobile app',
+      price: 'From 250,000 FCFA',
+      duration: '2 to 6 weeks',
+      description: 'For a tailored product with workflows, data, and business logic.',
+      bullets: ['Product scoping', 'UI + backend', 'Delivery roadmap'],
+      featured: false
+    }
+  ]
+} : {
+  title: 'Offres tarifaires visibles',
+  subtitle: 'Des prix de départ clairs pour cadrer la discussion avant d’aller plus loin.',
+  note: 'Chaque projet est cadré avant lancement. Les montants ci-dessous sont des points d’entrée, pas des plafonds.',
+  cta: 'Parler de mon projet',
+  plans: [
+    {
+      name: 'Cadrage / Audit',
+      price: 'À partir de 25 000 FCFA',
+      duration: '1 à 2 jours',
+      description: 'Pour un diagnostic concret, la clarification du périmètre et la meilleure route technique.',
+      bullets: ['Lecture du besoin', 'Recommandation technique', 'Plan d’action'],
+      featured: false
+    },
+    {
+      name: 'Landing page / Site vitrine',
+      price: 'À partir de 60 000 FCFA',
+      duration: '3 à 7 jours',
+      description: 'Pour un site soigné qui vend, explique et capte des prospects rapidement.',
+      bullets: ['Design responsive', 'Copy orientée conversion', 'Déploiement inclus'],
+      featured: true
+    },
+    {
+      name: 'Application web ou mobile sur mesure',
+      price: 'À partir de 250 000 FCFA',
+      duration: '2 à 6 semaines',
+      description: 'Pour un produit sur mesure avec workflows, données et logique métier.',
+      bullets: ['Cadrage produit', 'UI + backend', 'Feuille de route'],
+      featured: false
+    }
+  ]
+};
+---
+
+<section id="pricing" class="section-padding pricing-section">
+  <div class="container">
+    <div class="section-header text-center mb-12">
+      <h2 class="section-title">{pricing.title}</h2>
+      <p class="section-subtitle">{pricing.subtitle}</p>
+    </div>
+
+    <div class="pricing-grid">
+      {pricing.plans.map((plan) => (
+        <article class={plan.featured ? 'pricing-card featured' : 'pricing-card'}>
+          <div class="pricing-card-top">
+            <h3 class="pricing-plan-name">{plan.name}</h3>
+            <span class="pricing-duration">{plan.duration}</span>
+          </div>
+          <div class="pricing-price">{plan.price}</div>
+          <p class="pricing-description">{plan.description}</p>
+          <ul class="pricing-bullets">
+            {plan.bullets.map((bullet) => (
+              <li>{bullet}</li>
+            ))}
+          </ul>
+        </article>
+      ))}
+    </div>
+
+    <div class="pricing-footer glass-panel">
+      <p>{pricing.note}</p>
+      <a href="#contact" class="btn btn-primary">{pricing.cta}</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .pricing-section {
+    position: relative;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .pricing-card {
+    padding: 2rem;
+    border-radius: 2rem;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(180deg, rgba(10, 16, 32, 0.9), rgba(5, 8, 18, 0.95));
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  }
+
+  .pricing-card.featured {
+    border-color: rgba(59, 130, 246, 0.6);
+    transform: translateY(-8px);
+    background: linear-gradient(180deg, rgba(19, 29, 58, 0.95), rgba(5, 8, 18, 0.98));
+  }
+
+  .pricing-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .pricing-plan-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+  }
+
+  .pricing-duration {
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-primary);
+    white-space: nowrap;
+  }
+
+  .pricing-price {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: #fff;
+  }
+
+  .pricing-description {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .pricing-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .pricing-bullets li {
+    position: relative;
+    padding-left: 1rem;
+    color: var(--text-primary);
+  }
+
+  .pricing-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55rem;
+    width: 0.35rem;
+    height: 0.35rem;
+    border-radius: 9999px;
+    background: var(--accent-primary);
+  }
+
+  .pricing-footer {
+    margin-top: 1.5rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .pricing-footer p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    max-width: 760px;
+  }
+
+  @media (max-width: 1024px) {
+    .pricing-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .pricing-card.featured {
+      transform: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .pricing-card,
+    .pricing-footer {
+      padding: 1.5rem;
+    }
+
+    .pricing-card-top {
+      flex-direction: column;
+    }
+  }
+</style>

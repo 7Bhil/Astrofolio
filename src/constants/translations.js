@@ -40,28 +40,52 @@ export const translations = {
       subtitle: "A selection of my best work across web and mobile platforms.",
       bhilal: {
         title: "Bhilal Language v1.2.0",
-        description: "Bilingual French/English programming language transpiling to JavaScript. Full OOP, interactive REPL mode and native network security tools. Designed for French-speaking developers."
+        description: "Bilingual French/English programming language transpiling to JavaScript.",
+        problem: "French-speaking developers needed a language they could learn locally and still use with a practical JavaScript runtime.",
+        decision: "Built a bilingual language with OOP support, an interactive REPL and native network security tools.",
+        impact: "Lowered the barrier to experimentation and positioned the project as a serious developer tool.",
+        solved: "A local tooling gap that slowed onboarding and early prototyping."
       },
       bhilcours: {
         title: "Bhil Cours",
-        description: "A comprehensive platform designed for learning programming languages and completing practical exercises in C, C++, JavaScript, PHP, Python, and Ruby."
+        description: "A learning platform for programming practice and guided exercises.",
+        problem: "Learners needed a practical place to train across several languages without jumping between disconnected resources.",
+        decision: "Built a structured React and Django platform for lessons, exercises and progression tracking.",
+        impact: "Made practice more repeatable and easier to consume for students.",
+        solved: "Fragmented programming practice for beginners."
       },
       arrondissement: {
         title: "Bloc Républicain - Arrondissement",
-        description: "Institutional web application for a national-audience organization. Interactive communication interface and initiative management."
+        description: "Institutional web application for a national audience.",
+        problem: "A public-facing organization needed a clearer digital channel to communicate and manage initiatives.",
+        decision: "Designed an institutional web application around communication clarity and initiative management.",
+        impact: "Centralized updates and made key information easier to present to a broad audience.",
+        solved: "Scattered communication around local initiatives."
       },
 
       challenge: {
         title: "Challenge Platform",
-        description: "An interactive platform where administrators propose coding challenges. Participants submit their solutions to be graded by a jury, with results displayed on a real-time leaderboard."
+        description: "An interactive platform for coding challenges and real-time ranking.",
+        problem: "Challenge organizers needed a clear way to collect submissions and rank participants transparently.",
+        decision: "Built a MERN platform with jury grading and a live leaderboard.",
+        impact: "Reduced manual tracking and made results more credible.",
+        solved: "Manual evaluation and unclear rankings during competitions."
       },
       resto: {
         title: "Premium Restaurant Frontend",
-        description: "A modern and elegant frontend for a restaurant, built with React. Features a responsive menu, smooth animations, and a focus on premium user experience."
+        description: "A modern restaurant frontend built with React and premium UI polish.",
+        problem: "The restaurant needed a digital storefront that felt premium and worked well on mobile.",
+        decision: "Built a React frontend with a responsive menu and polished visual rhythm.",
+        impact: "Improved brand perception and made discovery easier on small screens.",
+        solved: "A weak first impression that did not match the brand value."
       },
       vitch: {
         title: "Vitch (Demo)",
-        description: "Secure electronic wallet with virtual card issuance and real-time transaction management."
+        description: "Secure electronic wallet with virtual card issuance and transaction management.",
+        problem: "Digital payments needed a wallet experience that felt secure and simple from the first interaction.",
+        decision: "Built a fintech demo around secure payment flows, wallet actions and virtual card issuance.",
+        impact: "Demonstrated a scalable fintech interface and validated the product direction.",
+        solved: "No clear wallet flow for virtual payments and card management."
       },
       demo: "Demo",
       viewDetails: "View details"
@@ -152,28 +176,52 @@ export const translations = {
       subtitle: "Une sélection de mes meilleurs travaux sur plateformes web et mobiles.",
       bhilal: {
         title: "Bhilal Language v1.2.0",
-        description: "Langage de programmation bilingue français/anglais transpilant vers JavaScript. POO complète, REPL interactif et outils natifs de sécurité réseau. Conçu pour les développeurs francophones."
+        description: "Langage bilingue français/anglais transpilant vers JavaScript.",
+        problem: "Les développeurs francophones avaient besoin d'un langage qu'ils puissent apprendre localement tout en gardant une base JavaScript exploitable.",
+        decision: "J'ai construit un langage bilingue avec POO, REPL interactif et outils natifs de sécurité réseau.",
+        impact: "Le projet est devenu plus facile à adopter et plus crédible comme outil développeur.",
+        solved: "Un manque d'outillage local qui freinait l'apprentissage et le prototypage."
       },
       bhilcours: {
         title: "Bhil Cours",
-        description: "Une plateforme d'apprentissage dédiée aux langages de programmation, permettant de réaliser des exercices pratiques en C, C++, JS, PHP, Python et Ruby."
+        description: "Une plateforme d'apprentissage pour pratiquer le code avec progression guidée.",
+        problem: "Les apprenants avaient besoin d'un espace pratique pour s'entraîner sur plusieurs langages sans naviguer entre des ressources dispersées.",
+        decision: "J'ai construit une plateforme React et Django avec cours, exercices et progression structurée.",
+        impact: "La pratique est devenue plus régulière et plus simple à suivre pour les étudiants.",
+        solved: "Une pratique du code fragmentée pour les débutants."
       },
       arrondissement: {
         title: "Bloc Républicain - Arrondissement",
-        description: "Application web institutionnelle pour une organisation à audience nationale. Interface interactive de communication et gestion des initiatives."
+        description: "Application web institutionnelle pour une audience nationale.",
+        problem: "Une organisation publique avait besoin d'un canal digital plus clair pour communiquer et gérer ses initiatives.",
+        decision: "J'ai conçu une application institutionnelle centrée sur la clarté des messages et la gestion des initiatives.",
+        impact: "Les informations sont centralisées et plus faciles à présenter à un large public.",
+        solved: "Une communication éparpillée autour des initiatives locales."
       },
 
       challenge: {
         title: "Plateforme de Challenges",
-        description: "Une plateforme interactive où les administrateurs proposent des challenges. Les participants soumettent leurs solutions pour être notées par un jury, avec des résultats affichés sur un classement en temps réel."
+        description: "Une plateforme interactive pour des challenges et un classement temps réel.",
+        problem: "Les organisateurs de challenges avaient besoin d'un moyen clair pour collecter les soumissions et classer les participants de façon transparente.",
+        decision: "J'ai développé une plateforme MERN avec notation par jury et classement live.",
+        impact: "Le suivi manuel a été réduit et les résultats sont devenus plus crédibles.",
+        solved: "Une évaluation manuelle et des classements flous pendant les compétitions."
       },
       resto: {
         title: "Interface Restaurant Premium",
-        description: "Un frontend moderne et élégant pour un restaurant, développé avec React. Propose un menu responsive, des animations fluides et met l'accent sur une expérience utilisateur premium."
+        description: "Un frontend restaurant moderne développé avec React et soigné visuellement.",
+        problem: "Le restaurant avait besoin d'une vitrine digitale premium, efficace sur mobile.",
+        decision: "J'ai construit un frontend React avec menu responsive et rythme visuel soigné.",
+        impact: "L'image de marque est mieux perçue et la navigation mobile est plus fluide.",
+        solved: "Une première impression trop faible par rapport à la valeur de la marque."
       },
       vitch: {
         title: "Vitch (Démo)",
-        description: "Portefeuille électronique sécurisé avec émission de cartes virtuelles et gestion de transactions en temps réel."
+        description: "Portefeuille électronique sécurisé avec émission de cartes virtuelles et gestion des transactions.",
+        problem: "Les paiements digitaux avaient besoin d'une expérience portefeuille simple et rassurante dès la première interaction.",
+        decision: "J'ai construit une démo fintech autour de parcours de paiement sécurisés, d'actions portefeuille et de cartes virtuelles.",
+        impact: "L'interface fintech devient démonstrative et crédible pour valider la direction produit.",
+        solved: "Aucun parcours clair pour les paiements virtuels et la gestion des cartes."
       },
       demo: "Démo",
       viewDetails: "Voir les détails"

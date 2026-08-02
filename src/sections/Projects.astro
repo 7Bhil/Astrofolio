@@ -1,6 +1,5 @@
 ---
 import { ExpandableProjects } from '../components/ExpandableProjects';
-import ProjectCard from '../components/ProjectCard.astro';
 import { getTranslations } from '../utils/t';
 import '../styles/Projects.css';
 
@@ -18,50 +17,74 @@ const featuredProjects = [
   {
     title: t('projects.bhilal.title'),
     description: t('projects.bhilal.description'),
-    tags: ["Node.js", "Go", "Cybersecurity", "Custom Language"],
+    problem: t('projects.bhilal.problem'),
+    decision: t('projects.bhilal.decision'),
+    impact: t('projects.bhilal.impact'),
+    solved: t('projects.bhilal.solved'),
+    tags: ['Node.js', 'Go', 'Cybersecurity', 'Custom Language'],
     image: bhilalImg,
-    githubUrl: "https://github.com/7Bhil/Language-Bhilal",
-    liveUrl: "https://bhil-documentations.netlify.app/"
+    githubUrl: 'https://github.com/7Bhil/Language-Bhilal',
+    liveUrl: 'https://bhil-documentations.netlify.app/'
   },
   {
     title: t('projects.bhilcours.title'),
     description: t('projects.bhilcours.description'),
-    tags: ["React", "Django", "PostgreSQL"],
+    problem: t('projects.bhilcours.problem'),
+    decision: t('projects.bhilcours.decision'),
+    impact: t('projects.bhilcours.impact'),
+    solved: t('projects.bhilcours.solved'),
+    tags: ['React', 'Django', 'PostgreSQL'],
     image: bhilCoursImg,
-    githubUrl: "https://github.com/7Bhil/Cours-front",
-    liveUrl: "https://bhilcours.netlify.app/"
+    githubUrl: 'https://github.com/7Bhil/Cours-front',
+    liveUrl: 'https://bhilcours.netlify.app/'
   },
   {
     title: t('projects.arrondissement.title'),
     description: t('projects.arrondissement.description'),
-    tags: ["React", "UI/UX", "Political Party"],
+    problem: t('projects.arrondissement.problem'),
+    decision: t('projects.arrondissement.decision'),
+    impact: t('projects.arrondissement.impact'),
+    solved: t('projects.arrondissement.solved'),
+    tags: ['React', 'UI/UX', 'Political Party'],
     image: arrondissementImg,
-    githubUrl: "https://github.com/7Bhil/Arrondissement",
-    liveUrl: "https://chef-d-arrondissement.netlify.app/"
+    githubUrl: 'https://github.com/7Bhil/Arrondissement',
+    liveUrl: 'https://chef-d-arrondissement.netlify.app/'
   },
   {
     title: t('projects.challenge.title'),
     description: t('projects.challenge.description'),
-    tags: ["MERN Stack", "State Management", "Leaderboard"],
+    problem: t('projects.challenge.problem'),
+    decision: t('projects.challenge.decision'),
+    impact: t('projects.challenge.impact'),
+    solved: t('projects.challenge.solved'),
+    tags: ['MERN Stack', 'State Management', 'Leaderboard'],
     image: challengeImg,
-    githubUrl: "https://github.com/7Bhil/Challenge-react",
-    liveUrl: "https://challenge-react-delta.vercel.app/"
+    githubUrl: 'https://github.com/7Bhil/Challenge-react',
+    liveUrl: 'https://challenge-react-delta.vercel.app/'
   },
   {
     title: t('projects.resto.title'),
     description: t('projects.resto.description'),
-    tags: ["React", "Tailwind CSS", "Premium UI"],
+    problem: t('projects.resto.problem'),
+    decision: t('projects.resto.decision'),
+    impact: t('projects.resto.impact'),
+    solved: t('projects.resto.solved'),
+    tags: ['React', 'Tailwind CSS', 'Premium UI'],
     image: restoImg,
-    githubUrl: "https://github.com/7Bhil/Restaurant",
-    liveUrl: "https://restaurant-nine-tau.vercel.app/"
+    githubUrl: 'https://github.com/7Bhil/Restaurant',
+    liveUrl: 'https://restaurant-nine-tau.vercel.app/'
   },
   {
     title: t('projects.vitch.title'),
     description: t('projects.vitch.description'),
-    tags: ["React", "Fintech", "Online Payment"],
+    problem: t('projects.vitch.problem'),
+    decision: t('projects.vitch.decision'),
+    impact: t('projects.vitch.impact'),
+    solved: t('projects.vitch.solved'),
+    tags: ['React', 'Fintech', 'Online Payment'],
     image: vitchImg,
-    githubUrl: "https://github.com/7Bhil/wallet-next",
-    liveUrl: "https://vitch.vercel.app/"
+    githubUrl: 'https://github.com/7Bhil/wallet-next',
+    liveUrl: 'https://vitch.vercel.app/'
   }
 ];
 ---
@@ -72,7 +95,7 @@ const featuredProjects = [
       <h2 class="section-title text-4xl font-bold mb-4">{t('projects.title')}</h2>
       <p class="section-subtitle text-lg text-neutral-600 dark:text-neutral-400 max-w-2xl">{t('projects.subtitle')}</p>
     </div>
-    
+
     <ExpandableProjects
       projects={featuredProjects}
       labels={{ demo: t('projects.demo'), viewDetails: t('projects.viewDetails') }}

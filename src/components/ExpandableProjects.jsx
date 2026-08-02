@@ -3,7 +3,14 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../hooks/use-outside-click";
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github } from "lucide-react";
+
+const insightCards = [
+  { key: "problem", label: "Problème" },
+  { key: "decision", label: "Décision technique" },
+  { key: "impact", label: "Impact business" },
+  { key: "solved", label: "Problème résolu" }
+];
 
 export function ExpandableProjects({ projects, labels = {} }) {
   const [active, setActive] = useState(null);
@@ -13,7 +20,7 @@ export function ExpandableProjects({ projects, labels = {} }) {
   useEffect(() => {
     function onKeyDown(event) {
       if (event.key === "Escape") {
-        setActive(false);
+        setActive(null);
       }
     }
 
@@ -41,11 +48,12 @@ export function ExpandableProjects({ projects, labels = {} }) {
           />
         )}
       </AnimatePresence>
+
       <AnimatePresence>
         {active && typeof active === "object" ? (
           <div className="fixed inset-0 grid place-items-center z-[100] p-4">
             <motion.button
-              key={`button-${active.title}-${id}`}
+              key={"button-" + active.title + "-" + id}
               layout
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -55,12 +63,13 @@ export function ExpandableProjects({ projects, labels = {} }) {
             >
               <CloseIcon />
             </motion.button>
+
             <motion.div
-              layoutId={`card-${active.title}-${id}`}
+              layoutId={"card-" + active.title + "-" + id}
               ref={ref}
-              className="w-full max-w-[600px] h-fit max-h-[90vh] flex flex-col bg-white dark:bg-neutral-900 rounded-3xl overflow-hidden shadow-2xl border border-white/10"
+              className="w-full max-w-[760px] h-fit max-h-[90vh] flex flex-col bg-white dark:bg-neutral-900 rounded-3xl overflow-hidden shadow-2xl border border-white/10"
             >
-              <motion.div layoutId={`image-${active.title}-${id}`}>
+              <motion.div layoutId={"image-" + active.title + "-" + id}>
                 <img
                   src={active.image.src || active.image}
                   alt={active.title}
@@ -69,24 +78,24 @@ export function ExpandableProjects({ projects, labels = {} }) {
               </motion.div>
 
               <div className="flex-1 overflow-y-auto p-6 md:p-8">
-                <div className="flex justify-between items-start mb-6">
-                  <div>
+                <div className="flex justify-between items-start gap-6 mb-6">
+                  <div className="min-w-0">
                     <motion.h3
-                      layoutId={`title-${active.title}-${id}`}
+                      layoutId={"title-" + active.title + "-" + id}
                       className="font-bold text-2xl text-neutral-800 dark:text-neutral-100"
                     >
                       {active.title}
                     </motion.h3>
                     <div className="flex flex-wrap gap-2 mt-2">
-                       {active.tags.map((tag, idx) => (
-                         <span key={idx} className="px-2 py-0.5 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium">
-                           {tag}
-                         </span>
-                       ))}
+                      {active.tags.map((tag, idx) => (
+                        <span key={idx} className="px-2 py-0.5 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-medium">
+                          {tag}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 shrink-0">
                     {active.githubUrl && (
                       <motion.a
                         layout
@@ -119,16 +128,25 @@ export function ExpandableProjects({ projects, labels = {} }) {
                     )}
                   </div>
                 </div>
-                
-                <motion.div
-                  layout
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-neutral-600 dark:text-neutral-400 text-base leading-relaxed"
-                >
-                  <p>{active.description}</p>
-                </motion.div>
+
+                {active.description && (
+                  <p className="text-neutral-600 dark:text-neutral-400 text-base leading-relaxed mb-6">
+                    {active.description}
+                  </p>
+                )}
+
+                <div className="grid gap-3 md:grid-cols-2">
+                  {insightCards.map((item) => (
+                    <article key={item.key} className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-800/50 p-4">
+                      <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-neutral-500 dark:text-neutral-400">
+                        {item.label}
+                      </p>
+                      <p className="mt-2 text-sm leading-relaxed text-neutral-700 dark:text-neutral-200">
+                        {active[item.key]}
+                      </p>
+                    </article>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </div>
@@ -140,7 +158,7 @@ export function ExpandableProjects({ projects, labels = {} }) {
           <motion.div
             role="button"
             tabIndex={0}
-            layoutId={`card-${card.title}-${id}`}
+            layoutId={"card-" + card.title + "-" + id}
             key={card.title}
             onClick={() => setActive(card)}
             onKeyDown={(event) => {
@@ -149,10 +167,10 @@ export function ExpandableProjects({ projects, labels = {} }) {
                 setActive(card);
               }
             }}
-            className="group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:shadow-2xl transition-all duration-300"
+            className="group relative h-[430px] rounded-2xl overflow-hidden cursor-pointer bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:shadow-2xl transition-all duration-300"
           >
-            <motion.div 
-              layoutId={`image-${card.title}-${id}`}
+            <motion.div
+              layoutId={"image-" + card.title + "-" + id}
               className="h-2/3 w-full overflow-hidden"
             >
               <img
@@ -161,11 +179,11 @@ export function ExpandableProjects({ projects, labels = {} }) {
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
-            
-            <div className="p-6 h-1/3 flex flex-col justify-between">
+
+            <div className="p-6 h-1/3 flex flex-col justify-between gap-3">
               <div>
                 <motion.h3
-                  layoutId={`title-${card.title}-${id}`}
+                  layoutId={"title-" + card.title + "-" + id}
                   className="font-bold text-lg text-neutral-800 dark:text-neutral-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
                 >
                   {card.title}
@@ -173,13 +191,19 @@ export function ExpandableProjects({ projects, labels = {} }) {
                 <div className="flex flex-wrap gap-2 mt-2">
                   {card.tags.slice(0, 3).map((tag, idx) => (
                     <span key={idx} className="text-[10px] uppercase tracking-wider font-bold text-neutral-500 dark:text-neutral-400">
-                      {tag} {idx < 2 && idx < card.tags.length - 1 ? "•" : ""}
+                      {tag}{idx < 2 && idx < card.tags.length - 1 ? " •" : ""}
                     </span>
                   ))}
                 </div>
               </div>
-              
-              <div className="flex justify-between items-center mt-4">
+
+              <div className="space-y-2">
+                <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-neutral-500 dark:text-neutral-400">
+                  Problème résolu
+                </p>
+                <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
+                  {card.solved}
+                </p>
                 <span className="text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
                   {labels.viewDetails || "View details"} <ExternalLink size={14} />
                 </span>
