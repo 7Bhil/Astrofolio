@@ -38,7 +38,7 @@ const BOT_DATA = {
     responses: {
       services: `Bhilal est spécialiste en **Fintech et Sécurité**. Il conçoit des solutions robustes pour automatiser et sécuriser vos activités :\n\n- **Fintech & Paiement** : Intégration de passerelles de paiement, portefeuilles électroniques (ex: Vitch), numérisation de transactions.\n- **Automatisation** : Robotisation des tâches et automatisation des workflows métiers.\n- **Systèmes Sécurisés** : Architecture de sécurité dès la conception (Security by Design), protection de données.\n- **Développement Web & Mobile** : Systèmes sur-mesure avec React, Node.js, Django et React Native.`,
       contact: `Vous pouvez me contacter directement par les canaux suivants :\n\n- **WhatsApp** : [Discuter sur WhatsApp](https://wa.me/2290144242964?text=Bonjour%20Bhilal%2C%20je%20souhaite%20discuter%20d%27un%20projet%20avec%20vous.)\n- **Email** : 7bhilal.chitou7@gmail.com\n- **Téléphone** : +229 01 44 24 29 64\n\nJe réponds très rapidement, surtout sur WhatsApp.`,
-      tarifs: `Mes modèles d'intervention s'adaptent à vos besoins :\n\n- **TJM (Taux Journalier Moyen)** : Environ 300 € / jour (ajustable selon la durée du projet).\n- **Forfait** : Un devis global fixe est établi suite à l'analyse de votre cahier des charges.\n\nVous souhaitez estimer le budget de votre application ? Venez m'en parler sur [WhatsApp](https://wa.me/2290144242964).`,
+      tarifs: `Mes prix sont pensés pour rester accessibles pendant que je développe mon activité, surtout au Bénin :\n\n- **Petite mission** : à partir de 25 000 FCFA\n- **Site vitrine simple** : 25 000 à 60 000 FCFA\n- **Application web simple** : 120 000 à 350 000 FCFA\n- **Projet plus complet** : 250 000 à 700 000 FCFA\n\nSi vous me décrivez votre projet, je peux vous aider à estimer un budget plus précis.`,
       projets: `Voici quelques-uns de mes travaux les plus importants :\n\n- **Bhilal Language** : Langage de programmation POO transpilant vers JavaScript avec outils réseau natifs.\n- **Vitch (Démo)** : Application de portefeuille électronique sécurisé et émission de cartes virtuelles.\n- **Bhil Cours** : Plateforme interactive d'apprentissage du code (C, C++, JS, Python, etc.).\n- **Plateforme de Challenges** : Classement en temps réel et notation automatisée de soumissions.\n\nRetrouvez tous les détails dans la section **Projets** du site.`,
       parcours: `Développeur Full-Stack & Mobile Freelance basé au Bénin, avec une double formation informatique et financière :\n\n- **Diplôme** : Licence en Informatique à l'IUT de Parakou, Bénin (spécialisation développement et cybersécurité).\n- **Technologies** : React, Node.js, Django, React Native, TailwindCSS et Docker.\n- **Philosophie** : Sécurité dès la conception, performance maximale, et code maintenable.`,
       greetings: `Bonjour. Comment puis-je vous renseigner aujourd'hui ? Choisissez une suggestion ci-dessous ou écrivez votre question.`,
@@ -62,7 +62,14 @@ const BOT_DATA = {
     responses: {
       services: `Bhilal is a specialist in **Fintech & Security**. He designs robust architectures to automate and protect your workflows:\n\n- **Fintech & Payment**: Integration of payment gateways, electronic wallets (e.g. Vitch), transaction digitization.\n- **Automation**: Process automation, converting manual tasks into robust software pipelines.\n- **Secure Systems**: Security by design, data protection, compliance.\n- **Web & Mobile Dev**: Tailored platforms using React, Node.js, Django, and React Native.`,
       contact: `You can reach me directly through any of these channels:\n\n- **WhatsApp**: [Chat on WhatsApp](https://wa.me/2290144242964?text=Hello%20Bhilal%2C%20I%20would%20like%20to%20discuss%20a%20project%20with%20you.)\n- **Email**: 7bhilal.chitou7@gmail.com\n- **Phone**: +229 01 44 24 29 64\n\nI answer very quickly, especially on WhatsApp.`,
-      tarifs: `My collaboration models adapt to your scope:\n\n- **ADR (Average Daily Rate)**: Around €300 / day (negotiable depending on duration).\n- **Fixed Price**: Global budget set after analyzing your project specification.\n\nWant to estimate the budget for your app? Let's discuss it on [WhatsApp](https://wa.me/2290144242964).`,
+      tarifs: `My prices are kept accessible while I grow my freelance activity, especially for Benin:
+
+- **Small task**: from 25,000 XOF
+- **Simple portfolio site**: 25,000 to 60,000 XOF
+- **Simple web app**: 120,000 to 350,000 XOF
+- **More complete project**: 250,000 to 700,000 XOF
+
+If you describe your project, I can help estimate a more precise budget.`,
       projets: `Here are some of my featured projects:\n\n- **Bhilal Language**: OOP programming language transpiling to JS with native network security utilities.\n- **Vitch (Demo)**: Secure digital wallet with virtual card generation.\n- **Bhil Cours**: Interactive platform to learn programming (C, C++, JS, Python, etc.).\n- **Challenge Platform**: Code grading engine and real-time leaderboards.\n\nAll details are listed in the **Projects** section of the website.`,
       parcours: `Freelance Full-Stack & Mobile Developer with dual computer science and finance training:\n\n- **Education**: Bachelor's Degree in Computer Science from the University of Parakou (IUT), Benin.\n- **Tech Stack**: React, Node.js, Django, React Native, TailwindCSS, and Docker.\n- **Philosophy**: Security by design, top-tier performance, and highly clean, documented code.`,
       greetings: `Hello. How can I help you today? Pick a suggestion below or write your question.`,
@@ -129,7 +136,7 @@ const Chatbot = ({ lang = 'fr' }) => {
       text.includes("combien") || text.includes("cout") || text.includes("cher") ||
       text.includes("tjm") || text.includes("rate") || text.includes("price") ||
       text.includes("cost") || text.includes("how much") || text.includes("devis") ||
-      text.includes("argent") || text.includes("payer") || text.includes("paye")
+      text.includes("estime") || text.includes("estimation") || text.includes("argent") || text.includes("payer") || text.includes("paye")
     ) {
       return 'tarifs';
     }

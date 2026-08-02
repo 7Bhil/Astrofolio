@@ -4,6 +4,29 @@ import { getTranslations } from '../utils/t';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
+const conversion = lang === "en" ? {
+  title: "What you get",
+  subtitle: "A clear process, a direct exchange, and a deliverable that moves the project forward.",
+  cta: "Start a project",
+  note: "Send the brief, get a concrete reply.",
+  cards: [
+    { index: "01", title: "Fast diagnosis", description: "I identify the real business problem, the technical constraints and the shortest route to a useful deliverable." },
+    { index: "02", title: "Outcome-driven delivery", description: "I build interfaces, APIs and integrations with one objective: something usable that moves the project forward." },
+    { index: "03", title: "Security and reliability", description: "Clean architecture, protected data and stable deployment so the project feels safe to buy." },
+    { index: "04", title: "Simple next step", description: "No funnel, no long questionnaire. One message is enough to start the discussion." }
+  ]
+} : {
+  title: "Ce que vous recevez",
+  subtitle: "Un cadre clair, une réponse directe et une suite concrète.",
+  cta: "Démarrer le projet",
+  note: "Envoyez le brief, recevez une réponse concrète.",
+  cards: [
+    { index: "01", title: "Diagnostic rapide", description: "Je repère le vrai problème métier, les contraintes techniques et la route la plus courte vers un livrable utile." },
+    { index: "02", title: "Livraison orientée résultat", description: "Je construis interfaces, API et intégrations avec un seul objectif : quelque chose d'utilisable qui fait avancer le projet." },
+    { index: "03", title: "Sécurité et fiabilité", description: "Architecture propre, données protégées et déploiement stable pour inspirer confiance avant la signature." },
+    { index: "04", title: "Prochaine étape simple", description: "Pas de tunnel, pas de questionnaire interminable. Un message suffit pour lancer la discussion." }
+  ]
+};
 
 const services = [
   {
@@ -35,16 +58,37 @@ const services = [
 
 <section id="services" class="services-section section-padding">
   <div class="container">
-    <div class="section-header reveal">
+    <div class="section-header">
       <h2 class="section-title">{t('services.title')}</h2>
       <p class="section-subtitle">{t('services.subtitle')}</p>
     </div>
 
+<div class="conversion-panel glass-panel">
+      <div class="conversion-header-copy">
+        <h3 class="conversion-title">{conversion.title}</h3>
+        <p class="conversion-subtitle">{conversion.subtitle}</p>
+      </div>
+
+      <div class="conversion-cards">
+        {conversion.cards.map((card) => (
+          <article class="conversion-card">
+            <span class="conversion-index">{card.index}</span>
+            <h4 class="conversion-card-title">{card.title}</h4>
+            <p class="conversion-card-desc">{card.description}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="conversion-cta-row">
+        <a href="#contact" class="btn btn-primary">{conversion.cta}</a>
+        <span class="conversion-note">{conversion.note}</span>
+      </div>
+    </div>
     <div class="services-bento">
       {services.map((service) => {
         const Icon = service.icon;
         return (
-          <div class={`service-card glass-panel ${service.size} reveal`}>
+          <div class={`service-card glass-panel ${service.size}`}>
             <div class="service-content">
               <div class="service-icon-wrapper" style={`background: ${service.gradient}`}>
                 <Icon size={32} color="white" />
@@ -170,6 +214,110 @@ const services = [
 .service-card:hover .service-glow {
   opacity: 0.1;
 }
+
+.conversion-panel {
+  margin-top: 2rem;
+  padding: 2rem;
+  border-radius: 2rem;
+  border: 1px solid var(--border-color);
+  background: linear-gradient(135deg, rgba(41, 98, 255, 0.12), rgba(124, 58, 237, 0.12));
+  backdrop-filter: blur(14px);
+  transition: none;
+}
+
+.conversion-panel:hover,
+.conversion-panel:focus-within,
+.conversion-panel:hover *,
+.conversion-panel:focus-within *,
+.conversion-panel .btn,
+.conversion-panel .btn:hover,
+.conversion-panel .btn:focus-visible,
+.conversion-panel .btn::after,
+.conversion-panel .btn:hover::after {
+  transform: none !important;
+  box-shadow: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+.conversion-header-copy {
+  max-width: 760px;
+  margin-bottom: 1.5rem;
+}
+
+
+
+.conversion-title {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin-bottom: 0.6rem;
+  letter-spacing: -0.03em;
+}
+
+.conversion-subtitle {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  max-width: 850px;
+}
+
+.conversion-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.conversion-card {
+  padding: 1.25rem 1.25rem 1.35rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-color);
+  background: rgba(3, 4, 11, 0.25);
+}
+
+.conversion-index {
+  display: inline-flex;
+  margin-bottom: 0.85rem;
+  color: var(--accent-cyan);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.conversion-card-title {
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.conversion-card-desc {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.conversion-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.conversion-note {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 720px) {
+  .conversion-panel {
+    padding: 1.5rem;
+  }
+
+  .conversion-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .conversion-cta-row {
+    align-items: flex-start;
+  }
+}
+
 
 @media (max-width: 1024px) {
   .services-bento {

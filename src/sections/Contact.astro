@@ -1,34 +1,59 @@
 ---
 import { MapPin, Mail, MessageCircle, Phone } from 'lucide-react';
-import { getTranslations } from '../utils/t';
 import '../styles/Contact.css';
 
 const { lang = 'fr' } = Astro.props;
-const t = getTranslations(lang);
+const contactInfoTitle = lang === 'en' ? 'Contact details' : 'Infos de contact';
 const whatsappNumber = '2290144242964';
 const whatsappText = lang === 'en'
   ? 'Hello Bhilal, I would like to discuss a project with you.'
   : 'Bonjour Bhilal, je souhaite discuter d\'un projet avec vous.';
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
+const contactTitle = lang === 'en' ? 'Contact' : 'Contact';
+const contactSubtitle = lang === 'en' ? 'Have a project or an idea? Send a message and I will reply with the next clear step.' : 'Vous avez un projet ou une idée ? Envoyez un message et je vous répondrai avec la prochaine étape claire.';
+const contactInfoCopy = lang === 'en' ? 'A direct message is enough to get started.' : 'Un message direct suffit pour démarrer.';
+const whatsappHeading = lang === 'en' ? 'Talk on WhatsApp' : 'Échangeons sur WhatsApp';
+const whatsappCopy = lang === 'en' ? 'Send a direct message and I will reply as soon as possible.' : 'Envoyez un message direct et je vous répondrai dès que possible.';
+const whatsappButton = lang === 'en' ? 'Send the brief on WhatsApp' : 'Envoyer le brief sur WhatsApp';
+const contactSteps = lang === 'en' ? [
+  { index: '01', title: 'Share the brief', description: 'Tell me what you want to launch, improve or secure.' },
+  { index: '02', title: 'Get a plan', description: 'I reply with scope, timing and the next concrete step.' },
+  { index: '03', title: 'Start delivery', description: 'We move straight into build mode once the plan is clear.' }
+] : [
+  { index: '01', title: 'Envoyez le brief', description: 'Dites-moi ce que vous voulez lancer, améliorer ou sécuriser.' },
+  { index: '02', title: 'Recevez un plan', description: 'Je réponds avec le périmètre, le délai et la prochaine étape concrète.' },
+  { index: '03', title: 'Lancement', description: 'On passe en mode livraison dès que le cadre est clair.' }
+];
 ---
 
 <section id="contact" class="section-padding contact-section">
   <div class="container">
-    <div class="section-header text-center mb-12 reveal">
-      <h2 class="section-title">{t('contact.title')}</h2>
+    <div class="section-header text-center mb-12">
+      <h2 class="section-title">{contactTitle}</h2>
       <p class="section-subtitle">
-        {t('contact.subtitle')}
+        {contactSubtitle}
       </p>
     </div>
 
-    <div class="contact-grid glass-panel reveal reveal-stagger-1">
+    <div class="contact-grid glass-panel">
       <div class="contact-info">
-        <h3 class="contact-info-title">{t('contact.infoTitle')}</h3>
+        <h3 class="contact-info-title">{contactInfoTitle}</h3>
         <p class="contact-info-desc">
-          {t('contact.infoDesc')}
+          {contactInfoCopy}
         </p>
         
         <div class="info-items">
+        <div class="contact-steps">
+          {contactSteps.map((step) => (
+            <div class="contact-step">
+              <span class="contact-step-index">{step.index}</span>
+              <div class="contact-step-copy">
+                <h4>{step.title}</h4>
+                <p>{step.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
           <div class="info-item">
             <div class="info-icon">
               <Phone size={20} />
@@ -58,18 +83,18 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(w
             <MessageCircle size={34} />
           </div>
           <div class="whatsapp-copy">
-            <h3>{t('contact.whatsappTitle')}</h3>
-            <p>{t('contact.whatsappDesc')}</p>
+            <h3>{whatsappHeading}</h3>
+            <p>{whatsappCopy}</p>
           </div>
           <a
             class="btn whatsapp-btn"
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={t('contact.whatsappAria')}
+            aria-label={lang === 'en' ? 'Contact Bhilal CHITOU on WhatsApp' : 'Contacter Bhilal CHITOU sur WhatsApp'}
           >
             <MessageCircle size={20} />
-            <span>{t('contact.whatsappCta')}</span>
+            <span>{whatsappButton}</span>
           </a>
         </div>
       </div>

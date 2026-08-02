@@ -116,7 +116,7 @@ export const translations = {
       about: "À propos",
       projects: "Projets",
       skills: "Compétences",
-      contact: "Me contacter",
+      contact: "Discuter du projet",
       switchLanguage: "Changer de langue",
       toggleTheme: "Changer de thème",
       openMenu: "Ouvrir le menu"
@@ -185,7 +185,7 @@ export const translations = {
       infoDesc: "N'hésitez pas à me contacter pour des collaborations ou simplement pour dire bonjour !",
       whatsappTitle: "Discutons sur WhatsApp",
       whatsappDesc: "Plus besoin de remplir un formulaire. Envoyez-moi un message direct et je vous répondrai dès que possible.",
-      whatsappCta: "Me contacter sur WhatsApp",
+      whatsappCta: "Discuter du projet sur WhatsApp",
       whatsappAria: "Contacter Bhilal CHITOU sur WhatsApp"
     },
     skills: {

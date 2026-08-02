@@ -49,6 +49,7 @@ const Navbar = ({ lang, translations }) => {
   ];
 
   const otherLangUrl = lang === 'fr' ? '/en/' : '/';
+  const contactCta = lang === 'en' ? 'Book a call' : 'Discuter du projet';
   return (
     <header className={`navbar-wrapper ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
@@ -78,7 +79,7 @@ const Navbar = ({ lang, translations }) => {
             </button>
           </div>
           <a href="#contact" className="btn btn-primary btn-sm rounded-pill">
-            {t('nav.contact')}
+            {contactCta}
           </a>
         </div>
 
@@ -119,7 +120,7 @@ const Navbar = ({ lang, translations }) => {
           ))}
           <li>
              <a href="#contact" className="nav-mobile-link text-accent" onClick={() => setIsMobileMenuOpen(false)}>
-               {t('nav.contact')}
+               {contactCta}
              </a>
           </li>
         </ul>
