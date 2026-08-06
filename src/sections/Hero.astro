@@ -19,6 +19,18 @@ const heroSecondaryCta = lang === 'en' ? 'Download profile' : 'Télécharger le 
     <div class="glow-orb orb-2"></div>
   </div>
   
+  <!-- Custom Modal for Mobile Confirmation -->
+  <div id="orbit-modal" class="orbit-modal" style="display: none;">
+    <div class="orbit-modal-content glass-panel">
+      <h3 class="orbit-modal-title">Confirmer</h3>
+      <p class="orbit-modal-message">Voulez-vous consulter mon profil sur <span id="modal-platform"></span> ?</p>
+      <div class="orbit-modal-actions">
+        <button id="modal-cancel" class="btn btn-outline">Annuler</button>
+        <button id="modal-confirm" class="btn btn-primary">Confirmer</button>
+      </div>
+    </div>
+  </div>
+  
   <div class="container hero-container">
     <div class="hero-content">
       <h1 class="hero-title reveal reveal-stagger-2">
@@ -268,6 +280,50 @@ const heroSecondaryCta = lang === 'en' ? 'Download profile' : 'Télécharger le 
     icons.forEach((icon, idx) => {
       icon.addEventListener('mouseenter', () => { state[idx].paused = true; });
       icon.addEventListener('mouseleave', () => { state[idx].paused = false; });
+      
+      // Mobile confirmation dialog with custom modal
+      icon.addEventListener('click', (e) => {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+          e.preventDefault();
+          // Pause ALL animations when modal opens
+          state.forEach(s => s.paused = true);
+          
+          const href = icon.getAttribute('href');
+          const platform = icon.querySelector('.icon-tooltip')?.textContent || 'ce lien';
+          const modal = document.getElementById('orbit-modal');
+          const modalPlatform = document.getElementById('modal-platform');
+          const modalConfirm = document.getElementById('modal-confirm');
+          const modalCancel = document.getElementById('modal-cancel');
+          
+          if (modal && modalPlatform && modalConfirm && modalCancel) {
+            modalPlatform.textContent = platform;
+            modal.style.display = 'flex';
+            
+            const handleConfirm = () => {
+              if (href) {
+                window.open(href, '_blank', 'noopener,noreferrer');
+              }
+              modal.style.display = 'none';
+              // Resume ALL animations
+              state.forEach(s => s.paused = false);
+              modalConfirm.removeEventListener('click', handleConfirm);
+              modalCancel.removeEventListener('click', handleCancel);
+            };
+            
+            const handleCancel = () => {
+              modal.style.display = 'none';
+              // Resume ALL animations
+              state.forEach(s => s.paused = false);
+              modalConfirm.removeEventListener('click', handleConfirm);
+              modalCancel.removeEventListener('click', handleCancel);
+            };
+            
+            modalConfirm.addEventListener('click', handleConfirm);
+            modalCancel.addEventListener('click', handleCancel);
+          }
+        }
+      });
     });
 
     let last = 0;
