@@ -373,3 +373,115 @@
     margin: -22px 0 0 -22px;
   }
 }
+
+@media (max-width: 768px) {
+  .hero-section {
+    padding-top: 4rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .hero-description {
+    font-size: 1.1rem;
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+
+  .hero-visual {
+    height: 350px;
+  }
+
+  .orbit-scene,
+  .profile-image-wrapper {
+    width: 200px;
+    height: 200px;
+  }
+
+  .saturn-rings {
+    width: 280px;
+    height: 280px;
+  }
+
+  .path-1, .path-2, .path-3 {
+    width: 260px;
+    height: 104px;
+  }
+
+  .orbit-icon {
+    width: 40px;
+    height: 40px;
+    margin: -20px 0 0 -20px;
+  }
+
+  .icon-tooltip {
+    font-size: 12px;
+    padding: 4px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section {
+    padding-top: 3rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 6vw, 2.5rem);
+    letter-spacing: -1px;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .hero-visual {
+    height: 300px;
+  }
+
+  .orbit-scene,
+  .profile-image-wrapper {
+    width: 160px;
+    height: 160px;
+  }
+
+  .saturn-rings {
+    width: 220px;
+    height: 220px;
+  }
+
+  .path-1, .path-2, .path-3 {
+    width: 200px;
+    height: 80px;
+  }
+
+  .orbit-icon {
+    width: 36px;
+    height: 36px;
+    margin: -18px 0 0 -18px;
+  }
+
+  .orbit-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .icon-tooltip {
+    font-size: 11px;
+    padding: 3px 8px;
+    top: -38px;
+  }
+}

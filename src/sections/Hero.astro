@@ -231,11 +231,15 @@ const heroSecondaryCta = lang === 'en' ? 'Download profile' : 'Télécharger le 
       { tiltDeg: 120, speed: 0.00028, rx: 220, ry: 88  },   // path-3
     ];
 
-    // Mobile: smaller radii
-    const isMobile = () => window.innerWidth <= 968;
-    const getRxRy  = () => isMobile()
-      ? { rx: 140, ry: 56 }
-      : { rx: 220, ry: 88 };
+    // Mobile: smaller radii based on screen size
+    const getScreenSize = () => {
+      const w = window.innerWidth;
+      if (w <= 480) return { rx: 100, ry: 40 };
+      if (w <= 768) return { rx: 130, ry: 52 };
+      if (w <= 968) return { rx: 140, ry: 56 };
+      return { rx: 220, ry: 88 };
+    };
+    const getRxRy = getScreenSize;
 
     // Collect all orbit icons
     const icons = Array.from(
