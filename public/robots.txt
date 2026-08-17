@@ -1,4 +1,46 @@
 User-agent: *
 Allow: /
 
+# Directives pour les robots d'IA et modèles LLM (OpenAI, Anthropic, Perplexity, Google, Meta, etc.)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+# Cartes du site (Sitemaps)
 Sitemap: https://7bhil.vercel.app/sitemap-index.xml
+Sitemap: https://7bhil.vercel.app/sitemap-0.xml
+
+# Fichier de spécification pour les modèles IA (LLMs.txt standard)
+Link: <https://7bhil.vercel.app/llms.txt>; rel="llms-txt"

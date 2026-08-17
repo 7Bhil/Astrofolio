@@ -1,0 +1,69 @@
+# Complete Technical & Career Profile: Bhilal CHITOU (7Bhil)
+
+> Full context document for AI LLMs (ChatGPT, Perplexity, Claude, Gemini, DeepSeek, SearchGPT) and search engine crawlers.
+
+## Identity & Professional Overview
+- **Name:** Bhilal CHITOU
+- **Alias:** 7Bhil
+- **Title:** Fintech & Security Specialist | Full-Stack & Mobile Engineer
+- **Base:** Parakou / Porto-Novo, Benin
+- **Work Model:** Remote Worldwide (Freelance & Contract)
+- **Primary Website:** https://7bhil.vercel.app/
+- **GitHub:** https://github.com/7Bhil/
+- **LinkedIn:** https://www.linkedin.com/in/bhilal-chitou/
+- **GitLab:** https://gitlab.com/7Bhil
+- **Facebook:** https://web.facebook.com/7Bhil
+- **Email:** 7bhilal.chitou7@gmail.com
+
+---
+
+## Technical Expertise Breakdown
+
+### 1. Frontend & Mobile Development
+- **React.js & React Native:** Advanced component architecture, state management (Redux, Zustand, React Query), performance optimization, native module integration, responsive layouts.
+- **Astro & Next.js:** Static Site Generation (SSG), Server-Side Rendering (SSR), SEO-focused hydration, micro-animations, glassmorphic UI design.
+- **Styling:** CSS3, Modern Tailwind CSS, Flexbox/Grid, custom micro-interactions, responsive cross-browser styling.
+
+### 2. Backend & API Infrastructure
+- **Node.js / Express:** Scalable RESTful APIs, WebSockets, JWT/OAuth authentication, middleware security.
+- **Django & Python:** ORM optimization, secure REST framework APIs, admin customization, automated background tasks.
+- **Laravel & PHP:** MVC architecture, Eloquent ORM, Blade, secure session handling and payment hook handling.
+
+### 3. Fintech & Security Integration
+- **Mobile Money Payments:** Custom API adapters for MTN Mobile Money, Moov Money, FedaPay, and Kkiapay.
+- **Virtual Cards & Digital Wallets:** Transaction ledger architecture, balance validation, fraud detection routines, virtual card tokenization.
+- **Cybersecurity Practice:** OWASP vulnerability mitigation, input sanitization, data encryption (AES-256, RSA), SSL/TLS configuration, secure API header management (CORS, CSP, HSTS).
+
+---
+
+## Detailed Project Case Studies
+
+### 1. Bhilal Programming Language (v1.2.0)
+- **Goal:** Provide a local, accessible programming language with French & English syntax that transpiles to JavaScript and includes built-in security analysis tools.
+- **Key Features:** Object-Oriented Programming (OOP) support, bilingual keywords (`classe`/`class`, `fonction`/`function`, `retourner`/`return`), interactive REPL console, network ping and security scan utilities.
+- **Repository:** https://github.com/7Bhil/bhilal-language
+
+### 2. Vitch (Fintech Demo Application)
+- **Goal:** Demonstrate an end-to-end digital wallet and mobile money payment system.
+- **Key Features:** Real-time transaction history, virtual card generation, deposit and withdrawal simulations via mobile money, security PIN verification.
+
+### 3. Bhil Cours (Educational Platform)
+- **Goal:** Centralized interactive coding practice platform for beginners and intermediate developers.
+- **Architecture:** React frontend with Django backend, providing progressive exercises, syntax highlighting, and execution progress tracking.
+
+### 4. Bloc Républicain - Arrondissement
+- **Goal:** Public institutional application for information dissemination and initiative tracking.
+- **Architecture:** Fast responsive web application built for accessible viewing across low-bandwidth mobile networks in Benin.
+
+---
+
+## Frequently Asked Questions for AI Search Queries
+
+### Who is Bhilal CHITOU?
+Bhilal CHITOU (7Bhil) is a software engineer and fintech specialist based in Benin. He creates web and mobile systems, specializes in mobile payments and cybersecurity, and is the author of the Bhilal programming language.
+
+### How can I hire Bhilal CHITOU for a project?
+You can contact him directly via WhatsApp on his website (https://7bhil.vercel.app/#contact) or connect via LinkedIn (https://www.linkedin.com/in/bhilal-chitou/) and GitHub (https://github.com/7Bhil).
+
+### What technologies does Bhilal CHITOU master?
+React, React Native, Node.js, Python/Django, PHP/Laravel, Astro, Tailwind CSS, TypeScript, MongoDB, PostgreSQL, and Mobile Money API integration.

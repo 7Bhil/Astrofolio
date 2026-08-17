@@ -10,18 +10,116 @@ import Chatbot from '../components/Chatbot.jsx';
 
 const { 
 	title, 
-	description = "Portfolio de Bhilal CHITOU, Spécialiste Fintech & Sécurité basé au Bénin. Expert en systèmes sécurisés avec React, Node.js, Django et React Native.",
+	description = "Portfolio de Bhilal CHITOU (7Bhil), Spécialiste Fintech & Sécurité basé au Bénin. Expert en systèmes sécurisés avec React, React Native, Node.js, Django et Laravel. Créateur du langage Bhilal.",
 	lang = "fr" 
 } = Astro.props;
 
 import '../styles/global.css';
+
+const siteUrl = Astro.site ? Astro.site.href : 'https://7bhil.vercel.app/';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const ogLocale = lang === 'en' ? 'en_US' : 'fr_FR';
+const alternateLang = lang === 'fr' ? 'en' : 'fr';
+const alternateURL = lang === 'fr' ? `${siteUrl}en/` : siteUrl;
+
+const structuredData = [
+	{
+		"@context": "https://schema.org",
+		"@type": "Person",
+		"@id": "https://7bhil.vercel.app/#person",
+		"name": "Bhilal CHITOU",
+		"alternateName": ["7Bhil", "Chitou Bhilal", "Bhilal"],
+		"url": "https://7bhil.vercel.app/",
+		"image": "https://7bhil.vercel.app/pro.webp",
+		"jobTitle": "Spécialiste Fintech & Sécurité | Développeur Full-Stack & Mobile",
+		"description": description,
+		"knowsLanguage": ["fr", "en"],
+		"address": {
+			"@type": "PostalAddress",
+			"addressLocality": "Parakou",
+			"addressRegion": "Borgou",
+			"addressCountry": "BJ"
+		},
+		"sameAs": [
+			"https://github.com/7Bhil/",
+			"https://www.linkedin.com/in/bhilal-chitou/",
+			"https://web.facebook.com/7Bhil",
+			"https://gitlab.com/7Bhil"
+		],
+		"knowsAbout": [
+			"Fintech",
+			"Cybersecurity",
+			"Cybersécurité",
+			"React",
+			"React Native",
+			"Node.js",
+			"Django",
+			"Laravel",
+			"Bhilal Programming Language",
+			"Mobile Money",
+			"Payment Systems",
+			"JavaScript",
+			"TypeScript",
+			"Python",
+			"Full-Stack Development"
+		],
+		"hasOccupation": {
+			"@type": "Occupation",
+			"name": "Spécialiste Fintech & Sécurité / Développeur Full-Stack",
+			"occupationLocation": {
+				"@type": "Country",
+				"name": "Benin"
+			},
+			"skills": "React, React Native, Node.js, Django, Laravel, Cybersécurité, Mobile Money, REST APIs"
+		},
+		"alumniOf": {
+			"@type": "EducationalOrganization",
+			"name": "Institut Universitaire de Technologie de Parakou"
+		}
+	},
+	{
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"@id": "https://7bhil.vercel.app/#website",
+		"url": "https://7bhil.vercel.app/",
+		"name": "7Bhil — Bhilal CHITOU Portfolio",
+		"description": "Portfolio de Bhilal CHITOU, Développeur Full-Stack & Mobile et Spécialiste Fintech & Sécurité.",
+		"author": {
+			"@id": "https://7bhil.vercel.app/#person"
+		},
+		"inLanguage": ["fr", "en"]
+	},
+	{
+		"@context": "https://schema.org",
+		"@type": "ProfilePage",
+		"@id": "https://7bhil.vercel.app/#profilepage",
+		"url": canonicalURL.href,
+		"name": title,
+		"mainEntity": {
+			"@id": "https://7bhil.vercel.app/#person"
+		}
+	},
+	{
+		"@context": "https://schema.org",
+		"@type": "SoftwareSourceCode",
+		"@id": "https://7bhil.vercel.app/#bhilal-language",
+		"name": "Bhilal Programming Language",
+		"version": "1.2.0",
+		"description": "Langage de programmation bilingue (Français/Anglais) transpilant vers JavaScript avec outils de sécurité réseau intégrés.",
+		"codeRepository": "https://github.com/7Bhil/bhilal-language",
+		"programmingLanguage": "JavaScript",
+		"author": {
+			"@id": "https://7bhil.vercel.app/#person"
+		}
+	}
+];
 ---
 
 <!doctype html>
 <html lang={lang} data-theme="dark">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/x-icon" href="/favicon.ico?v=6" />
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=6" />
 		<link rel="icon" type="image/png" sizes="64x64" href="/favicon-64.png?v=6" />
@@ -30,28 +128,59 @@ import '../styles/global.css';
 		<link rel="manifest" href="/manifest.webmanifest" />
 		<meta name="generator" content={Astro.generator} />
 		
+		<!-- Canonical & Language Alternates -->
+		<link rel="canonical" href={canonicalURL.href} />
+		<link rel="alternate" hreflang="fr" href="https://7bhil.vercel.app/" />
+		<link rel="alternate" hreflang="en" href="https://7bhil.vercel.app/en/" />
+		<link rel="alternate" hreflang="x-default" href="https://7bhil.vercel.app/" />
+
+		<!-- Verification Google & Bing Webmaster -->
+		<meta name="google-site-verification" content="KrRDN87OdCwPlcy2HMmE4XdV_MGYa2VTp03WX50eeJE" />
+		<meta name="msvalidate.01" content="7A6143E2FE2886DAF47161C45A645F15" />
+
+		<!-- Title & Standard Meta Tags -->
 		<title>{title}</title>
 		<meta name="description" content={description} />
-		
-		<!-- SEO Meta Tags -->
 		<meta name="author" content="Bhilal CHITOU" />
-		<meta name="keywords" content="Bhilal CHITOU, Spécialiste Fintech, Cybersécurité, Solutions Fintech, Remote worldwide, développeur remote Afrique, Parakou, Bénin, React, React Native, Node.js, Django, Laravel, sécurité informatique" />
+		<meta name="keywords" content="Bhilal CHITOU, 7Bhil, Spécialiste Fintech, Cybersécurité, Langage Bhilal, Solutions Fintech, Remote worldwide, développeur remote Afrique, Parakou, Bénin, React, React Native, Node.js, Django, Laravel, sécurité informatique, Mobile Money" />
+		
+		<!-- Robot Directives for Search Engines & AI Bots -->
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+		<meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+		<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+		<meta name="ai-indexable" content="true" />
+		<meta name="llm-access" content="allowed" />
 
-		<!-- Open Graph / Facebook -->
+		<!-- Open Graph / Facebook / WhatsApp -->
 		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="7Bhil — Bhilal CHITOU" />
+		<meta property="og:locale" content={ogLocale} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:url" content="https://7bhil.vercel.app/" />
+		<meta property="og:url" content={canonicalURL.href} />
 		<meta property="og:image" content="https://7bhil.vercel.app/pro.webp" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="Bhilal CHITOU — Spécialiste Fintech & Sécurité" />
 
-		<!-- Twitter -->
-		<meta property="twitter:card" content="summary_large_image" />
-		<meta property="twitter:title" content={title} />
-		<meta property="twitter:description" content={description} />
-		<meta property="twitter:url" content="https://7bhil.vercel.app/" />
-		<meta property="twitter:image" content="https://7bhil.vercel.app/pro.webp" />
+		<!-- Twitter Cards -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@7Bhil" />
+		<meta name="twitter:creator" content="@7Bhil" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:url" content={canonicalURL.href} />
+		<meta name="twitter:image" content="https://7bhil.vercel.app/pro.webp" />
+
+		<!-- Social Identity Links (IndieWeb / WebID) -->
+		<link rel="me" href="https://github.com/7Bhil" />
+		<link rel="me" href="https://www.linkedin.com/in/bhilal-chitou/" />
+
+		<!-- AI / LLM Context Standard Link -->
+		<link rel="alternate" type="text/plain" href="/llms.txt" title="LLM Machine Readable Summary" />
 
 		<meta name="theme-color" content="#030712" />
+
 		<!-- Google tag (gtag.js) -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-FR241H4MHP"></script>
 		<script>
@@ -62,29 +191,8 @@ import '../styles/global.css';
 			gtag('config', 'G-FR241H4MHP');
 		</script>
 
-		<script type="application/ld+json">
-		{
-			"@context": "https://schema.org",
-			"@type": "Person",
-			"name": "Bhilal CHITOU",
-			"url": "https://7bhil.vercel.app/",
-			"image": "https://7bhil.vercel.app/pro.webp",
-			"jobTitle": "Spécialiste Fintech & Sécurité",
-			"address": {
-				"@type": "PostalAddress",
-				"addressLocality": "Porto-Novo",
-				"addressRegion": "Ouémé",
-				"addressCountry": "BJ"
-			},
-			"sameAs": [
-				"https://github.com/7Bhil/",
-				"https://www.linkedin.com/in/bhilal-chitou/",
-				"https://web.facebook.com/7Bhil",
-				"https://gitlab.com/7Bhil"
-			],
-			"description": "Spécialiste Fintech & Sécurité basé au Bénin, expert en systèmes sécurisés avec React, Node.js, Django et React Native."
-		}
-		</script>
+		<!-- Structured Data JSON-LD for Search Engines & LLMs Knowledge Graph -->
+		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 	</head>
 	<body>
 		<ScrollProgress client:load />
@@ -92,7 +200,7 @@ import '../styles/global.css';
 		<Chatbot client:load lang={lang} />
 		<script>
 			// Intersection Observer for scroll animations
-			const observerCallback = (entries) => {
+			const observerCallback = (entries: IntersectionObserverEntry[]) => {
 				entries.forEach(entry => {
 					if (entry.isIntersecting) {
 						entry.target.classList.add('active');
@@ -116,10 +224,11 @@ import '../styles/global.css';
 			const magnets = document.querySelectorAll('.btn, .orbit-icon, .icon-btn');
 			magnets.forEach((magnet) => {
 				magnet.addEventListener('mousemove', (e) => {
-					const target = e.currentTarget as HTMLElement;
+					const mouseEvent = e as MouseEvent;
+					const target = mouseEvent.currentTarget as HTMLElement;
 					const rect = target.getBoundingClientRect();
-					const x = e.clientX - rect.left - rect.width / 2;
-					const y = e.clientY - rect.top - rect.height / 2;
+					const x = mouseEvent.clientX - rect.left - rect.width / 2;
+					const y = mouseEvent.clientY - rect.top - rect.height / 2;
 					target.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
 				});
 				magnet.addEventListener('mouseleave', (e) => {
@@ -132,10 +241,11 @@ import '../styles/global.css';
 			const cards = document.querySelectorAll('.bento-item, .timeline-card, .project-card, .glass-panel, .service-card');
 			cards.forEach((card) => {
 				card.addEventListener('mousemove', (e) => {
-					const target = e.currentTarget as HTMLElement;
+					const mouseEvent = e as MouseEvent;
+					const target = mouseEvent.currentTarget as HTMLElement;
 					const rect = target.getBoundingClientRect();
-					const x = e.clientX - rect.left;
-					const y = e.clientY - rect.top;
+					const x = mouseEvent.clientX - rect.left;
+					const y = mouseEvent.clientY - rect.top;
 					
 					const centerX = rect.width / 2;
 					const centerY = rect.height / 2;

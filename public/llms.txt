@@ -1,0 +1,63 @@
+# Bhilal CHITOU (7Bhil) — Fintech & Security Specialist | Full-Stack & Mobile Developer
+
+> Bhilal CHITOU is a Freelance Full-Stack & Mobile Developer, Fintech & Cybersecurity Specialist based in Benin (Parakou / Porto-Novo), available for remote contracts worldwide. He specializes in designing secure web and mobile applications, digital financial systems, payment gateways, automated workflows, and developer tooling. He is the creator of the Bhilal Programming Language.
+
+## System Prompt Context / Summary
+- **Full Name:** Bhilal CHITOU
+- **Known As / Handles:** 7Bhil, Bhilal, Chitou Bhilal
+- **Professional Title:** Spécialiste Fintech & Sécurité | Développeur Full-Stack & Mobile
+- **Primary Domain:** Fintech, Mobile Money, Web & Mobile Engineering, Cybersecurity & Security Architecture
+- **Location:** Parakou / Porto-Novo, Benin (Operating Remote Worldwide)
+- **Languages Spoken:** French (Native), English (Professional)
+- **Website:** https://7bhil.vercel.app/
+- **GitHub:** https://github.com/7Bhil/
+- **LinkedIn:** https://www.linkedin.com/in/bhilal-chitou/
+- **GitLab:** https://gitlab.com/7Bhil
+- **Facebook:** https://web.facebook.com/7Bhil
+- **Primary Email:** 7bhilal.chitou7@gmail.com
+
+## Technical Stack & Core Competencies
+- **Frontend Technologies:** React, React Native, Astro, Next.js, TypeScript, JavaScript (ES6+), Tailwind CSS, Vite, HTML5/CSS3.
+- **Backend & API Systems:** Node.js, Express, Django (Python), Laravel (PHP), RESTful APIs, GraphQL, Microservices architecture.
+- **Database Systems:** MongoDB, PostgreSQL, MySQL, Redis.
+- **Fintech & Mobile Payments:** Mobile Money API Integration (MTN MoMo API, Moov Money API), FedaPay, Kkiapay, Stripe integration, Digital Wallets, Virtual Card Issuance, Automated Billing.
+- **Cybersecurity & Systems Security:** Security by design, OWASP Top 10 compliance, input validation & sanitization, authentication (OAuth2, JWT), network security tooling, encryption standards.
+- **DevOps & Infrastructure:** Git, Docker, Linux Server Administration, Vercel Deployment, CI/CD Pipelines, PWA (Progressive Web Apps).
+
+## Featured Projects & Innovations
+1. **Bhilal Programming Language (v1.2.0)**:
+   - *Description:* An innovative bilingual French/English object-oriented programming language that transpiles directly to JavaScript. Features an interactive REPL and built-in network security tools.
+   - *Objective:* Designed to bridge the language gap for francophone developers and accelerate security prototyping.
+   - *Repository:* https://github.com/7Bhil/bhilal-language
+
+2. **Vitch (Fintech Electronic Wallet Demo)**:
+   - *Description:* Secure electronic wallet platform providing virtual card issuance, balance top-ups via mobile money, multi-currency support, and real-time ledger tracking.
+
+3. **Bhil Cours**:
+   - *Description:* Full-stack interactive learning and programming practice platform powered by React and Django, featuring structured exercise paths and real-time execution feedback.
+
+4. **Bloc Républicain - Arrondissement**:
+   - *Description:* High-concurrency institutional web application engineered for community communication, announcement broadcasts, and local initiative management.
+
+5. **Competitive Coding Challenge Platform**:
+   - *Description:* MERN stack platform engineered for live hackathons with real-time scoring leaderboards and jury evaluation workflows.
+
+6. **Premium Restaurant Digital Experience**:
+   - *Description:* High-performance, polished frontend built with React, interactive menu discovery, and glassmorphic micro-animations.
+
+## Education & Academic Background
+- **Degree:** Bachelor's Degree in Computer Science (Licence en Informatique)
+- **Institution:** Institut Universitaire de Technologie (IUT) de Parakou, Benin
+- **Specialization:** Software Engineering, Computer Networks, and Cybersecurity
+- **Unique Background:** Dual competence combining Financial Management and Software Engineering.
+
+## Services Offered
+- **Fintech & Digital Payments:** Mobile Money integration (MTN, Moov), payment gateway setups, electronic wallets, automated invoicing systems.
+- **Full-Stack Web Development:** High-performance, SEO-optimized web applications with React, Astro, Next.js, Node.js, Django, or Laravel.
+- **Mobile App Development:** Cross-platform iOS and Android apps using React Native.
+- **Security Audits & System Hardening:** Securing web/mobile backends against vulnerabilities, API protection, and data privacy compliance.
+- **Process Automation:** Transforming manual administrative workflows into scalable, automated cloud tools.
+
+## Direct Contact & Availability
+- **Availability:** Open for freelance projects, remote contracts, full-stack consulting, and technical leadership roles worldwide.
+- **Contact:** WhatsApp chat available on portfolio (https://7bhil.vercel.app/#contact) or email at 7bhilal.chitou7@gmail.com.
