@@ -68,6 +68,7 @@ export const projectsApi = {
   getById: (id) => apiRequest(`/projects/${id}`),
   create: (data) => apiRequest('/projects', 'POST', data, true),
   update: (id, data) => apiRequest(`/projects/${id}`, 'PUT', data, true),
+  reorder: (items) => apiRequest('/projects/reorder', 'PUT', { items }, true),
   delete: (id) => apiRequest(`/projects/${id}`, 'DELETE', null, true)
 };
 

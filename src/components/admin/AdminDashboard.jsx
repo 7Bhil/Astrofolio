@@ -25,7 +25,12 @@ import {
   Database,
   Globe,
   Menu,
-  X
+  X,
+  GripVertical,
+  Upload,
+  ArrowUp,
+  ArrowDown,
+  Image as ImageIcon
 } from 'lucide-react';
 import '../../styles/Admin.css';
 
@@ -59,6 +64,70 @@ export default function AdminDashboard() {
   });
 
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+
+  // Drag and Drop states for Project reordering
+  const [draggedProjectIdx, setDraggedProjectIdx] = useState(null);
+  const [dragOverProjectIdx, setDragOverProjectIdx] = useState(null);
+
+  const handleDragStart = (e, index) => {
+    setDraggedProjectIdx(index);
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', index);
+  };
+
+  const handleDragOver = (e, index) => {
+    e.preventDefault();
+    if (draggedProjectIdx !== index) {
+      setDragOverProjectIdx(index);
+    }
+  };
+
+  const handleDrop = async (e, dropIndex) => {
+    e.preventDefault();
+    if (draggedProjectIdx === null || draggedProjectIdx === dropIndex) {
+      setDraggedProjectIdx(null);
+      setDragOverProjectIdx(null);
+      return;
+    }
+
+    const sortedProjects = [...projects].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const [movedItem] = sortedProjects.splice(draggedProjectIdx, 1);
+    sortedProjects.splice(dropIndex, 0, movedItem);
+
+    const reordered = sortedProjects.map((p, idx) => ({ ...p, order: idx }));
+    setProjects(reordered);
+    setDraggedProjectIdx(null);
+    setDragOverProjectIdx(null);
+
+    try {
+      await projectsApi.reorder(reordered.map(p => ({ id: p.id, order: p.order })));
+      showAlert('success', 'Ordre des projets réorganisé avec succès !');
+    } catch (err) {
+      showAlert('danger', 'Erreur lors de la réorganisation.');
+      loadDashboardData();
+    }
+  };
+
+  const moveProject = async (index, direction) => {
+    const sorted = [...projects].sort((a, b) => (a.order || 0) - (b.order || 0));
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= sorted.length) return;
+
+    const temp = sorted[index];
+    sorted[index] = sorted[targetIndex];
+    sorted[targetIndex] = temp;
+
+    const reordered = sorted.map((p, idx) => ({ ...p, order: idx }));
+    setProjects(reordered);
+
+    try {
+      await projectsApi.reorder(reordered.map(p => ({ id: p.id, order: p.order })));
+      showAlert('success', 'Ordre mis à jour !');
+    } catch (err) {
+      showAlert('danger', 'Erreur lors du déplacement.');
+      loadDashboardData();
+    }
+  };
 
   // Initial authentication check & data load
   useEffect(() => {
@@ -484,10 +553,51 @@ export default function AdminDashboard() {
               </button>
             </div>
 
+            <p style={{ color: '#38bdf8', fontSize: '0.85rem', marginBottom: '1rem', background: 'rgba(6, 182, 212, 0.1)', padding: '0.6rem 1rem', borderRadius: '8px', border: '1px solid rgba(6, 182, 212, 0.2)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span>💡</span> <strong>Glisser-déposer :</strong> Attrapez l'icône ☰ ou utilisez les flèches ↑/↓ pour modifier l'ordre des projets sur l'espace client.
+            </p>
+
             <div>
-              {[...projects].sort((a, b) => (a.order || 0) - (b.order || 0)).map(proj => (
-                <div key={proj.id} className="admin-item-card">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {[...projects].sort((a, b) => (a.order || 0) - (b.order || 0)).map((proj, idx, sortedArr) => (
+                <div 
+                  key={proj.id} 
+                  className="admin-item-card"
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, idx)}
+                  onDragOver={(e) => handleDragOver(e, idx)}
+                  onDrop={(e) => handleDrop(e, idx)}
+                  onDragEnd={() => { setDraggedProjectIdx(null); setDragOverProjectIdx(null); }}
+                  style={{
+                    border: dragOverProjectIdx === idx ? '2px solid #06b6d4' : (draggedProjectIdx === idx ? '2px dashed #38bdf8' : '1px solid rgba(255,255,255,0.08)'),
+                    opacity: draggedProjectIdx === idx ? 0.4 : 1,
+                    transition: 'all 0.2s ease',
+                    cursor: 'grab'
+                  }}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+                    <div style={{ cursor: 'grab', color: '#64748b', display: 'flex', alignItems: 'center' }} title="Glisser pour réorganiser">
+                      <GripVertical size={20} />
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                      <button 
+                        disabled={idx === 0} 
+                        onClick={() => moveProject(idx, -1)} 
+                        style={{ background: 'none', border: 'none', color: idx === 0 ? '#334155' : '#94a3b8', cursor: idx === 0 ? 'default' : 'pointer', padding: 0 }}
+                        title="Monter d'un rang"
+                      >
+                        <ArrowUp size={14} />
+                      </button>
+                      <button 
+                        disabled={idx === sortedArr.length - 1} 
+                        onClick={() => moveProject(idx, 1)} 
+                        style={{ background: 'none', border: 'none', color: idx === sortedArr.length - 1 ? '#334155' : '#94a3b8', cursor: idx === sortedArr.length - 1 ? 'default' : 'pointer', padding: 0 }}
+                        title="Descendre d'un rang"
+                      >
+                        <ArrowDown size={14} />
+                      </button>
+                    </div>
+
                     {proj.image ? (
                       <img 
                         src={proj.image} 
@@ -502,7 +612,7 @@ export default function AdminDashboard() {
                     )}
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
-                        <span className="admin-tag" style={{ background: 'rgba(6, 182, 212, 0.15)', color: '#38bdf8' }}>Position: {proj.order ?? 0}</span>
+                        <span className="admin-tag" style={{ background: 'rgba(6, 182, 212, 0.15)', color: '#38bdf8' }}>N°{idx + 1}</span>
                         <strong style={{ fontSize: '1.05rem', color: '#fff' }}>{proj.titleFr}</strong>
                         <span className="admin-tag admin-tag-blue">{proj.category}</span>
                         {proj.featured && <span className="admin-tag admin-tag-gold">⭐ Vedette</span>}
@@ -589,21 +699,61 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
-                    {/* IMAGE SELECTION & PREVIEW */}
+                    {/* IMAGE SELECTION & LOCAL FILE UPLOAD & PREVIEW */}
                     <div className="admin-form-group">
-                      <label>Image du projet (URL ou chemin d'accès)</label>
+                      <label>Image du projet (Depuis votre ordinateur ou URL)</label>
+                      
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '0.75rem' }}>
+                        <label 
+                          style={{ 
+                            background: 'linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)', 
+                            color: '#fff', 
+                            padding: '0.55rem 1rem', 
+                            borderRadius: '8px', 
+                            cursor: 'pointer', 
+                            fontSize: '0.85rem', 
+                            fontWeight: 600, 
+                            display: 'inline-flex', 
+                            alignItems: 'center', 
+                            gap: '0.5rem',
+                            boxShadow: '0 4px 12px rgba(6, 182, 212, 0.25)'
+                          }}
+                        >
+                          <Upload size={16} /> Choisir une image locale sur votre PC
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            style={{ display: 'none' }} 
+                            onChange={(e) => {
+                              const file = e.target.files[0];
+                              if (!file) return;
+                              if (file.size > 5 * 1024 * 1024) {
+                                showAlert('danger', 'L\'image sélectionnée dépasse 5 Mo.');
+                                return;
+                              }
+                              const reader = new FileReader();
+                              reader.onloadend = () => {
+                                setProjectForm(prev => ({ ...prev, image: reader.result }));
+                                showAlert('success', `Image locale "${file.name}" chargée !`);
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                          />
+                        </label>
+                      </div>
+
                       <input 
                         type="text" 
                         value={projectForm.image} 
                         onChange={e => setProjectForm({...projectForm, image: e.target.value})} 
                         className="admin-input" 
-                        placeholder="/images/resto.webp ou https://..." 
+                        placeholder="Ou saisissez un chemin relatif (/images/resto.webp) ou une URL web" 
                       />
                       
                       {/* PRESET IMAGES PICKER */}
-                      <div style={{ marginTop: '0.5rem' }}>
+                      <div style={{ marginTop: '0.6rem' }}>
                         <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.4rem' }}>
-                          Ou choisir une image existante :
+                          Ou sélectionner parmi nos modèles prédéfinis :
                         </span>
                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                           {[
@@ -638,16 +788,26 @@ export default function AdminDashboard() {
 
                       {/* IMAGE PREVIEW */}
                       {projectForm.image && (
-                        <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', background: '#060b18', padding: '0.6rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                        <div style={{ marginTop: '0.85rem', display: 'flex', alignItems: 'center', gap: '1rem', background: '#060b18', padding: '0.75rem', borderRadius: '10px', border: '1px solid rgba(6, 182, 212, 0.3)' }}>
                           <img 
                             src={projectForm.image} 
                             alt="Aperçu" 
-                            style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '6px' }}
+                            style={{ width: '90px', height: '56px', objectFit: 'cover', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)' }}
                             onError={(e) => { e.target.style.display = 'none'; }}
                           />
-                          <span style={{ fontSize: '0.8rem', color: '#94a3b8', wordBreak: 'break-all' }}>
-                            Aperçu: {projectForm.image}
-                          </span>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <span style={{ fontSize: '0.82rem', color: '#38bdf8', fontWeight: 600, display: 'block' }}>Aperçu de l'image sélectionnée</span>
+                            <span style={{ fontSize: '0.75rem', color: '#94a3b8', wordBreak: 'break-all', display: 'block', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                              {projectForm.image.startsWith('data:') ? 'Fichier image local chargé (Base64)' : projectForm.image}
+                            </span>
+                          </div>
+                          <button 
+                            type="button" 
+                            onClick={() => setProjectForm({...projectForm, image: ''})}
+                            style={{ background: 'rgba(239, 68, 68, 0.2)', border: '1px solid rgba(239, 68, 68, 0.4)', color: '#f87171', padding: '0.3rem 0.6rem', borderRadius: '6px', fontSize: '0.75rem', cursor: 'pointer' }}
+                          >
+                            Retirer
+                          </button>
                         </div>
                       )}
                     </div>
