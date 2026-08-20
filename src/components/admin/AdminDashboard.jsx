@@ -23,12 +23,15 @@ import {
   AlertCircle, 
   RefreshCw, 
   Database,
-  ExternalLink,
   Globe,
-  Sparkles,
-  Search,
-  Eye
+  Menu,
+  X,
+  Calendar,
+  Layers,
+  ChevronRight,
+  ExternalLink
 } from 'lucide-react';
+import '../../styles/Admin.css';
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -40,6 +43,7 @@ export default function AdminDashboard() {
   const [experiences, setExperiences] = useState([]);
   const [messages, setMessages] = useState([]);
   const [alert, setAlert] = useState(null);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Form states
   const [editingProject, setEditingProject] = useState(null);
@@ -238,35 +242,55 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#030712', color: '#fff' }}>
-        <RefreshCw size={32} className="spin" style={{ animation: 'spin 1s linear infinite' }} />
-        <span style={{ marginLeft: '1rem', fontSize: '1.2rem' }}>Chargement du panneau d'administration...</span>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', background: '#060b18', color: '#fff' }}>
+        <RefreshCw size={32} style={{ animation: 'spin 1s linear infinite' }} />
+        <span style={{ marginLeft: '1rem', fontSize: '1.1rem', fontWeight: 500 }}>Chargement du panneau d'administration...</span>
       </div>
     );
   }
 
+  const unreadCount = messages.filter(m => !m.read).length;
+
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#030712', color: '#f8fafc', fontFamily: 'system-ui, sans-serif' }}>
-      
-      {/* SIDEBAR NAVIGATION */}
-      <aside style={{ width: '260px', background: 'rgba(15, 23, 42, 0.8)', borderRight: '1px solid rgba(255,255,255,0.1)', padding: '1.5rem', display: 'flex', flexDirection: 'column' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem' }}>
-          <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: 'linear-[#2563eb,#3b82f6]', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
-            7B
-          </div>
+    <div className="admin-layout">
+
+      {/* MOBILE TOP BAR */}
+      <header className="admin-mobile-header">
+        <div className="admin-mobile-brand">
+          <div className="admin-brand-icon">7B</div>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 600 }}>Portfolio Admin</h3>
-            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Neon PostgreSQL</span>
+            <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>Admin 7Bhil</h3>
+            <span style={{ fontSize: '0.75rem', color: '#06b6d4' }}>PostgreSQL Neon</span>
+          </div>
+        </div>
+        <button className="admin-mobile-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </header>
+
+      {/* MOBILE BACKDROP OVERLAY */}
+      <div 
+        className={`admin-sidebar-overlay ${mobileMenuOpen ? 'open' : ''}`}
+        onClick={() => setMobileMenuOpen(false)}
+      />
+
+      {/* SIDEBAR NAVIGATION */}
+      <aside className={`admin-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+        <div className="admin-sidebar-brand">
+          <div className="admin-brand-icon">7B</div>
+          <div>
+            <h3>Portfolio Admin</h3>
+            <span>Neon PostgreSQL</span>
           </div>
         </div>
 
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
+        <nav className="admin-nav">
           {[
             { id: 'overview', label: 'Vue d\'ensemble', icon: LayoutDashboard },
             { id: 'projects', label: 'Projets', icon: FolderGit2, count: projects.length },
             { id: 'skills', label: 'Compétences', icon: Wrench, count: skills.length },
             { id: 'experiences', label: 'Parcours', icon: Briefcase, count: experiences.length },
-            { id: 'messages', label: 'Messages', icon: Mail, count: messages.filter(m => !m.read).length },
+            { id: 'messages', label: 'Messages', icon: Mail, count: unreadCount, isUnread: unreadCount > 0 },
             { id: 'security', label: 'Sécurité & Accès', icon: ShieldCheck }
           ].map(tab => {
             const Icon = tab.icon;
@@ -274,27 +298,16 @@ export default function AdminDashboard() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  padding: '0.75rem 1rem',
-                  borderRadius: '8px',
-                  border: 'none',
-                  background: isActive ? 'rgba(37, 99, 235, 0.2)' : 'transparent',
-                  color: isActive ? '#60a5fa' : '#94a3b8',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  fontSize: '0.95rem',
-                  fontWeight: isActive ? 600 : 400,
-                  transition: 'all 0.2s'
+                onClick={() => {
+                  setActiveTab(tab.id);
+                  setMobileMenuOpen(false);
                 }}
+                className={`admin-nav-item ${isActive ? 'active' : ''}`}
               >
                 <Icon size={18} />
-                <span style={{ flex: 1 }}>{tab.label}</span>
+                <span>{tab.label}</span>
                 {tab.count !== undefined && tab.count > 0 && (
-                  <span style={{ background: isActive ? '#2563eb' : 'rgba(255,255,255,0.1)', color: '#fff', padding: '0.15rem 0.5rem', borderRadius: '12px', fontSize: '0.75rem' }}>
+                  <span className={`admin-nav-badge ${tab.isUnread ? 'unread' : ''}`}>
                     {tab.count}
                   </span>
                 )}
@@ -303,56 +316,41 @@ export default function AdminDashboard() {
           })}
         </nav>
 
-        <div style={{ paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-          <div style={{ marginBottom: '1rem', fontSize: '0.85rem', color: '#94a3b8' }}>
+        <div className="admin-sidebar-footer">
+          <div className="admin-user-info">
             Connecté en tant que:<br />
-            <strong style={{ color: '#fff' }}>{user?.email}</strong>
+            <strong>{user?.email}</strong>
           </div>
-          <button
-            onClick={handleLogout}
-            style={{
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justify: 'center',
-              gap: '0.5rem',
-              padding: '0.6rem',
-              borderRadius: '6px',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              background: 'rgba(239, 68, 68, 0.1)',
-              color: '#f87171',
-              cursor: 'pointer'
-            }}
-          >
+          <button onClick={handleLogout} className="btn-logout">
             <LogOut size={16} /> Déconnexion
           </button>
         </div>
       </aside>
 
       {/* MAIN CONTENT AREA */}
-      <main style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
+      <main className="admin-main">
         
         {/* HEADER BAR */}
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', paddingBottom: '1rem', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-          <div>
-            <h1 style={{ margin: 0, fontSize: '1.8rem', fontWeight: 700 }}>
-              {activeTab === 'overview' && 'Vue d\'ensemble du Portfolio'}
+        <header className="admin-header">
+          <div className="admin-header-title">
+            <h1>
+              {activeTab === 'overview' && 'Vue d\'ensemble'}
               {activeTab === 'projects' && 'Gestion des Projets'}
               {activeTab === 'skills' && 'Gestion des Compétences'}
-              {activeTab === 'experiences' && 'Gestion du Parcours & Formations'}
-              {activeTab === 'messages' && 'Boîte de Réception des Messages'}
+              {activeTab === 'experiences' && 'Parcours & Formations'}
+              {activeTab === 'messages' && 'Messages Reçus'}
               {activeTab === 'security' && 'Sécurité & Identifiants'}
             </h1>
-            <p style={{ margin: '0.25rem 0 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>
-              Base de données Neon PostgreSQL connectée • Mode Direct
+            <p>
+              Base de données Neon PostgreSQL • Admin Panel
             </p>
           </div>
 
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-            <a href="/" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: '#60a5fa', textDecoration: 'none', background: 'rgba(37,99,235,0.15)', padding: '0.5rem 1rem', borderRadius: '8px', border: '1px solid rgba(37,99,235,0.3)', fontSize: '0.9rem' }}>
-              <Globe size={16} /> Voir le site public
+          <div className="admin-header-actions">
+            <a href="/" target="_blank" rel="noopener noreferrer" className="btn-admin-secondary">
+              <Globe size={16} /> Voir le site
             </a>
-            <button onClick={loadDashboardData} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '0.5rem 0.8rem', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+            <button onClick={loadDashboardData} className="btn-admin-secondary">
               <RefreshCw size={16} /> Actualiser
             </button>
           </div>
@@ -361,15 +359,16 @@ export default function AdminDashboard() {
         {/* ALERTS NOTIFICATION */}
         {alert && (
           <div style={{
-            padding: '1rem',
-            borderRadius: '8px',
+            padding: '0.9rem 1.25rem',
+            borderRadius: '10px',
             marginBottom: '1.5rem',
             background: alert.type === 'success' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-            border: alert.type === 'success' ? '1px solid #22c55e' : '1px solid #ef4444',
+            border: alert.type === 'success' ? '1px solid rgba(34, 197, 94, 0.3)' : '1px solid rgba(239, 68, 68, 0.3)',
             color: alert.type === 'success' ? '#4ade80' : '#f87171',
             display: 'flex',
             alignItems: 'center',
-            gap: '0.75rem'
+            gap: '0.75rem',
+            fontWeight: 500
           }}>
             {alert.type === 'success' ? <CheckCircle2 size={20} /> : <AlertCircle size={20} />}
             <span>{alert.message}</span>
@@ -379,58 +378,60 @@ export default function AdminDashboard() {
         {/* TAB 1: OVERVIEW */}
         {activeTab === 'overview' && (
           <div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.25rem', marginBottom: '2rem' }}>
-              <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.25rem', borderRadius: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+            <div className="admin-kpi-grid">
+              <div className="admin-kpi-card">
+                <div className="admin-kpi-header">
                   <span>Projets Réalisés</span>
-                  <FolderGit2 size={20} color="#3b82f6" />
+                  <FolderGit2 size={20} color="#2563eb" />
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 700, margin: '0.5rem 0' }}>{projects.length}</div>
-                <span style={{ fontSize: '0.8rem', color: '#22c55e' }}>Stockés sur Neon DB</span>
+                <div className="admin-kpi-value">{projects.length}</div>
+                <span className="admin-kpi-subtitle">Stockés sur Neon DB</span>
               </div>
 
-              <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.25rem', borderRadius: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+              <div className="admin-kpi-card">
+                <div className="admin-kpi-header">
                   <span>Compétences</span>
-                  <Wrench size={20} color="#10b981" />
+                  <Wrench size={20} color="#06b6d4" />
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 700, margin: '0.5rem 0' }}>{skills.length}</div>
-                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Cataloguées</span>
+                <div className="admin-kpi-value">{skills.length}</div>
+                <span className="admin-kpi-subtitle">Stack Technique</span>
               </div>
 
-              <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.25rem', borderRadius: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+              <div className="admin-kpi-card">
+                <div className="admin-kpi-header">
                   <span>Messages Reçus</span>
                   <Mail size={20} color="#8b5cf6" />
                 </div>
-                <div style={{ fontSize: '2rem', fontWeight: 700, margin: '0.5rem 0' }}>{messages.length}</div>
-                <span style={{ fontSize: '0.8rem', color: messages.filter(m => !m.read).length > 0 ? '#f59e0b' : '#94a3b8' }}>
-                  {messages.filter(m => !m.read).length} non lus
+                <div className="admin-kpi-value">{messages.length}</div>
+                <span className="admin-kpi-subtitle" style={{ color: unreadCount > 0 ? '#fbbf24' : '#06b6d4' }}>
+                  {unreadCount > 0 ? `${unreadCount} non lue(s)` : 'Tous lus'}
                 </span>
               </div>
 
-              <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.25rem', borderRadius: '12px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', color: '#94a3b8' }}>
+              <div className="admin-kpi-card">
+                <div className="admin-kpi-header">
                   <span>Base de Données</span>
-                  <Database size={20} color="#06b6d4" />
+                  <Database size={20} color="#10b981" />
                 </div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0.75rem 0', color: '#22c55e' }}>PostgreSQL Neon</div>
-                <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Pooler AWS us-east-2</span>
+                <div className="admin-kpi-value" style={{ fontSize: '1.25rem', marginTop: '0.4rem', color: '#4ade80' }}>
+                  PostgreSQL Neon
+                </div>
+                <span className="admin-kpi-subtitle">Cloud AWS Pooler</span>
               </div>
             </div>
 
-            {/* QUICK ACTIONS & RECENT ACTIVITY */}
-            <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.5rem', borderRadius: '12px', marginBottom: '2rem' }}>
-              <h3 style={{ marginTop: 0, marginBottom: '1rem' }}>Actions Rapides</h3>
+            {/* QUICK ACTIONS */}
+            <div className="admin-panel">
+              <h3 className="admin-panel-title">Actions Rapides</h3>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <button onClick={() => { setActiveTab('projects'); setShowProjectModal(true); }} style={{ padding: '0.75rem 1.25rem', borderRadius: '8px', background: '#2563eb', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <button onClick={() => { setActiveTab('projects'); setShowProjectModal(true); }} className="btn-admin-primary">
                   <Plus size={18} /> Ajouter un Projet
                 </button>
-                <button onClick={() => { setActiveTab('skills'); setShowSkillModal(true); }} style={{ padding: '0.75rem 1.25rem', borderRadius: '8px', background: 'rgba(255,255,255,0.1)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <button onClick={() => { setActiveTab('skills'); setShowSkillModal(true); }} className="btn-admin-secondary">
                   <Plus size={18} /> Ajouter une Compétence
                 </button>
-                <button onClick={() => setActiveTab('messages')} style={{ padding: '0.75rem 1.25rem', borderRadius: '8px', background: 'rgba(139, 92, 246, 0.2)', color: '#c084fc', border: '1px solid rgba(139, 92, 246, 0.3)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Mail size={18} /> Consulter les messages ({messages.filter(m => !m.read).length})
+                <button onClick={() => setActiveTab('messages')} className="btn-admin-secondary">
+                  <Mail size={18} /> Messages ({unreadCount})
                 </button>
               </div>
             </div>
@@ -440,30 +441,30 @@ export default function AdminDashboard() {
         {/* TAB 2: PROJECTS MANAGER */}
         {activeTab === 'projects' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-              <h3>Liste des Projets ({projects.length})</h3>
-              <button onClick={() => { resetProjectForm(); setEditingProject(null); setShowProjectModal(true); }} style={{ padding: '0.6rem 1.2rem', borderRadius: '8px', background: '#2563eb', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div className="admin-panel-title">
+              <span>Projets Catalogués ({projects.length})</span>
+              <button onClick={() => { resetProjectForm(); setEditingProject(null); setShowProjectModal(true); }} className="btn-admin-primary">
                 <Plus size={18} /> Nouveau Projet
               </button>
             </div>
 
-            <div style={{ display: 'grid', gap: '1rem' }}>
+            <div>
               {projects.map(proj => (
-                <div key={proj.id} style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.25rem', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={proj.id} className="admin-item-card">
                   <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.4rem' }}>
-                      <strong style={{ fontSize: '1.1rem' }}>{proj.titleFr}</strong>
-                      <span style={{ background: 'rgba(37,99,235,0.2)', color: '#60a5fa', padding: '0.15rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>{proj.category}</span>
-                      {proj.featured && <span style={{ background: 'rgba(234,179,8,0.2)', color: '#fde047', padding: '0.15rem 0.5rem', borderRadius: '6px', fontSize: '0.75rem' }}>⭐ En vedette</span>}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
+                      <strong style={{ fontSize: '1.1rem', color: '#fff' }}>{proj.titleFr}</strong>
+                      <span className="admin-tag admin-tag-blue">{proj.category}</span>
+                      {proj.featured && <span className="admin-tag admin-tag-gold">⭐ Vedette</span>}
                     </div>
-                    <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem' }}>{proj.descFr}</p>
+                    <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.5 }}>{proj.descFr}</p>
                   </div>
 
-                  <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    <button onClick={() => openEditProject(proj)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', color: '#60a5fa', padding: '0.5rem', borderRadius: '6px', cursor: 'pointer' }}>
+                  <div className="admin-item-card-actions">
+                    <button onClick={() => openEditProject(proj)} className="btn-icon-edit" title="Modifier">
                       <Edit size={16} />
                     </button>
-                    <button onClick={() => handleDeleteProject(proj.id)} style={{ background: 'rgba(239, 68, 68, 0.15)', border: 'none', color: '#f87171', padding: '0.5rem', borderRadius: '6px', cursor: 'pointer' }}>
+                    <button onClick={() => handleDeleteProject(proj.id)} className="btn-icon-danger" title="Supprimer">
                       <Trash2 size={16} />
                     </button>
                   </div>
@@ -473,59 +474,72 @@ export default function AdminDashboard() {
 
             {/* PROJECT MODAL */}
             {showProjectModal && (
-              <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '1rem' }}>
-                <div style={{ background: '#0f172a', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '1.5rem', maxWidth: '600px', width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
-                  <h3 style={{ marginTop: 0 }}>{editingProject ? 'Modifier le projet' : 'Ajouter un nouveau projet'}</h3>
-                  <form onSubmit={handleSaveProject} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div>
-                      <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Slug unique</label>
-                      <input type="text" value={projectForm.slug} onChange={e => setProjectForm({...projectForm, slug: e.target.value})} required style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} placeholder="mon-projet" />
+              <div className="admin-modal-backdrop" onClick={() => setShowProjectModal(false)}>
+                <div className="admin-modal-content" onClick={e => e.stopPropagation()}>
+                  <h3 className="admin-panel-title">
+                    <span>{editingProject ? 'Modifier le projet' : 'Ajouter un nouveau projet'}</span>
+                    <button onClick={() => setShowProjectModal(false)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
+                      <X size={20} />
+                    </button>
+                  </h3>
+                  
+                  <form onSubmit={handleSaveProject}>
+                    <div className="admin-form-group">
+                      <label>Slug unique</label>
+                      <input 
+                        type="text" 
+                        value={projectForm.slug} 
+                        onChange={e => setProjectForm({...projectForm, slug: e.target.value})} 
+                        required 
+                        className="admin-input" 
+                        placeholder="mon-projet" 
+                      />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                      <div>
-                        <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Titre (FR)</label>
-                        <input type="text" value={projectForm.titleFr} onChange={e => setProjectForm({...projectForm, titleFr: e.target.value})} required style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} />
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                      <div className="admin-form-group">
+                        <label>Titre (FR)</label>
+                        <input type="text" value={projectForm.titleFr} onChange={e => setProjectForm({...projectForm, titleFr: e.target.value})} required className="admin-input" />
                       </div>
-                      <div>
-                        <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Title (EN)</label>
-                        <input type="text" value={projectForm.titleEn} onChange={e => setProjectForm({...projectForm, titleEn: e.target.value})} required style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Description (FR)</label>
-                      <textarea value={projectForm.descFr} onChange={e => setProjectForm({...projectForm, descFr: e.target.value})} required style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', minHeight: '70px' }} />
-                    </div>
-
-                    <div>
-                      <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Description (EN)</label>
-                      <textarea value={projectForm.descEn} onChange={e => setProjectForm({...projectForm, descEn: e.target.value})} required style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff', minHeight: '70px' }} />
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                      <div>
-                        <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Lien GitHub</label>
-                        <input type="text" value={projectForm.githubUrl} onChange={e => setProjectForm({...projectForm, githubUrl: e.target.value})} style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} placeholder="https://github.com/..." />
-                      </div>
-                      <div>
-                        <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Lien Démo</label>
-                        <input type="text" value={projectForm.demoUrl} onChange={e => setProjectForm({...projectForm, demoUrl: e.target.value})} style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} placeholder="https://..." />
+                      <div className="admin-form-group">
+                        <label>Title (EN)</label>
+                        <input type="text" value={projectForm.titleEn} onChange={e => setProjectForm({...projectForm, titleEn: e.target.value})} required className="admin-input" />
                       </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
-                        <input type="checkbox" checked={projectForm.featured} onChange={e => setProjectForm({...projectForm, featured: e.target.checked})} />
+                    <div className="admin-form-group">
+                      <label>Description (FR)</label>
+                      <textarea value={projectForm.descFr} onChange={e => setProjectForm({...projectForm, descFr: e.target.value})} required className="admin-textarea" />
+                    </div>
+
+                    <div className="admin-form-group">
+                      <label>Description (EN)</label>
+                      <textarea value={projectForm.descEn} onChange={e => setProjectForm({...projectForm, descEn: e.target.value})} required className="admin-textarea" />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                      <div className="admin-form-group">
+                        <label>Lien GitHub</label>
+                        <input type="text" value={projectForm.githubUrl} onChange={e => setProjectForm({...projectForm, githubUrl: e.target.value})} className="admin-input" placeholder="https://github.com/..." />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>Lien Démo</label>
+                        <input type="text" value={projectForm.demoUrl} onChange={e => setProjectForm({...projectForm, demoUrl: e.target.value})} className="admin-input" placeholder="https://..." />
+                      </div>
+                    </div>
+
+                    <div style={{ margin: '1rem 0' }}>
+                      <label style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', color: '#fff', fontSize: '0.9rem' }}>
+                        <input type="checkbox" checked={projectForm.featured} onChange={e => setProjectForm({...projectForm, featured: e.target.checked})} style={{ width: '18px', height: '18px' }} />
                         Mettre en vedette
                       </label>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem' }}>
-                      <button type="button" onClick={() => setShowProjectModal(false)} style={{ padding: '0.6rem 1.2rem', borderRadius: '6px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', cursor: 'pointer' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem' }}>
+                      <button type="button" onClick={() => setShowProjectModal(false)} className="btn-admin-secondary">
                         Annuler
                       </button>
-                      <button type="submit" style={{ padding: '0.6rem 1.2rem', borderRadius: '6px', background: '#2563eb', border: 'none', color: '#fff', cursor: 'pointer' }}>
+                      <button type="submit" className="btn-admin-primary">
                         Enregistrer
                       </button>
                     </div>
@@ -539,21 +553,23 @@ export default function AdminDashboard() {
         {/* TAB 3: SKILLS MANAGER */}
         {activeTab === 'skills' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
-              <h3>Compétences ({skills.length})</h3>
-              <button onClick={() => setShowSkillModal(true)} style={{ padding: '0.6rem 1.2rem', borderRadius: '8px', background: '#2563eb', color: '#fff', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div className="admin-panel-title">
+              <span>Compétences ({skills.length})</span>
+              <button onClick={() => setShowSkillModal(true)} className="btn-admin-primary">
                 <Plus size={18} /> Ajouter une compétence
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem' }}>
               {skills.map(sk => (
-                <div key={sk.id} style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1rem', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div key={sk.id} className="admin-item-card" style={{ marginBottom: 0 }}>
                   <div>
-                    <strong style={{ fontSize: '1rem' }}>{sk.name}</strong>
-                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.2rem' }}>Catégorie: {sk.category} • Niveau: {sk.level}%</div>
+                    <strong style={{ fontSize: '1rem', color: '#fff' }}>{sk.name}</strong>
+                    <div style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '0.3rem' }}>
+                      {sk.category} • {sk.level}%
+                    </div>
                   </div>
-                  <button onClick={() => handleDeleteSkill(sk.id)} style={{ background: 'rgba(239,68,68,0.15)', border: 'none', color: '#f87171', padding: '0.4rem', borderRadius: '6px', cursor: 'pointer' }}>
+                  <button onClick={() => handleDeleteSkill(sk.id)} className="btn-icon-danger">
                     <Trash2 size={16} />
                   </button>
                 </div>
@@ -562,18 +578,35 @@ export default function AdminDashboard() {
 
             {/* SKILL MODAL */}
             {showSkillModal && (
-              <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-                <div style={{ background: '#0f172a', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '12px', padding: '1.5rem', maxWidth: '400px', width: '100%' }}>
-                  <h3 style={{ marginTop: 0 }}>Ajouter une compétence</h3>
-                  <form onSubmit={handleSaveSkill} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                    <div>
-                      <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Nom de la compétence</label>
-                      <input type="text" value={skillForm.name} onChange={e => setSkillForm({...skillForm, name: e.target.value})} required style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} placeholder="Ex: React Native" />
+              <div className="admin-modal-backdrop" onClick={() => setShowSkillModal(false)}>
+                <div className="admin-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '440px' }}>
+                  <h3 className="admin-panel-title">
+                    <span>Ajouter une compétence</span>
+                    <button onClick={() => setShowSkillModal(false)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
+                      <X size={20} />
+                    </button>
+                  </h3>
+
+                  <form onSubmit={handleSaveSkill}>
+                    <div className="admin-form-group">
+                      <label>Nom de la compétence</label>
+                      <input 
+                        type="text" 
+                        value={skillForm.name} 
+                        onChange={e => setSkillForm({...skillForm, name: e.target.value})} 
+                        required 
+                        className="admin-input" 
+                        placeholder="Ex: React Native" 
+                      />
                     </div>
 
-                    <div>
-                      <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Catégorie</label>
-                      <select value={skillForm.category} onChange={e => setSkillForm({...skillForm, category: e.target.value})} style={{ width: '100%', padding: '0.6rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }}>
+                    <div className="admin-form-group">
+                      <label>Catégorie</label>
+                      <select 
+                        value={skillForm.category} 
+                        onChange={e => setSkillForm({...skillForm, category: e.target.value})} 
+                        className="admin-select"
+                      >
                         <option value="frontend">Frontend</option>
                         <option value="backend">Backend & DB</option>
                         <option value="mobile">Mobile</option>
@@ -582,9 +615,13 @@ export default function AdminDashboard() {
                       </select>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1rem' }}>
-                      <button type="button" onClick={() => setShowSkillModal(false)} style={{ padding: '0.6rem 1.2rem', borderRadius: '6px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', cursor: 'pointer' }}>Annuler</button>
-                      <button type="submit" style={{ padding: '0.6rem 1.2rem', borderRadius: '6px', background: '#2563eb', border: 'none', color: '#fff', cursor: 'pointer' }}>Enregistrer</button>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem' }}>
+                      <button type="button" onClick={() => setShowSkillModal(false)} className="btn-admin-secondary">
+                        Annuler
+                      </button>
+                      <button type="submit" className="btn-admin-primary">
+                        Enregistrer
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -596,26 +633,45 @@ export default function AdminDashboard() {
         {/* TAB 4: MESSAGES INBOX */}
         {activeTab === 'messages' && (
           <div>
-            <h3>Boîte de Réception des Messages ({messages.length})</h3>
+            <h3 className="admin-panel-title">Boîte de Réception des Messages ({messages.length})</h3>
             {messages.length === 0 ? (
               <p style={{ color: '#94a3b8' }}>Aucun message reçu pour le moment.</p>
             ) : (
               <div style={{ display: 'grid', gap: '1rem' }}>
                 {messages.map(msg => (
-                  <div key={msg.id} style={{ background: msg.read ? 'rgba(15, 23, 42, 0.4)' : 'rgba(37, 99, 235, 0.1)', border: msg.read ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(37, 99, 235, 0.4)', padding: '1.25rem', borderRadius: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <div 
+                    key={msg.id} 
+                    className="admin-panel" 
+                    style={{ 
+                      borderColor: msg.read ? 'rgba(255,255,255,0.08)' : 'rgba(6,182,212,0.4)',
+                      background: msg.read ? 'rgba(11, 19, 41, 0.6)' : 'rgba(6, 182, 212, 0.05)'
+                    }}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.6rem', flexWrap: 'wrap', gap: '0.5rem' }}>
                       <div>
-                        <strong style={{ fontSize: '1.1rem' }}>{msg.name}</strong> ({msg.email})
+                        <strong style={{ fontSize: '1.1rem', color: '#fff' }}>{msg.name}</strong> 
+                        <span style={{ color: '#94a3b8', fontSize: '0.9rem', marginLeft: '0.5rem' }}>({msg.email})</span>
                       </div>
-                      <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{new Date(msg.createdAt).toLocaleString('fr-FR')}</span>
+                      <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                        {new Date(msg.createdAt).toLocaleString('fr-FR')}
+                      </span>
                     </div>
-                    {msg.subject && <div style={{ fontWeight: 600, color: '#60a5fa', marginBottom: '0.5rem' }}>Sujet: {msg.subject}</div>}
-                    <p style={{ background: '#030712', padding: '0.75rem', borderRadius: '6px', margin: '0.5rem 0', whiteSpace: 'pre-wrap' }}>{msg.message}</p>
+                    
+                    {msg.subject && (
+                      <div style={{ fontWeight: 600, color: '#38bdf8', marginBottom: '0.5rem' }}>
+                        Sujet: {msg.subject}
+                      </div>
+                    )}
+
+                    <p style={{ background: '#060b18', padding: '0.85rem', borderRadius: '8px', margin: '0.75rem 0', whiteSpace: 'pre-wrap', lineHeight: 1.6, border: '1px solid rgba(255,255,255,0.06)' }}>
+                      {msg.message}
+                    </p>
+
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
-                      <button onClick={() => handleMarkMessageRead(msg.id, !msg.read)} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                      <button onClick={() => handleMarkMessageRead(msg.id, !msg.read)} className="btn-admin-secondary" style={{ fontSize: '0.82rem' }}>
                         {msg.read ? 'Marquer non lu' : 'Marquer comme lu'}
                       </button>
-                      <button onClick={() => handleDeleteMessage(msg.id)} style={{ background: 'rgba(239, 68, 68, 0.2)', border: 'none', color: '#f87171', padding: '0.4rem 0.8rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem' }}>
+                      <button onClick={() => handleDeleteMessage(msg.id)} className="btn-icon-danger" style={{ fontSize: '0.82rem', padding: '0.4rem 0.8rem' }}>
                         Supprimer
                       </button>
                     </div>
@@ -628,30 +684,49 @@ export default function AdminDashboard() {
 
         {/* TAB 5: SECURITY SETTINGS */}
         {activeTab === 'security' && (
-          <div style={{ maxWidth: '500px' }}>
-            <div style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid rgba(255,255,255,0.1)', padding: '1.5rem', borderRadius: '12px' }}>
-              <h3 style={{ marginTop: 0, marginBottom: '1.5rem' }}>Changer le mot de passe</h3>
-              <form onSubmit={handleChangePassword} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div>
-                  <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Mot de passe actuel</label>
-                  <input type="password" value={passwordForm.currentPassword} onChange={e => setPasswordForm({...passwordForm, currentPassword: e.target.value})} required style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} />
+          <div style={{ maxWidth: '520px' }}>
+            <div className="admin-panel">
+              <h3 className="admin-panel-title">Changer le mot de passe</h3>
+              <form onSubmit={handleChangePassword}>
+                <div className="admin-form-group">
+                  <label>Mot de passe actuel</label>
+                  <input 
+                    type="password" 
+                    value={passwordForm.currentPassword} 
+                    onChange={e => setPasswordForm({...passwordForm, currentPassword: e.target.value})} 
+                    required 
+                    className="admin-input" 
+                  />
                 </div>
-                <div>
-                  <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Nouveau mot de passe</label>
-                  <input type="password" value={passwordForm.newPassword} onChange={e => setPasswordForm({...passwordForm, newPassword: e.target.value})} required style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} />
+                <div className="admin-form-group">
+                  <label>Nouveau mot de passe</label>
+                  <input 
+                    type="password" 
+                    value={passwordForm.newPassword} 
+                    onChange={e => setPasswordForm({...passwordForm, newPassword: e.target.value})} 
+                    required 
+                    className="admin-input" 
+                  />
                 </div>
-                <div>
-                  <label style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Confirmer le nouveau mot de passe</label>
-                  <input type="password" value={passwordForm.confirmPassword} onChange={e => setPasswordForm({...passwordForm, confirmPassword: e.target.value})} required style={{ width: '100%', padding: '0.7rem', borderRadius: '6px', background: '#030712', border: '1px solid rgba(255,255,255,0.15)', color: '#fff' }} />
+                <div className="admin-form-group">
+                  <label>Confirmer le nouveau mot de passe</label>
+                  <input 
+                    type="password" 
+                    value={passwordForm.confirmPassword} 
+                    onChange={e => setPasswordForm({...passwordForm, confirmPassword: e.target.value})} 
+                    required 
+                    className="admin-input" 
+                  />
                 </div>
 
-                <button type="submit" style={{ marginTop: '0.5rem', padding: '0.75rem', borderRadius: '8px', background: '#2563eb', color: '#fff', border: 'none', fontWeight: 600, cursor: 'pointer' }}>
+                <button type="submit" className="btn-admin-primary" style={{ width: '100%', justifyContent: 'center', marginTop: '1rem' }}>
                   Mettre à jour le mot de passe
                 </button>
               </form>
             </div>
           </div>
         )}
+
       </main>
     </div>
   );
