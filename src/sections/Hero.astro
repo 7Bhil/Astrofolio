@@ -7,9 +7,12 @@ const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
 const cvFile = lang === 'en' ? '/Bhilal CV en.pdf' : '/Bhilal CV fr.pdf';
 const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.pdf';
-const heroPitch = lang === 'en' ? 'I turn ideas into web and mobile products that sell, automate operations and reduce risk.' : 'Je transforme des idées en produits web et mobile qui vendent, automatisent les opérations et réduisent les risques.';
-const heroPrimaryCta = lang === 'en' ? 'Start a project' : 'Démarrer le projet';
-const heroSecondaryCta = lang === 'en' ? 'Download profile' : 'Télécharger le profil';
+const heroPitch = lang === 'en'
+  ? 'I design and ship web and mobile systems that handle payments, automate operations and protect data. React, Node.js, Django — full cycle, from architecture to deployment.'
+  : 'Je conçois et livre des systèmes web et mobile qui gèrent des paiements, automatisent des opérations et protègent des données. React, Node.js, Django — cycle complet, de l\'architecture au déploiement.';
+const heroPrimaryCta = lang === 'en' ? 'Discuss a project' : 'Discuter d\'un projet';
+const heroSecondaryCta = lang === 'en' ? 'Download CV' : 'Télécharger le CV';
+const heroBadge = lang === 'en' ? 'Available for freelance — remote worldwide' : 'Disponible en freelance — remote worldwide';
 ---
 
 <section id="home" class="hero-section">
@@ -33,6 +36,8 @@ const heroSecondaryCta = lang === 'en' ? 'Download profile' : 'Télécharger le 
   
   <div class="container hero-container">
     <div class="hero-content">
+      
+
       <h1 class="hero-title reveal reveal-stagger-2">
         {t('hero.welcome')} <span class="text-accent">Bhilal CHITOU</span>
         <br />

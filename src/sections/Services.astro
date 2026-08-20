@@ -8,7 +8,7 @@ const conversion = lang === "en" ? {
   title: "What you get",
   subtitle: "A clear process, a direct exchange, and a deliverable that moves the project forward.",
   cta: "Start a project",
-  note: "Send the brief, get a concrete reply.",
+  note: "Let's chat",
   cards: [
     { index: "01", title: "Fast diagnosis", description: "I identify the real business problem, the technical constraints and the shortest route to a useful deliverable." },
     { index: "02", title: "Outcome-driven delivery", description: "I build interfaces, APIs and integrations with one objective: something usable that moves the project forward." },
@@ -19,7 +19,7 @@ const conversion = lang === "en" ? {
   title: "Ce que vous recevez",
   subtitle: "Un cadre clair, une réponse directe et une suite concrète.",
   cta: "Démarrer le projet",
-  note: "Envoyez le brief, recevez une réponse concrète.",
+  note: "Discutons",
   cards: [
     { index: "01", title: "Diagnostic rapide", description: "Je repère le vrai problème métier, les contraintes techniques et la route la plus courte vers un livrable utile." },
     { index: "02", title: "Livraison orientée résultat", description: "Je construis interfaces, API et intégrations avec un seul objectif : quelque chose d'utilisable qui fait avancer le projet." },
@@ -63,7 +63,7 @@ const services = [
       <p class="section-subtitle">{t('services.subtitle')}</p>
     </div>
 
-<div class="conversion-panel glass-panel">
+<div class="conversion-panel">
       <div class="conversion-header-copy">
         <h3 class="conversion-title">{conversion.title}</h3>
         <p class="conversion-subtitle">{conversion.subtitle}</p>
@@ -216,28 +216,11 @@ const services = [
 }
 
 .conversion-panel {
-  margin-top: 2rem;
-  padding: 2rem;
-  border-radius: 2rem;
+  margin-top: 2.5rem;
+  padding: 2.5rem;
+  border-radius: 1.5rem;
   border: 1px solid var(--border-color);
-  background: linear-gradient(135deg, rgba(41, 98, 255, 0.12), rgba(124, 58, 237, 0.12));
-  backdrop-filter: blur(14px);
-  transition: none;
-}
-
-.conversion-panel:hover,
-.conversion-panel:focus-within,
-.conversion-panel:hover *,
-.conversion-panel:focus-within *,
-.conversion-panel .btn,
-.conversion-panel .btn:hover,
-.conversion-panel .btn:focus-visible,
-.conversion-panel .btn::after,
-.conversion-panel .btn:hover::after {
-  transform: none !important;
-  box-shadow: none !important;
-  transition: none !important;
-  animation: none !important;
+  background: var(--bg-secondary);
 }
 
 .conversion-header-copy {

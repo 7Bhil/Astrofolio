@@ -1,46 +1,48 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&display=swap');
 
 :root {
-  /* DARK MODE - Electric Blue & Purple (Banner Theme) */
-  --bg-primary: #03040B; 
-  --bg-secondary: #0A0F1E; 
-  --bg-tertiary: #111827; 
+  /* Branding Palette: Deep Navy, Sapphire Blue, Cyan */
+  --bg-primary: #060b18; 
+  --bg-secondary: #0b1329; 
+  --bg-tertiary: #141f38; 
   
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   
-  --accent-primary: #2962FF; /* Electric Blue */
-  --accent-secondary: #7C3AED; /* Purple/Violet */
-  --accent-cyan: #00f2ff; /* Added Cyan */
-  --accent-glow: rgba(41, 98, 255, 0.25);
-  --accent-gradient: linear-gradient(135deg, #2962FF 0%, #7C3AED 100%);
+  --accent-primary: #2563eb; /* Sapphire Blue */
+  --accent-secondary: #0b1329; /* Deep Navy */
+  --accent-cyan: #06b6d4; /* Vivid Cyan */
+  --accent-glow: rgba(6, 182, 212, 0.15);
+  --accent-gradient: linear-gradient(135deg, #2563eb 0%, #06b6d4 100%);
   
-  --border-color: rgba(148, 163, 184, 0.1);
-  --glass-bg: rgba(10, 15, 30, 0.7);
-  --glass-border: rgba(41, 98, 255, 0.15);
+  --border-color: rgba(6, 182, 212, 0.12);
+  --glass-bg: rgba(11, 19, 41, 0.75);
+  --glass-border: rgba(6, 182, 212, 0.15);
   
-  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.7);
-  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.7);
-  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.7);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
 }
 
 [data-theme='light'] {
   --bg-primary: #f8fafc;
-  --bg-secondary: #f1f5f9;
-  --bg-tertiary: #e2e8f0;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f1f5f9;
   
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  --text-muted: #64748b;
   
-  --accent-primary: #0ea5e9;
-  --accent-secondary: #0284c7;
-  --accent-glow: rgba(14, 165, 233, 0.2);
-  --accent-gradient: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  --accent-primary: #0284c7;
+  --accent-secondary: #1d4ed8;
+  --accent-cyan: #0891b2;
+  --accent-glow: rgba(2, 132, 199, 0.12);
+  --accent-gradient: linear-gradient(135deg, #0284c7 0%, #1d4ed8 100%);
 
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(14, 165, 233, 0.15);
+  --border-color: rgba(15, 23, 42, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(15, 23, 42, 0.08);
 }
 
 * {

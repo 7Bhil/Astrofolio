@@ -130,9 +130,61 @@
 
 .hero-actions {
   display: flex;
+  align-items: center;
   gap: 1.25rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
 }
+
+.hero-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.6rem;
+  min-height: 48px;
+  font-weight: 600;
+}
+
+/* Availability badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--accent-primary);
+  letter-spacing: 0.2px;
+  margin-bottom: 1.5rem;
+  width: fit-content;
+}
+
+.hero-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* Social proof microline */
+.hero-social-proof {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  letter-spacing: 0.2px;
+  margin-bottom: 2rem;
+}
+
+
 
 /* Button enhancements in Hero */
 .hero-actions .btn {

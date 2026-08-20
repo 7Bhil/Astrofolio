@@ -2,221 +2,352 @@
 const { lang = 'fr' } = Astro.props;
 
 const pricing = lang === 'en' ? {
-  title: 'Visible offers',
-  subtitle: 'Clear starting prices to frame the discussion before we go deeper.',
-  note: 'Every project is scoped before kickoff. The prices below are entry points, not ceilings.',
-  cta: 'Discuss my project',
+  title: 'Pricing & Packages',
+  subtitle: 'Indicative estimates for services. Every project receives a tailored quote after scope discovery.',
+  note: 'Need a custom estimate or specific setup? Contact me directly.',
+  ctaLabel: 'Chat on WhatsApp',
   plans: [
     {
-      name: 'Discovery / Audit',
-      price: 'From 25,000 FCFA',
-      duration: '1 to 2 days',
-      description: 'For a concrete diagnosis, scope clarification and the best technical path.',
-      bullets: ['Problem framing', 'Tech recommendation', 'Action plan'],
-      featured: false
+      name: 'Audit & Framing',
+      price: '50,000',
+      currency: 'FCFA',
+      duration: '1 – 2 days',
+      description: 'Technical audit of your needs, technology selection, and writing an actionable spec document.',
+      bullets: [
+        'Requirements & constraint analysis',
+        'Architecture recommendation',
+        'Technical specs & scope definition',
+        'Risk & cost estimation'
+      ],
+      featured: false,
+      cta: 'Request an audit',
+      color: '#06b6d4'
     },
     {
-      name: 'Landing page / Showcase site',
-      price: 'From 60,000 FCFA',
-      duration: '3 to 7 days',
-      description: 'For a polished site that sells, explains and captures leads quickly.',
-      bullets: ['Responsive design', 'Conversion copy', 'Deployment included'],
-      featured: true
+      name: 'Website / Landing Page',
+      price: '150,000',
+      currency: 'FCFA',
+      duration: '3 – 7 days',
+      description: 'Custom showcase website or high-converting landing page, fast, responsive and SEO-ready.',
+      bullets: [
+        'Custom responsive UI design',
+        'Performance & animation integration',
+        'Contact form & analytics setup',
+        'Deployment & custom domain setup',
+        'Post-launch technical support'
+      ],
+      featured: true,
+      cta: 'Start this project',
+      color: '#2563eb'
     },
     {
-      name: 'Custom web or mobile app',
-      price: 'From 250,000 FCFA',
-      duration: '2 to 6 weeks',
-      description: 'For a tailored product with workflows, data, and business logic.',
-      bullets: ['Product scoping', 'UI + backend', 'Delivery roadmap'],
-      featured: false
+      name: 'Web & Mobile App',
+      price: '500,000+',
+      currency: 'FCFA',
+      duration: '2 – 6 weeks',
+      description: 'Full-cycle application build: UI, custom backend, database, and payment processing.',
+      bullets: [
+        'React / Node.js / Django architecture',
+        'Secured REST API & PostgreSQL database',
+        'Mobile Money & Stripe integration',
+        'Role-based admin dashboard',
+        'Source code handoff & documentation'
+      ],
+      featured: false,
+      cta: 'Discuss project',
+      color: '#0284c7'
     }
   ]
 } : {
-  title: 'Offres tarifaires visibles',
-  subtitle: 'Des prix de départ clairs pour cadrer la discussion avant d’aller plus loin.',
-  note: 'Chaque projet est cadré avant lancement. Les montants ci-dessous sont des points d’entrée, pas des plafonds.',
-  cta: 'Parler de mon projet',
+  title: 'Tarifs & Formats',
+  subtitle: 'Estimation indicative des prestations. Chaque projet fait l\'objet d\'un devis détaillé après cadrage du besoin.',
+  note: 'Pour une estimation personnalisée ou un projet spécifique, contactez-moi directement.',
+  ctaLabel: 'Discuter sur WhatsApp',
   plans: [
     {
-      name: 'Cadrage / Audit',
-      price: 'À partir de 25 000 FCFA',
-      duration: '1 à 2 jours',
-      description: 'Pour un diagnostic concret, la clarification du périmètre et la meilleure route technique.',
-      bullets: ['Lecture du besoin', 'Recommandation technique', 'Plan d’action'],
-      featured: false
+      name: 'Audit & Cadrage',
+      price: '50 000',
+      currency: 'FCFA',
+      duration: '1 – 2 jours',
+      description: 'Analyse technique de votre besoin, choix de la stack et rédaction d\'un cahier des charges opérationnel.',
+      bullets: [
+        'Analyse du besoin & contraintes',
+        'Recommandation d\'architecture',
+        'Spécification technique & périmètre',
+        'Estimation des risques et coûts'
+      ],
+      featured: false,
+      cta: 'Demander un audit',
+      color: '#38bdf8'
     },
     {
-      name: 'Landing page / Site vitrine',
-      price: 'À partir de 60 000 FCFA',
-      duration: '3 à 7 jours',
-      description: 'Pour un site soigné qui vend, explique et capte des prospects rapidement.',
-      bullets: ['Design responsive', 'Copy orientée conversion', 'Déploiement inclus'],
-      featured: true
+      name: 'Site Web / Landing Page',
+      price: '150 000',
+      currency: 'FCFA',
+      duration: '3 – 7 jours',
+      description: 'Développement d\'un site vitrine ou d\'une landing page sur mesure, rapide, responsive et SEO-friendly.',
+      bullets: [
+        'Design UI responsive sur mesure',
+        'Intégration animations & performances',
+        'Formulaire de contact & analytics',
+        'Déploiement & configuration domaine',
+        'Support post-livraison'
+      ],
+      featured: true,
+      cta: 'Démarrer ce projet',
+      color: '#2563eb'
     },
     {
-      name: 'Application web ou mobile sur mesure',
-      price: 'À partir de 250 000 FCFA',
-      duration: '2 à 6 semaines',
-      description: 'Pour un produit sur mesure avec workflows, données et logique métier.',
-      bullets: ['Cadrage produit', 'UI + backend', 'Feuille de route'],
-      featured: false
+      name: 'Application Web & Mobile',
+      price: '500 000+',
+      currency: 'FCFA',
+      duration: '2 – 6 semaines',
+      description: 'Développement d\'une application complète avec backend, base de données et intégrations de paiement.',
+      bullets: [
+        'Architecture React / Node.js / Django',
+        'API REST sécurisée & base PostgreSQL',
+        'Intégration Mobile Money / Stripe',
+        'Tableau de bord d\'administration',
+        'Remise des sources & documentation'
+      ],
+      featured: false,
+      cta: 'Discuter du projet',
+      color: '#0284c7'
     }
   ]
+};
+
+const whatsappNumber = '2290144242964';
+const getWhatsappUrl = (planName) => {
+  const text = lang === 'en'
+    ? `Hello Bhilal, I am interested in the "${planName}" package. Can we discuss?`
+    : `Bonjour Bhilal, je souhaite échanger à propos de l'offre "${planName}".`;
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
 };
 ---
 
 <section id="pricing" class="section-padding pricing-section">
   <div class="container">
-    <div class="section-header text-center mb-12">
+    <div class="section-header text-center mb-12 reveal">
       <h2 class="section-title">{pricing.title}</h2>
       <p class="section-subtitle">{pricing.subtitle}</p>
     </div>
 
     <div class="pricing-grid">
-      {pricing.plans.map((plan) => (
-        <article class={plan.featured ? 'pricing-card featured' : 'pricing-card'}>
+      {pricing.plans.map((plan, i) => (
+        <article class={plan.featured ? 'pricing-card featured reveal' : `pricing-card reveal reveal-stagger-${i + 1}`}>
           <div class="pricing-card-top">
-            <h3 class="pricing-plan-name">{plan.name}</h3>
+            <div>
+              <h3 class="pricing-plan-name">{plan.name}</h3>
+            </div>
             <span class="pricing-duration">{plan.duration}</span>
           </div>
-          <div class="pricing-price">{plan.price}</div>
+
+          <div class="pricing-price-row">
+            <div class="pricing-price">{plan.price}</div>
+            <span class="pricing-currency">{plan.currency}</span>
+          </div>
+
           <p class="pricing-description">{plan.description}</p>
+
           <ul class="pricing-bullets">
             {plan.bullets.map((bullet) => (
               <li>{bullet}</li>
             ))}
           </ul>
+
+          <a
+            href={getWhatsappUrl(plan.name)}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="pricing-cta"
+          >
+            {plan.cta}
+          </a>
         </article>
       ))}
     </div>
 
-    <div class="pricing-footer glass-panel">
+    <div class="pricing-footer glass-panel reveal">
       <p>{pricing.note}</p>
-      <a href="#contact" class="btn btn-primary">{pricing.cta}</a>
+      <a
+        href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(lang === 'en' ? 'Hello Bhilal, I would like to discuss a project.' : 'Bonjour Bhilal, je souhaite échanger sur un projet.')}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        {pricing.ctaLabel}
+      </a>
     </div>
   </div>
 </section>
 
 <style>
-  .pricing-section {
-    position: relative;
-  }
+.pricing-section {
+  position: relative;
+}
 
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.pricing-card {
+  position: relative;
+  padding: 2rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.pricing-card.featured {
+  border-color: var(--accent-primary);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.pricing-plan-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.pricing-duration {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  background: var(--bg-tertiary);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+}
+
+.pricing-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.pricing-price {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text-primary);
+}
+
+.pricing-currency {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.pricing-description {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+.pricing-bullets {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.pricing-bullets li {
+  position: relative;
+  padding-left: 1.25rem;
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.pricing-bullets li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--accent-primary);
+  font-weight: bold;
+}
+
+.pricing-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.25rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: auto;
+  color: #fff;
+  background: var(--accent-primary);
+}
+
+.pricing-cta:hover {
+  background: var(--accent-secondary);
+  transform: translateY(-2px);
+}
+
+.pricing-footer {
+  margin-top: 2.5rem;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-radius: 1rem;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+}
+
+.pricing-footer p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 700px;
+  flex: 1;
+}
+
+@media (max-width: 1024px) {
   .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
+    grid-template-columns: 1fr;
+    max-width: 480px;
+    margin: 0 auto;
   }
+}
 
-  .pricing-card {
-    padding: 2rem;
-    border-radius: 2rem;
-    border: 1px solid var(--border-color);
-    background: linear-gradient(180deg, rgba(10, 16, 32, 0.9), rgba(5, 8, 18, 0.95));
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
-  }
-
-  .pricing-card.featured {
-    border-color: rgba(59, 130, 246, 0.6);
-    transform: translateY(-8px);
-    background: linear-gradient(180deg, rgba(19, 29, 58, 0.95), rgba(5, 8, 18, 0.98));
-  }
-
-  .pricing-card-top {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    align-items: flex-start;
-    margin-bottom: 1rem;
-  }
-
-  .pricing-plan-name {
-    font-size: 1.2rem;
-    font-weight: 800;
-  }
-
-  .pricing-duration {
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--accent-primary);
-    white-space: nowrap;
-  }
-
-  .pricing-price {
-    font-size: clamp(1.7rem, 3vw, 2.4rem);
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 1rem;
-    color: #fff;
-  }
-
-  .pricing-description {
-    color: var(--text-secondary);
-    line-height: 1.7;
-    margin-bottom: 1rem;
-  }
-
-  .pricing-bullets {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: grid;
-    gap: 0.7rem;
-  }
-
-  .pricing-bullets li {
-    position: relative;
-    padding-left: 1rem;
-    color: var(--text-primary);
-  }
-
-  .pricing-bullets li::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0.55rem;
-    width: 0.35rem;
-    height: 0.35rem;
-    border-radius: 9999px;
-    background: var(--accent-primary);
+@media (max-width: 640px) {
+  .pricing-card,
+  .pricing-footer {
+    padding: 1.5rem;
   }
 
   .pricing-footer {
-    margin-top: 1.5rem;
-    padding: 1.5rem 2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    text-align: center;
   }
-
-  .pricing-footer p {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    max-width: 760px;
-  }
-
-  @media (max-width: 1024px) {
-    .pricing-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .pricing-card.featured {
-      transform: none;
-    }
-  }
-
-  @media (max-width: 640px) {
-    .pricing-card,
-    .pricing-footer {
-      padding: 1.5rem;
-    }
-
-    .pricing-card-top {
-      flex-direction: column;
-    }
-  }
+}
 </style>

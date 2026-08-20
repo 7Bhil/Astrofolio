@@ -9,12 +9,45 @@ const whatsappText = lang === 'en'
   ? 'Hello Bhilal, I would like to discuss a project with you.'
   : 'Bonjour Bhilal, je souhaite discuter d\'un projet avec vous.';
 const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
-const contactTitle = lang === 'en' ? 'Contact' : 'Contact';
-const contactSubtitle = lang === 'en' ? 'Have a project or an idea? Send a message and I will reply with the next clear step.' : 'Vous avez un projet ou une idée ? Envoyez un message et je vous répondrai avec la prochaine étape claire.';
-const contactInfoCopy = lang === 'en' ? 'A direct message is enough to get started.' : 'Un message direct suffit pour démarrer.';
+const contactTitle = lang === 'en' ? 'Let\'s build something' : 'Construisons quelque chose';
+const contactSubtitle = lang === 'en'
+  ? 'One message to start. I reply within 24h with a clear next step.'
+  : 'Un message pour commencer. Je réponds sous 24h avec une prochaine étape claire.';
+const contactInfoCopy = lang === 'en' ? 'Prefer a direct message? All channels work.' : 'Vous préférez un message direct ? Tous les canaux fonctionnent.';
 const whatsappHeading = lang === 'en' ? 'Talk on WhatsApp' : 'Échangeons sur WhatsApp';
-const whatsappCopy = lang === 'en' ? 'Send a direct message and I will reply as soon as possible.' : 'Envoyez un message direct et je vous répondrai dès que possible.';
-const whatsappButton = lang === 'en' ? "Let's chat" : 'Discutons';
+const whatsappCopy = lang === 'en'
+  ? 'Fastest response guaranteed. Describe your project in one message.'
+  : 'Réponse la plus rapide garantie. Décrivez votre projet en un message.';
+const whatsappButton = lang === 'en' ? 'Open WhatsApp' : 'Ouvrir WhatsApp';
+const formLabels = lang === 'en' ? {
+  name: 'Your name',
+  email: 'Email address',
+  subject: 'Project type',
+  message: 'Tell me about your project',
+  send: 'Send message',
+  sending: 'Sending...',
+  success: '✅ Message sent! I will reply within 24h.',
+  error: '❌ Error sending. Please try WhatsApp directly.',
+  placeholder_name: 'Jean Dupont',
+  placeholder_email: 'jean@company.com',
+  placeholder_subject: 'e.g. Mobile app, Fintech system, Landing page...',
+  placeholder_message: 'Describe your project, your goal, and your timeline...',
+  subjects: ['Landing page / Showcase site', 'Web application', 'Mobile app', 'Fintech / Payment system', 'Technical audit', 'Other']
+} : {
+  name: 'Votre nom',
+  email: 'Adresse email',
+  subject: 'Type de projet',
+  message: 'Parlez-moi de votre projet',
+  send: 'Envoyer le message',
+  sending: 'Envoi en cours...',
+  success: '✅ Message envoyé ! Je vous réponds sous 24h.',
+  error: '❌ Erreur d\'envoi. Essayez WhatsApp directement.',
+  placeholder_name: 'Jean Dupont',
+  placeholder_email: 'jean@entreprise.com',
+  placeholder_subject: 'ex : Application mobile, Système fintech, Landing page...',
+  placeholder_message: 'Décrivez votre projet, votre objectif et votre délai...',
+  subjects: ['Landing page / Site vitrine', 'Application web', 'Application mobile', 'Système fintech / Paiement', 'Audit technique', 'Autre']
+};
 const contactSteps = lang === 'en' ? [
   { index: '01', title: 'Share the brief', description: 'Tell me what you want to launch, improve or secure.' },
   { index: '02', title: 'Get a plan', description: 'I reply with scope, timing and the next concrete step.' },
@@ -28,22 +61,15 @@ const contactSteps = lang === 'en' ? [
 
 <section id="contact" class="section-padding contact-section">
   <div class="container">
-    <div class="section-header text-center mb-12">
+    <div class="section-header text-center mb-12 reveal">
       <h2 class="section-title">{contactTitle}</h2>
-      <p class="section-subtitle">
-        {contactSubtitle}
-      </p>
+      <p class="section-subtitle">{contactSubtitle}</p>
     </div>
 
-    <div class="contact-grid glass-panel">
-      <div class="contact-info">
-        <h3 class="contact-info-title">{contactInfoTitle}</h3>
-        <p class="contact-info-desc">
-          {contactInfoCopy}
-        </p>
-        
-        <div class="info-items">
-        <div class="contact-steps">
+    <div class="contact-layout">
+      <!-- Left: Info + Steps -->
+      <div class="contact-info-col">
+        <div class="contact-steps-block reveal reveal-stagger-1">
           {contactSteps.map((step) => (
             <div class="contact-step">
               <span class="contact-step-index">{step.index}</span>
@@ -54,50 +80,326 @@ const contactSteps = lang === 'en' ? [
             </div>
           ))}
         </div>
-          <div class="info-item">
-            <div class="info-icon">
-              <Phone size={20} />
-            </div>
+
+        <!-- Contact quick links -->
+        <div class="contact-links reveal reveal-stagger-2">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="contact-link-item contact-link-whatsapp">
+            <MessageCircle size={20} />
+            <span>WhatsApp — réponse rapide garantie</span>
+          </a>
+          <a href="mailto:7bhilal.chitou7@gmail.com" class="contact-link-item">
+            <Mail size={20} />
+            <span>7bhilal.chitou7@gmail.com</span>
+          </a>
+          <div class="contact-link-item">
+            <Phone size={20} />
             <span>+229 01 44 24 29 64</span>
           </div>
-          <div class="info-item">
-            <div class="info-icon">
-              <Mail size={20} />
-            </div>
-            <span>7bhilal.chitou7@gmail.com</span>
-          </div>
-          <div class="info-item">
-            <div class="info-icon">
-              <MapPin size={20} />
-            </div>
-            <span>Remote / Full-time</span>
+          <div class="contact-link-item">
+            <MapPin size={20} />
+            <span>Remote worldwide · Bénin (UTC+1)</span>
           </div>
         </div>
-        
-        <div class="contact-shape"></div>
       </div>
 
-      <div class="whatsapp-contact">
-        <div class="whatsapp-card">
-          <div class="whatsapp-icon" aria-hidden="true">
-            <MessageCircle size={34} />
+      <!-- Right: Contact Form -->
+      <div class="contact-form-col glass-panel reveal reveal-stagger-2">
+        <form id="contact-form" class="contact-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="contact-name">{formLabels.name}</label>
+              <input
+                id="contact-name"
+                name="name"
+                type="text"
+                required
+                placeholder={formLabels.placeholder_name}
+                class="form-input"
+              />
+            </div>
+            <div class="form-group">
+              <label for="contact-email">{formLabels.email}</label>
+              <input
+                id="contact-email"
+                name="email"
+                type="email"
+                required
+                placeholder={formLabels.placeholder_email}
+                class="form-input"
+              />
+            </div>
           </div>
-          <div class="whatsapp-copy">
-            <h3>{whatsappHeading}</h3>
-            <p>{whatsappCopy}</p>
+
+          <div class="form-group">
+            <label for="contact-subject">{formLabels.subject}</label>
+            <select id="contact-subject" name="subject" class="form-input">
+              <option value="">— {lang === 'en' ? 'Select a project type' : 'Sélectionner un type'}</option>
+              {formLabels.subjects.map(s => (
+                <option value={s}>{s}</option>
+              ))}
+            </select>
           </div>
-          <a
-            class="btn whatsapp-btn"
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={lang === 'en' ? 'Contact Bhilal CHITOU on WhatsApp' : 'Contacter Bhilal CHITOU sur WhatsApp'}
-          >
-            <MessageCircle size={20} />
-            <span>{whatsappButton}</span>
-          </a>
-        </div>
+
+          <div class="form-group">
+            <label for="contact-message">{formLabels.message}</label>
+            <textarea
+              id="contact-message"
+              name="message"
+              required
+              rows="5"
+              placeholder={formLabels.placeholder_message}
+              class="form-input form-textarea"
+            ></textarea>
+          </div>
+
+          <div id="form-alert" class="form-alert" style="display:none;"></div>
+
+          <button type="submit" id="form-submit" class="btn btn-primary btn-glow form-submit-btn">
+            <MessageCircle size={18} />
+            <span id="form-submit-label">{formLabels.send}</span>
+          </button>
+        </form>
       </div>
     </div>
   </div>
 </section>
+
+<script define:vars={{ formLabels, whatsappUrl }}>
+  const form = document.getElementById('contact-form');
+  const alert = document.getElementById('form-alert');
+  const submitBtn = document.getElementById('form-submit');
+  const submitLabel = document.getElementById('form-submit-label');
+
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:5005/api'
+    : 'https://portfolio-backend-7bhil.onrender.com/api';
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    submitLabel.textContent = formLabels.sending;
+    submitBtn.disabled = true;
+
+    const data = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      subject: form.subject.value,
+      message: form.message.value.trim()
+    };
+
+    try {
+      const res = await fetch(`${API_BASE}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      if (res.ok) {
+        alert.textContent = formLabels.success;
+        alert.className = 'form-alert form-alert-success';
+        alert.style.display = 'block';
+        form.reset();
+      } else {
+        throw new Error('API error');
+      }
+    } catch (err) {
+      alert.innerHTML = `${formLabels.error} <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">WhatsApp</a>`;
+      alert.className = 'form-alert form-alert-error';
+      alert.style.display = 'block';
+    } finally {
+      submitLabel.textContent = formLabels.send;
+      submitBtn.disabled = false;
+    }
+  });
+</script>
+
+<style>
+.contact-section {
+  background: var(--bg-primary);
+}
+
+.contact-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Left column */
+.contact-steps-block {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.contact-step {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.contact-step-index {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--accent-primary);
+  opacity: 0.4;
+  line-height: 1;
+  min-width: 2.5rem;
+}
+
+.contact-step-copy h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: var(--text-primary);
+}
+
+.contact-step-copy p {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.55;
+}
+
+/* Contact quick links */
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.contact-link-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contact-link-item:hover {
+  color: var(--text-primary);
+}
+
+.contact-link-whatsapp {
+  color: #86efac;
+  font-weight: 600;
+}
+
+.contact-link-whatsapp:hover {
+  color: #4ade80;
+}
+
+/* Right: form panel */
+.contact-form-col {
+  border-radius: 2rem;
+  padding: 2rem;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-input {
+  background: rgba(3, 7, 18, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  transition: border-color 0.25s;
+  outline: none;
+  width: 100%;
+}
+
+.form-input:focus {
+  border-color: rgba(41, 98, 255, 0.5);
+  box-shadow: 0 0 0 3px rgba(41, 98, 255, 0.08);
+}
+
+.form-input option {
+  background: #0a0f1e;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-alert {
+  padding: 0.85rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.form-alert a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.form-alert-success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #86efac;
+}
+
+.form-alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+}
+
+.form-submit-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 0.9rem;
+  font-size: 1rem;
+}
+
+.form-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  animation: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-form-col {
+    padding: 1.5rem;
+  }
+}
+</style>

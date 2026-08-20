@@ -32,8 +32,8 @@ export const translations = {
       exp2_company: "IUT of Parakou, Benin",
       exp2_desc: "Specialization in software development, networks and cybersecurity.",
       edu1_title: "Bachelor's Degree in Computer Science",
-      edu1_school: "University of Parakou",
-      edu1_year: "2024 — Present"
+      edu1_school: "University of Parakou (IUT)",
+      edu1_year: "Graduated 2026"
     },
     projects: {
       title: "Featured Projects",
@@ -168,8 +168,8 @@ export const translations = {
       exp2_company: "IUT de Parakou, Bénin",
       exp2_desc: "Spécialisation développement logiciel, réseaux et cybersécurité.",
       edu1_title: "Licence en Informatique",
-      edu1_school: "Institut Universitaire de Technologie de Parakou, Benin",
-      edu1_year: "2024 — Présent"
+      edu1_school: "Institut Universitaire de Technologie de Parakou",
+      edu1_year: "Obtenue en 2026"
     },
     projects: {
       title: "Projets à la une",
