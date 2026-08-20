@@ -18,6 +18,8 @@ import '../styles/global.css';
 
 const siteUrl = Astro.site ? Astro.site.href : 'https://7bhil.vercel.app/';
 const canonicalURL = new URL(Astro.url.pathname, siteUrl);
+const currentPath = Astro.url.pathname;
+const isAdminPage = currentPath.startsWith('/admin');
 const ogLocale = lang === 'en' ? 'en_US' : 'fr_FR';
 const alternateLang = lang === 'fr' ? 'en' : 'fr';
 const alternateURL = lang === 'fr' ? `${siteUrl}en/` : siteUrl;
@@ -197,7 +199,7 @@ const structuredData = [
 	<body>
 		<ScrollProgress client:load />
 		<slot />
-		<Chatbot client:load lang={lang} />
+		{!isAdminPage && <Chatbot client:load lang={lang} />}
 		<script>
 			// Intersection Observer for scroll animations
 			const observerCallback = (entries: IntersectionObserverEntry[]) => {

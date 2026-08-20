@@ -25,11 +25,7 @@ import {
   Database,
   Globe,
   Menu,
-  X,
-  Calendar,
-  Layers,
-  ChevronRight,
-  ExternalLink
+  X
 } from 'lucide-react';
 import '../../styles/Admin.css';
 
@@ -49,20 +45,18 @@ export default function AdminDashboard() {
   const [editingProject, setEditingProject] = useState(null);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [projectForm, setProjectForm] = useState({
-    slug: '',
-    titleFr: '',
-    titleEn: '',
-    descFr: '',
-    descEn: '',
-    category: 'web',
-    githubUrl: '',
-    demoUrl: '',
-    featured: true,
-    order: 0
+    slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', githubUrl: '', demoUrl: '', featured: true, order: 0
   });
 
+  const [editingSkill, setEditingSkill] = useState(null);
   const [skillForm, setSkillForm] = useState({ name: '', category: 'frontend', level: 90 });
   const [showSkillModal, setShowSkillModal] = useState(false);
+
+  const [editingExp, setEditingExp] = useState(null);
+  const [showExpModal, setShowExpModal] = useState(false);
+  const [expForm, setExpForm] = useState({
+    type: 'experience', roleFr: '', roleEn: '', companyFr: '', companyEn: '', dateFr: '', dateEn: '', descFr: '', descEn: '', order: 0
+  });
 
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
@@ -128,7 +122,7 @@ export default function AdminDashboard() {
       }
       setShowProjectModal(false);
       setEditingProject(null);
-      resetProjectForm();
+      setProjectForm({ slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', githubUrl: '', demoUrl: '', featured: true, order: 0 });
       loadDashboardData();
     } catch (err) {
       showAlert('danger', err.message || 'Erreur lors de l\'enregistrement du projet.');
@@ -149,47 +143,35 @@ export default function AdminDashboard() {
   const openEditProject = (proj) => {
     setEditingProject(proj);
     setProjectForm({
-      slug: proj.slug || '',
-      titleFr: proj.titleFr || '',
-      titleEn: proj.titleEn || '',
-      descFr: proj.descFr || '',
-      descEn: proj.descEn || '',
-      category: proj.category || 'web',
-      githubUrl: proj.githubUrl || '',
-      demoUrl: proj.demoUrl || '',
-      featured: proj.featured !== undefined ? proj.featured : true,
-      order: proj.order || 0
+      slug: proj.slug || '', titleFr: proj.titleFr || '', titleEn: proj.titleEn || '', descFr: proj.descFr || '', descEn: proj.descEn || '', category: proj.category || 'web', githubUrl: proj.githubUrl || '', demoUrl: proj.demoUrl || '', featured: proj.featured !== undefined ? proj.featured : true, order: proj.order || 0
     });
     setShowProjectModal(true);
-  };
-
-  const resetProjectForm = () => {
-    setProjectForm({
-      slug: '',
-      titleFr: '',
-      titleEn: '',
-      descFr: '',
-      descEn: '',
-      category: 'web',
-      githubUrl: '',
-      demoUrl: '',
-      featured: true,
-      order: 0
-    });
   };
 
   // --- SKILL ACTIONS ---
   const handleSaveSkill = async (e) => {
     e.preventDefault();
     try {
-      await skillsApi.create(skillForm);
-      showAlert('success', 'Compétence ajoutée !');
+      if (editingSkill) {
+        await skillsApi.update(editingSkill.id, skillForm);
+        showAlert('success', 'Compétence mise à jour !');
+      } else {
+        await skillsApi.create(skillForm);
+        showAlert('success', 'Compétence ajoutée !');
+      }
       setShowSkillModal(false);
+      setEditingSkill(null);
       setSkillForm({ name: '', category: 'frontend', level: 90 });
       loadDashboardData();
     } catch (err) {
-      showAlert('danger', 'Erreur lors de l\'ajout de la compétence.');
+      showAlert('danger', 'Erreur lors de l\'enregistrement de la compétence.');
     }
+  };
+
+  const openEditSkill = (sk) => {
+    setEditingSkill(sk);
+    setSkillForm({ name: sk.name, category: sk.category, level: sk.level || 90 });
+    setShowSkillModal(true);
   };
 
   const handleDeleteSkill = async (id) => {
@@ -200,6 +182,50 @@ export default function AdminDashboard() {
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de la suppression.');
+    }
+  };
+
+  // --- EXPERIENCE ACTIONS ---
+  const handleSaveExp = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingExp) {
+        await experiencesApi.update(editingExp.id, expForm);
+        showAlert('success', 'Élément mis à jour !');
+      } else {
+        await experiencesApi.create(expForm);
+        showAlert('success', 'Élément ajouté au parcours !');
+      }
+      setShowExpModal(false);
+      setEditingExp(null);
+      setExpForm({ type: 'experience', roleFr: '', roleEn: '', companyFr: '', companyEn: '', dateFr: '', dateEn: '', descFr: '', descEn: '', order: 0 });
+      loadDashboardData();
+    } catch (err) {
+      showAlert('danger', 'Erreur d\'enregistrement.');
+    }
+  };
+
+  const openEditExp = (exp) => {
+    setEditingExp(exp);
+    setExpForm({
+      type: exp.type || 'experience',
+      roleFr: exp.roleFr || '', roleEn: exp.roleEn || '',
+      companyFr: exp.companyFr || '', companyEn: exp.companyEn || '',
+      dateFr: exp.dateFr || '', dateEn: exp.dateEn || '',
+      descFr: exp.descFr || '', descEn: exp.descEn || '',
+      order: exp.order || 0
+    });
+    setShowExpModal(true);
+  };
+
+  const handleDeleteExp = async (id) => {
+    if (!window.confirm('Supprimer cet élément du parcours ?')) return;
+    try {
+      await experiencesApi.delete(id);
+      showAlert('success', 'Élément supprimé.');
+      loadDashboardData();
+    } catch (err) {
+      showAlert('danger', 'Erreur de suppression.');
     }
   };
 
@@ -424,10 +450,10 @@ export default function AdminDashboard() {
             <div className="admin-panel">
               <h3 className="admin-panel-title">Actions Rapides</h3>
               <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-                <button onClick={() => { setActiveTab('projects'); setShowProjectModal(true); }} className="btn-admin-primary">
+                <button onClick={() => { setActiveTab('projects'); setProjectForm({ slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', githubUrl: '', demoUrl: '', featured: true, order: 0 }); setEditingProject(null); setShowProjectModal(true); }} className="btn-admin-primary">
                   <Plus size={18} /> Ajouter un Projet
                 </button>
-                <button onClick={() => { setActiveTab('skills'); setShowSkillModal(true); }} className="btn-admin-secondary">
+                <button onClick={() => { setActiveTab('skills'); setSkillForm({ name: '', category: 'frontend', level: 90 }); setEditingSkill(null); setShowSkillModal(true); }} className="btn-admin-secondary">
                   <Plus size={18} /> Ajouter une Compétence
                 </button>
                 <button onClick={() => setActiveTab('messages')} className="btn-admin-secondary">
@@ -443,7 +469,7 @@ export default function AdminDashboard() {
           <div>
             <div className="admin-panel-title">
               <span>Projets Catalogués ({projects.length})</span>
-              <button onClick={() => { resetProjectForm(); setEditingProject(null); setShowProjectModal(true); }} className="btn-admin-primary">
+              <button onClick={() => { setProjectForm({ slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', githubUrl: '', demoUrl: '', featured: true, order: 0 }); setEditingProject(null); setShowProjectModal(true); }} className="btn-admin-primary">
                 <Plus size={18} /> Nouveau Projet
               </button>
             </div>
@@ -460,7 +486,7 @@ export default function AdminDashboard() {
                     <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.5 }}>{proj.descFr}</p>
                   </div>
 
-                  <div className="admin-item-card-actions">
+                  <div className="admin-item-card-actions" style={{ display: 'flex', gap: '0.5rem', flexDirection: 'row' }}>
                     <button onClick={() => openEditProject(proj)} className="btn-icon-edit" title="Modifier">
                       <Edit size={16} />
                     </button>
@@ -505,6 +531,20 @@ export default function AdminDashboard() {
                         <label>Title (EN)</label>
                         <input type="text" value={projectForm.titleEn} onChange={e => setProjectForm({...projectForm, titleEn: e.target.value})} required className="admin-input" />
                       </div>
+                    </div>
+
+                    <div className="admin-form-group">
+                      <label>Catégorie</label>
+                      <select 
+                        value={projectForm.category} 
+                        onChange={e => setProjectForm({...projectForm, category: e.target.value})} 
+                        className="admin-select"
+                      >
+                        <option value="web">Web Development</option>
+                        <option value="mobile">Mobile App</option>
+                        <option value="fintech">Fintech / Security</option>
+                        <option value="other">Autre</option>
+                      </select>
                     </div>
 
                     <div className="admin-form-group">
@@ -555,7 +595,7 @@ export default function AdminDashboard() {
           <div>
             <div className="admin-panel-title">
               <span>Compétences ({skills.length})</span>
-              <button onClick={() => setShowSkillModal(true)} className="btn-admin-primary">
+              <button onClick={() => { setSkillForm({ name: '', category: 'frontend', level: 90 }); setEditingSkill(null); setShowSkillModal(true); }} className="btn-admin-primary">
                 <Plus size={18} /> Ajouter une compétence
               </button>
             </div>
@@ -569,9 +609,14 @@ export default function AdminDashboard() {
                       {sk.category} • {sk.level}%
                     </div>
                   </div>
-                  <button onClick={() => handleDeleteSkill(sk.id)} className="btn-icon-danger">
-                    <Trash2 size={16} />
-                  </button>
+                  <div className="admin-item-card-actions" style={{ display: 'flex', gap: '0.5rem', flexDirection: 'row' }}>
+                    <button onClick={() => openEditSkill(sk)} className="btn-icon-edit" title="Modifier">
+                      <Edit size={16} />
+                    </button>
+                    <button onClick={() => handleDeleteSkill(sk.id)} className="btn-icon-danger" title="Supprimer">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
@@ -581,7 +626,7 @@ export default function AdminDashboard() {
               <div className="admin-modal-backdrop" onClick={() => setShowSkillModal(false)}>
                 <div className="admin-modal-content" onClick={e => e.stopPropagation()} style={{ maxWidth: '440px' }}>
                   <h3 className="admin-panel-title">
-                    <span>Ajouter une compétence</span>
+                    <span>{editingSkill ? 'Modifier la compétence' : 'Ajouter une compétence'}</span>
                     <button onClick={() => setShowSkillModal(false)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
                       <X size={20} />
                     </button>
@@ -615,8 +660,139 @@ export default function AdminDashboard() {
                       </select>
                     </div>
 
+                    <div className="admin-form-group">
+                      <label>Niveau / Maîtrise (%)</label>
+                      <input 
+                        type="number" 
+                        min="1" max="100"
+                        value={skillForm.level} 
+                        onChange={e => setSkillForm({...skillForm, level: parseInt(e.target.value)})} 
+                        required 
+                        className="admin-input" 
+                      />
+                    </div>
+
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem' }}>
                       <button type="button" onClick={() => setShowSkillModal(false)} className="btn-admin-secondary">
+                        Annuler
+                      </button>
+                      <button type="submit" className="btn-admin-primary">
+                        Enregistrer
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 3.5: EXPERIENCES MANAGER */}
+        {activeTab === 'experiences' && (
+          <div>
+            <div className="admin-panel-title">
+              <span>Parcours & Formations ({experiences.length})</span>
+              <button onClick={() => { setExpForm({ type: 'experience', roleFr: '', roleEn: '', companyFr: '', companyEn: '', dateFr: '', dateEn: '', descFr: '', descEn: '', order: 0 }); setEditingExp(null); setShowExpModal(true); }} className="btn-admin-primary">
+                <Plus size={18} /> Ajouter
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              {experiences.map(exp => (
+                <div key={exp.id} className="admin-item-card">
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
+                      <strong style={{ fontSize: '1.1rem', color: '#fff' }}>{exp.roleFr}</strong>
+                      <span className={exp.type === 'education' ? 'admin-tag admin-tag-gold' : 'admin-tag admin-tag-blue'}>
+                        {exp.type === 'education' ? 'Diplôme' : 'Expérience'}
+                      </span>
+                    </div>
+                    <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.5 }}>
+                      {exp.companyFr} • {exp.dateFr}
+                    </p>
+                  </div>
+
+                  <div className="admin-item-card-actions" style={{ display: 'flex', gap: '0.5rem', flexDirection: 'row' }}>
+                    <button onClick={() => openEditExp(exp)} className="btn-icon-edit" title="Modifier">
+                      <Edit size={16} />
+                    </button>
+                    <button onClick={() => handleDeleteExp(exp.id)} className="btn-icon-danger" title="Supprimer">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* EXP MODAL */}
+            {showExpModal && (
+              <div className="admin-modal-backdrop" onClick={() => setShowExpModal(false)}>
+                <div className="admin-modal-content" onClick={e => e.stopPropagation()}>
+                  <h3 className="admin-panel-title">
+                    <span>{editingExp ? 'Modifier' : 'Ajouter au parcours'}</span>
+                    <button onClick={() => setShowExpModal(false)} style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
+                      <X size={20} />
+                    </button>
+                  </h3>
+                  
+                  <form onSubmit={handleSaveExp}>
+                    <div className="admin-form-group">
+                      <label>Type</label>
+                      <select 
+                        value={expForm.type} 
+                        onChange={e => setExpForm({...expForm, type: e.target.value})} 
+                        className="admin-select"
+                      >
+                        <option value="experience">Expérience Professionnelle</option>
+                        <option value="education">Formation / Diplôme</option>
+                      </select>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                      <div className="admin-form-group">
+                        <label>Rôle / Titre (FR)</label>
+                        <input type="text" value={expForm.roleFr} onChange={e => setExpForm({...expForm, roleFr: e.target.value})} required className="admin-input" />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>Role / Title (EN)</label>
+                        <input type="text" value={expForm.roleEn} onChange={e => setExpForm({...expForm, roleEn: e.target.value})} required className="admin-input" />
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                      <div className="admin-form-group">
+                        <label>Entreprise / École (FR)</label>
+                        <input type="text" value={expForm.companyFr} onChange={e => setExpForm({...expForm, companyFr: e.target.value})} required className="admin-input" />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>Company / School (EN)</label>
+                        <input type="text" value={expForm.companyEn} onChange={e => setExpForm({...expForm, companyEn: e.target.value})} required className="admin-input" />
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                      <div className="admin-form-group">
+                        <label>Date (FR)</label>
+                        <input type="text" value={expForm.dateFr} onChange={e => setExpForm({...expForm, dateFr: e.target.value})} required className="admin-input" placeholder="Ex: 2023 — Présent" />
+                      </div>
+                      <div className="admin-form-group">
+                        <label>Date (EN)</label>
+                        <input type="text" value={expForm.dateEn} onChange={e => setExpForm({...expForm, dateEn: e.target.value})} required className="admin-input" placeholder="Ex: 2023 — Present" />
+                      </div>
+                    </div>
+
+                    <div className="admin-form-group">
+                      <label>Description (FR)</label>
+                      <textarea value={expForm.descFr || ''} onChange={e => setExpForm({...expForm, descFr: e.target.value})} className="admin-textarea" />
+                    </div>
+
+                    <div className="admin-form-group">
+                      <label>Description (EN)</label>
+                      <textarea value={expForm.descEn || ''} onChange={e => setExpForm({...expForm, descEn: e.target.value})} className="admin-textarea" />
+                    </div>
+
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', marginTop: '1.5rem' }}>
+                      <button type="button" onClick={() => setShowExpModal(false)} className="btn-admin-secondary">
                         Annuler
                       </button>
                       <button type="submit" className="btn-admin-primary">
