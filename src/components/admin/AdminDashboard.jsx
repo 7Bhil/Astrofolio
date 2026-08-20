@@ -45,7 +45,7 @@ export default function AdminDashboard() {
   const [editingProject, setEditingProject] = useState(null);
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [projectForm, setProjectForm] = useState({
-    slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', githubUrl: '', demoUrl: '', featured: true, order: 0
+    slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', image: '', githubUrl: '', demoUrl: '', featured: true, order: 0
   });
 
   const [editingSkill, setEditingSkill] = useState(null);
@@ -143,7 +143,17 @@ export default function AdminDashboard() {
   const openEditProject = (proj) => {
     setEditingProject(proj);
     setProjectForm({
-      slug: proj.slug || '', titleFr: proj.titleFr || '', titleEn: proj.titleEn || '', descFr: proj.descFr || '', descEn: proj.descEn || '', category: proj.category || 'web', githubUrl: proj.githubUrl || '', demoUrl: proj.demoUrl || '', featured: proj.featured !== undefined ? proj.featured : true, order: proj.order || 0
+      slug: proj.slug || '',
+      titleFr: proj.titleFr || '',
+      titleEn: proj.titleEn || '',
+      descFr: proj.descFr || '',
+      descEn: proj.descEn || '',
+      category: proj.category || 'web',
+      image: proj.image || '',
+      githubUrl: proj.githubUrl || '',
+      demoUrl: proj.demoUrl || '',
+      featured: proj.featured !== undefined ? proj.featured : true,
+      order: proj.order !== undefined ? proj.order : 0
     });
     setShowProjectModal(true);
   };
@@ -469,21 +479,36 @@ export default function AdminDashboard() {
           <div>
             <div className="admin-panel-title">
               <span>Projets Catalogués ({projects.length})</span>
-              <button onClick={() => { setProjectForm({ slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', githubUrl: '', demoUrl: '', featured: true, order: 0 }); setEditingProject(null); setShowProjectModal(true); }} className="btn-admin-primary">
+              <button onClick={() => { setProjectForm({ slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', image: '', githubUrl: '', demoUrl: '', featured: true, order: projects.length }); setEditingProject(null); setShowProjectModal(true); }} className="btn-admin-primary">
                 <Plus size={18} /> Nouveau Projet
               </button>
             </div>
 
             <div>
-              {projects.map(proj => (
+              {[...projects].sort((a, b) => (a.order || 0) - (b.order || 0)).map(proj => (
                 <div key={proj.id} className="admin-item-card">
-                  <div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.4rem', flexWrap: 'wrap' }}>
-                      <strong style={{ fontSize: '1.1rem', color: '#fff' }}>{proj.titleFr}</strong>
-                      <span className="admin-tag admin-tag-blue">{proj.category}</span>
-                      {proj.featured && <span className="admin-tag admin-tag-gold">⭐ Vedette</span>}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    {proj.image ? (
+                      <img 
+                        src={proj.image} 
+                        alt={proj.titleFr} 
+                        style={{ width: '56px', height: '40px', objectFit: 'cover', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }} 
+                        onError={(e) => { e.target.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div style={{ width: '56px', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', color: '#64748b' }}>
+                        Sans image
+                      </div>
+                    )}
+                    <div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.2rem', flexWrap: 'wrap' }}>
+                        <span className="admin-tag" style={{ background: 'rgba(6, 182, 212, 0.15)', color: '#38bdf8' }}>Position: {proj.order ?? 0}</span>
+                        <strong style={{ fontSize: '1.05rem', color: '#fff' }}>{proj.titleFr}</strong>
+                        <span className="admin-tag admin-tag-blue">{proj.category}</span>
+                        {proj.featured && <span className="admin-tag admin-tag-gold">⭐ Vedette</span>}
+                      </div>
+                      <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.85rem', lineHeight: 1.4 }}>{proj.descFr}</p>
                     </div>
-                    <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.5 }}>{proj.descFr}</p>
                   </div>
 
                   <div className="admin-item-card-actions" style={{ display: 'flex', gap: '0.5rem', flexDirection: 'row' }}>
@@ -533,18 +558,98 @@ export default function AdminDashboard() {
                       </div>
                     </div>
 
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1rem' }}>
+                      <div className="admin-form-group">
+                        <label>Catégorie</label>
+                        <select 
+                          value={projectForm.category} 
+                          onChange={e => setProjectForm({...projectForm, category: e.target.value})} 
+                          className="admin-select"
+                        >
+                          <option value="web">Web Development</option>
+                          <option value="mobile">Mobile App</option>
+                          <option value="fintech">Fintech / Security</option>
+                          <option value="tool">Outils / Langage</option>
+                          <option value="other">Autre</option>
+                        </select>
+                      </div>
+
+                      <div className="admin-form-group">
+                        <label>Position d'affichage (Ordre)</label>
+                        <input 
+                          type="number" 
+                          min="0"
+                          value={projectForm.order} 
+                          onChange={e => setProjectForm({...projectForm, order: parseInt(e.target.value) || 0})} 
+                          required 
+                          className="admin-input" 
+                          placeholder="0" 
+                        />
+                        <span style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '2px' }}>0 = Premier projet affiché sur le site</span>
+                      </div>
+                    </div>
+
+                    {/* IMAGE SELECTION & PREVIEW */}
                     <div className="admin-form-group">
-                      <label>Catégorie</label>
-                      <select 
-                        value={projectForm.category} 
-                        onChange={e => setProjectForm({...projectForm, category: e.target.value})} 
-                        className="admin-select"
-                      >
-                        <option value="web">Web Development</option>
-                        <option value="mobile">Mobile App</option>
-                        <option value="fintech">Fintech / Security</option>
-                        <option value="other">Autre</option>
-                      </select>
+                      <label>Image du projet (URL ou chemin d'accès)</label>
+                      <input 
+                        type="text" 
+                        value={projectForm.image} 
+                        onChange={e => setProjectForm({...projectForm, image: e.target.value})} 
+                        className="admin-input" 
+                        placeholder="/images/resto.webp ou https://..." 
+                      />
+                      
+                      {/* PRESET IMAGES PICKER */}
+                      <div style={{ marginTop: '0.5rem' }}>
+                        <span style={{ fontSize: '0.78rem', color: '#94a3b8', display: 'block', marginBottom: '0.4rem' }}>
+                          Ou choisir une image existante :
+                        </span>
+                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                          {[
+                            { label: 'Bhilal Lang', path: '/images/language.webp' },
+                            { label: 'Bhil Cours', path: '/images/cours.webp' },
+                            { label: 'Vitch', path: '/images/vitch.webp' },
+                            { label: 'Arrondissement', path: '/images/arrondissement.webp' },
+                            { label: 'Challenge', path: '/images/challenge.webp' },
+                            { label: 'Resto', path: '/images/resto.webp' },
+                            { label: 'Bussola', path: '/images/Busola.png' },
+                            { label: 'Profil 7Bhil', path: '/pro.webp' }
+                          ].map(preset => (
+                            <button
+                              type="button"
+                              key={preset.path}
+                              onClick={() => setProjectForm({...projectForm, image: preset.path})}
+                              style={{
+                                padding: '0.25rem 0.6rem',
+                                borderRadius: '6px',
+                                background: projectForm.image === preset.path ? 'rgba(6, 182, 212, 0.25)' : 'rgba(255,255,255,0.06)',
+                                border: projectForm.image === preset.path ? '1px solid #06b6d4' : '1px solid rgba(255,255,255,0.1)',
+                                color: projectForm.image === preset.path ? '#38bdf8' : '#cbd5e1',
+                                fontSize: '0.75rem',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              {preset.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* IMAGE PREVIEW */}
+                      {projectForm.image && (
+                        <div style={{ marginTop: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.75rem', background: '#060b18', padding: '0.6rem', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                          <img 
+                            src={projectForm.image} 
+                            alt="Aperçu" 
+                            style={{ width: '80px', height: '50px', objectFit: 'cover', borderRadius: '6px' }}
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                          <span style={{ fontSize: '0.8rem', color: '#94a3b8', wordBreak: 'break-all' }}>
+                            Aperçu: {projectForm.image}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="admin-form-group">

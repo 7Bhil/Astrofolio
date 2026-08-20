@@ -4,6 +4,7 @@ import React, { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../hooks/use-outside-click";
 import { ExternalLink, Github } from "lucide-react";
+import { projectsApi } from "../services/api";
 
 const insightCards = [
   { key: "problem", label: "Problème" },
@@ -12,10 +13,43 @@ const insightCards = [
   { key: "solved", label: "Problème résolu" }
 ];
 
-export function ExpandableProjects({ projects, labels = {} }) {
+export function ExpandableProjects({ projects: initialProjects = [], labels = {}, lang = 'fr' }) {
   const [active, setActive] = useState(null);
+  const [projectList, setProjectList] = useState(initialProjects);
   const id = useId();
   const ref = useRef(null);
+
+  useEffect(() => {
+    async function loadDynamicProjects() {
+      try {
+        const data = await projectsApi.getAll();
+        if (Array.isArray(data) && data.length > 0) {
+          const sorted = [...data].sort((a, b) => (a.order || 0) - (b.order || 0));
+          const formatted = sorted.map((p) => {
+            const isEn = lang === 'en';
+            return {
+              id: p.id,
+              title: (isEn ? p.titleEn : p.titleFr) || p.titleFr || p.slug,
+              description: (isEn ? p.descEn : p.descFr) || p.descFr || '',
+              problem: (isEn ? p.problemEn : p.problemFr) || (isEn ? p.descEn : p.descFr) || '',
+              decision: (isEn ? p.decisionEn : p.decisionFr) || (isEn ? "Technical Architecture" : "Architecture & Choix techniques"),
+              impact: (isEn ? p.impactEn : p.impactFr) || (isEn ? "High impact solution" : "Solution à fort impact"),
+              solved: (isEn ? p.solvedEn : p.solvedFr) || (isEn ? p.descEn : p.descFr) || '',
+              tags: p.category ? [p.category.toUpperCase(), 'Full-Stack'] : ['Web'],
+              image: p.image || '/pro.webp',
+              githubUrl: p.githubUrl || null,
+              liveUrl: p.demoUrl || null,
+              order: p.order || 0
+            };
+          });
+          setProjectList(formatted);
+        }
+      } catch (err) {
+        console.warn("Using fallback static projects:", err);
+      }
+    }
+    loadDynamicProjects();
+  }, [lang]);
 
   useEffect(() => {
     function onKeyDown(event) {
@@ -71,7 +105,7 @@ export function ExpandableProjects({ projects, labels = {} }) {
             >
               <motion.div layoutId={"image-" + active.title + "-" + id}>
                 <img
-                  src={active.image.src || active.image}
+                  src={typeof active.image === 'string' ? active.image : (active.image?.src || active.image)}
                   alt={active.title}
                   className="w-full h-64 md:h-80 object-cover object-top"
                 />
@@ -154,12 +188,12 @@ export function ExpandableProjects({ projects, labels = {} }) {
       </AnimatePresence>
 
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.map((card) => (
+        {projectList.map((card) => (
           <motion.div
             role="button"
             tabIndex={0}
             layoutId={"card-" + card.title + "-" + id}
-            key={card.title}
+            key={card.id || card.title}
             onClick={() => setActive(card)}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
@@ -174,7 +208,7 @@ export function ExpandableProjects({ projects, labels = {} }) {
               className="h-2/3 w-full overflow-hidden"
             >
               <img
-                src={card.image.src || card.image}
+                src={typeof card.image === 'string' ? card.image : (card.image?.src || card.image)}
                 alt={card.title}
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
               />
