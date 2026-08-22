@@ -973,7 +973,7 @@ export default function AdminDashboard() {
                       </span>
                     </div>
                     <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.5 }}>
-                      {exp.companyFr} • {exp.dateFr}
+                      {exp.companyFr}{exp.dateFr ? ` • ${exp.dateFr}` : ''}
                     </p>
                   </div>
 
