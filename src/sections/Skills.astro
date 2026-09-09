@@ -1,5 +1,5 @@
 ---
-import { Layout, Server, Smartphone, ShieldCheck } from 'lucide-react';
+import { Code2, Server, Smartphone, ShieldCheck, Terminal, Cpu } from 'lucide-react';
 import { getTranslations } from '../utils/t';
 import '../styles/Skills.css';
 
@@ -10,54 +10,55 @@ const skillCategories = [
   {
     id: 'frontend',
     title: t('skills.frontend'),
-    icon: Layout,
+    icon: Code2,
     skills: [
+      { name: 'TypeScript', icon: 'typescript' },
+      { name: 'JavaScript (ES6+)', icon: 'javascript' },
       { name: 'React', icon: 'react' },
       { name: 'Next.js', icon: 'nextdotjs' },
-      { name: 'Electron', icon: 'electron' },
-      { name: 'JavaScript', icon: 'javascript' },
+      { name: 'Astro', icon: 'astro' },
       { name: 'Tailwind CSS', icon: 'tailwindcss' },
-      { name: 'HTML5', icon: 'html5' },
-      { name: 'CSS3', icon: 'css3' }
-    ],
-    size: 'large'
+      { name: 'HTML5 / CSS3', icon: 'html5' }
+    ]
   },
   {
     id: 'backend',
     title: t('skills.backend'),
     icon: Server,
     skills: [
+      { name: 'NestJS', icon: 'nestjs' },
       { name: 'Node.js', icon: 'nodedotjs' },
       { name: 'Express', icon: 'express' },
+      { name: 'Python', icon: 'python' },
       { name: 'Django', icon: 'django' },
-      { name: 'Laravel', icon: 'laravel' },
+      { name: 'PHP / Laravel', icon: 'laravel' },
       { name: 'PostgreSQL', icon: 'postgresql' },
-      { name: 'MongoDB', icon: 'mongodb' },
-      { name: 'Supabase', icon: 'supabase' },
-      { name: 'PHP', icon: 'php' }
-    ],
-    size: 'medium'
+      { name: 'MongoDB', icon: 'mongodb' }
+    ]
   },
   {
     id: 'mobile',
     title: t('skills.mobile'),
     icon: Smartphone,
     skills: [
-      { name: 'React Native', icon: 'react' }
-    ],
-    size: 'small'
+      { name: 'React Native', icon: 'react' },
+      { name: 'Expo', icon: 'expo' },
+      { name: 'Mobile Architecture', icon: 'android' },
+      { name: 'PWA (Progressive Web Apps)', icon: 'pwa' }
+    ]
   },
   {
-    id: 'tools_security',
+    id: 'devops_security',
     title: t('skills.tools_security'),
     icon: ShieldCheck,
     skills: [
-      { name: 'Kali Linux', icon: 'kalilinux' },
-      { name: 'Git', icon: 'git' },
       { name: 'Docker', icon: 'docker' },
-      { name: 'Linux', icon: 'linux' }
-    ],
-    size: 'medium'
+      { name: 'Linux / Bash', icon: 'linux' },
+      { name: 'Git & GitHub', icon: 'git' },
+      { name: 'OWASP & Sécurité Web', icon: 'kalilinux' },
+      { name: 'Vercel / Cloud', icon: 'vercel' },
+      { name: 'CI/CD Pipelines', icon: 'githubactions' }
+    ]
   }
 ];
 
@@ -71,10 +72,10 @@ const getIconUrl = (slug) => `https://cdn.simpleicons.org/${slug}`;
       <p class="section-subtitle">{t('skills.subtitle')}</p>
     </div>
 
-    <div class="bento-grid">
+    <div class="skills-grid">
       {skillCategories.map((category, index) => (
         <div 
-          class={`bento-item ${category.size} glass-panel reveal`} 
+          class="skill-card glass-panel reveal" 
           style={{ transitionDelay: `${index * 0.1}s` }}
         >
           <div class="bento-content">

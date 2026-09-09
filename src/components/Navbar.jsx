@@ -41,11 +41,14 @@ const Navbar = ({ lang, translations }) => {
     return result;
   };
 
+  const aiUrl = lang === 'fr' ? '/ai' : '/en/ai';
+
   const navLinks = [
-    { name: t('nav.home'), href: '#home' },
-    { name: t('nav.about'), href: '#about' },
-    { name: t('nav.projects'), href: '#projects' },
-    { name: t('nav.skills'), href: '#skills' },
+    { name: t('nav.home'), href: lang === 'fr' ? '/#home' : '/en/#home' },
+    { name: t('nav.about'), href: lang === 'fr' ? '/#about' : '/en/#about' },
+    { name: t('nav.projects'), href: lang === 'fr' ? '/#projects' : '/en/#projects' },
+    { name: t('nav.skills'), href: lang === 'fr' ? '/#skills' : '/en/#skills' },
+    { name: t('nav.ai'), href: aiUrl, isPill: true },
   ];
 
   const otherLangUrl = lang === 'fr' ? '/en/' : '/';

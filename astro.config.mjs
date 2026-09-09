@@ -8,7 +8,12 @@ import tailwind from '@astrojs/tailwind';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://7bhil.vercel.app/',
-  integrations: [react(), sitemap(), AstroPWA({
+  integrations: [
+    react(), 
+    sitemap({
+      filter: (page) => !page.includes('/admin')
+    }), 
+    AstroPWA({
     registerType: 'autoUpdate',
     injectRegister: 'auto',
     manifest: {

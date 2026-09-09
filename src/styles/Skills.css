@@ -3,20 +3,19 @@
   background: var(--bg-secondary);
 }
 
-.bento-grid {
+.skills-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-auto-rows: minmax(180px, auto);
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
   margin-top: 3rem;
 }
 
-.bento-item {
+.skill-card {
   position: relative;
-  border-radius: 2rem;
-  padding: 2.5rem;
+  border-radius: 1.25rem;
+  padding: 2rem 2.25rem;
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -24,26 +23,10 @@
   background: var(--bg-primary);
 }
 
-.bento-item.large {
-  grid-column: span 2;
-  grid-row: span 2;
-  background: linear-gradient(135deg, var(--accent-glow), transparent);
-}
-
-.bento-item.medium {
-  grid-column: span 2;
-  grid-row: span 1;
-}
-
-.bento-item.small {
-  grid-column: span 1;
-  grid-row: span 1;
-}
-
-.bento-item:hover {
-  transform: translateY(-8px);
-  border-color: var(--accent-primary);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+.skill-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.6);
 }
 
 .bento-header {
@@ -102,9 +85,9 @@
   object-fit: contain;
 }
 
-.bento-item:hover .skill-tag {
-  border-color: var(--glass-border);
-  background: var(--accent-glow);
+.skill-card:hover .skill-tag {
+  border-color: rgba(6, 182, 212, 0.25);
+  background: rgba(6, 182, 212, 0.08);
   color: var(--text-primary);
 }
 
@@ -122,7 +105,7 @@
   filter: blur(80px);
 }
 
-.bento-item:hover .bento-bg-glow {
+.skill-card:hover .bento-bg-glow {
   opacity: 0.12;
 }
 
@@ -131,22 +114,12 @@
   z-index: 1;
 }
 
-@media (max-width: 1024px) {
-  .bento-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .bento-grid {
+@media (max-width: 900px) {
+  .skills-grid {
     grid-template-columns: 1fr;
-    grid-auto-rows: auto;
+    gap: 1.25rem;
   }
-  .bento-item.large, .bento-item.medium, .bento-item.small {
-    grid-column: span 1;
-    grid-row: span 1;
-  }
-  .bento-item {
-    padding: 2rem;
+  .skill-card {
+    padding: 1.75rem;
   }
 }

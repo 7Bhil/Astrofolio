@@ -187,65 +187,98 @@ export function ExpandableProjects({ projects: initialProjects = [], labels = {}
         ) : null}
       </AnimatePresence>
 
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projectList.map((card) => (
-          <motion.div
-            role="button"
-            tabIndex={0}
-            layoutId={"card-" + card.title + "-" + id}
-            key={card.id || card.title}
-            onClick={() => setActive(card)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                setActive(card);
-              }
-            }}
-            className="group relative h-[430px] rounded-2xl overflow-hidden cursor-pointer bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:shadow-2xl transition-all duration-300"
-          >
+      <div className="flex flex-col gap-12 lg:gap-16">
+        {projectList.map((card, index) => {
+          const isReversed = index % 2 !== 0;
+
+          return (
             <motion.div
-              layoutId={"image-" + card.title + "-" + id}
-              className="h-2/3 w-full overflow-hidden"
+              role="button"
+              tabIndex={0}
+              layoutId={"card-" + card.title + "-" + id}
+              key={card.id || card.title}
+              onClick={() => setActive(card)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setActive(card);
+                }
+              }}
+              className={`group relative rounded-2xl overflow-hidden cursor-pointer bg-neutral-900/60 border border-neutral-800 hover:border-cyan-500/40 hover:shadow-2xl hover:shadow-cyan-950/30 transition-all duration-500 flex flex-col ${
+                isReversed ? "lg:flex-row-reverse" : "lg:flex-row"
+              } items-stretch`}
             >
-              <img
-                src={typeof card.image === 'string' ? card.image : (card.image?.src || card.image)}
-                alt={card.title}
-                className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
-              />
-            </motion.div>
+              {/* Image Preview Container */}
+              <motion.div
+                layoutId={"image-" + card.title + "-" + id}
+                className="w-full lg:w-[55%] h-[260px] sm:h-[320px] lg:h-[380px] relative overflow-hidden bg-neutral-950 flex-shrink-0"
+              >
+                <img
+                  src={typeof card.image === 'string' ? card.image : (card.image?.src || card.image)}
+                  alt={card.title}
+                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent lg:hidden" />
+              </motion.div>
 
-            <div className="p-6 h-1/3 flex flex-col justify-between gap-3">
-              <div>
-                <motion.h3
-                  layoutId={"title-" + card.title + "-" + id}
-                  className="font-bold text-lg text-neutral-800 dark:text-neutral-100 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
-                >
-                  {card.title}
-                </motion.h3>
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {card.tags.slice(0, 3).map((tag, idx) => (
-                    <span key={idx} className="text-[10px] uppercase tracking-wider font-bold text-neutral-500 dark:text-neutral-400">
-                      {tag}{idx < 2 && idx < card.tags.length - 1 ? " •" : ""}
-                    </span>
-                  ))}
+              {/* Text & Insights Container */}
+              <div className="w-full lg:w-[45%] p-6 sm:p-8 lg:p-10 flex flex-col justify-between gap-6">
+                <div className="space-y-4">
+                  
+                  {/* Category & Tags */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    {card.tags.slice(0, 3).map((tag, idx) => (
+                      <span 
+                        key={idx} 
+                        className="text-[11px] font-mono tracking-wider font-semibold px-2.5 py-1 rounded-md bg-cyan-950/40 text-cyan-400 border border-cyan-800/30"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Title */}
+                  <motion.h3
+                    layoutId={"title-" + card.title + "-" + id}
+                    className="font-bold text-2xl sm:text-3xl text-neutral-100 group-hover:text-cyan-400 transition-colors tracking-tight"
+                  >
+                    {card.title}
+                  </motion.h3>
+
+                  {/* Description */}
+                  <p className="text-sm sm:text-base leading-relaxed text-neutral-300">
+                    {card.description}
+                  </p>
+
+                  {/* Problem & Solution block */}
+                  {card.solved && (
+                    <div className="p-4 rounded-xl bg-neutral-950/50 border border-neutral-800/60 space-y-1.5">
+                      <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-cyan-400/90 block">
+                        Défi & Solution
+                      </span>
+                      <p className="text-xs sm:text-sm text-neutral-300 leading-relaxed line-clamp-2">
+                        {card.solved}
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <p className="text-[10px] uppercase tracking-[0.24em] font-semibold text-neutral-500 dark:text-neutral-400">
-                  Problème résolu
-                </p>
-                <p className="text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">
-                  {card.solved}
-                </p>
-                <span className="text-sm font-semibold text-blue-600 dark:text-blue-400 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                  {labels.viewDetails || "View details"} <ExternalLink size={14} />
-                </span>
+                {/* Footer Link */}
+                <div className="pt-2 flex items-center justify-between border-t border-neutral-800/50">
+                  <span className="text-sm font-semibold text-cyan-400 flex items-center gap-2 group-hover:translate-x-1.5 transition-transform duration-300">
+                    {labels.viewDetails || "Consulter les détails techniques"} <ExternalLink size={15} />
+                  </span>
+                  
+                  <span className="text-xs text-neutral-500 font-mono">
+                    #{String(index + 1).padStart(2, '0')}
+                  </span>
+                </div>
+
               </div>
-            </div>
-          </motion.div>
-        ))}
-      </ul>
+            </motion.div>
+          );
+        })}
+      </div>
     </>
   );
 }

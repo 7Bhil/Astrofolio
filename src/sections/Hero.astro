@@ -5,14 +5,16 @@ import { getTranslations } from '../utils/t';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
-const cvFile = lang === 'en' ? '/Bhilal CV en.pdf' : '/Bhilal CV fr.pdf';
-const cvName = lang === 'en' ? 'Bhilal_CHITOU_CV_EN.pdf' : 'Bhilal_CHITOU_CV_FR.pdf';
+const cvFile = lang === 'en' ? '/CV_CHITOU_Bhilal_EN.pdf' : '/CV_CHITOU_Bhilal_FR.pdf';
+const cvName = lang === 'en' ? 'CV_CHITOU_Bhilal_EN.pdf' : 'CV_CHITOU_Bhilal_FR.pdf';
 const heroPitch = lang === 'en'
-  ? 'I design and ship web and mobile systems that handle payments, automate operations and protect data. React, Node.js, Django — full cycle, from architecture to deployment.'
-  : 'Je conçois et livre des systèmes web et mobile qui gèrent des paiements, automatisent des opérations et protègent des données. React, Node.js, Django — cycle complet, de l\'architecture au déploiement.';
-const heroPrimaryCta = lang === 'en' ? 'Discuss a project' : 'Discuter d\'un projet';
+  ? 'I build robust, high-performance web and mobile applications from end-to-end. Creator of the Bhilal programming language, combining solid system architecture with sleek user experiences.'
+  : 'Je conçois et déploie des applications web et mobiles robustes, évolutives et taillées pour la production. Créateur du langage Bhilal, j\'allie architecture système exigeante et interfaces millimétrées.';
+const heroPrimaryCta = lang === 'en' ? 'Book a Free 20m Audit' : 'Cadrer mon projet en 24h';
 const heroSecondaryCta = lang === 'en' ? 'Download CV' : 'Télécharger le CV';
-const heroBadge = lang === 'en' ? 'Available for freelance — remote worldwide' : 'Disponible en freelance — remote worldwide';
+const heroGuarantee = lang === 'en'
+  ? 'Zero commitment • Clear architecture & roadmap reply within 24h'
+  : 'Sans engagement • Retour d\'architecture & estimation claire sous 24h';
 ---
 
 <section id="home" class="hero-section">
@@ -36,7 +38,6 @@ const heroBadge = lang === 'en' ? 'Available for freelance — remote worldwide'
   
   <div class="container hero-container">
     <div class="hero-content">
-      
 
       <h1 class="hero-title reveal reveal-stagger-2">
         {t('hero.welcome')} <span class="text-accent">Bhilal CHITOU</span>
@@ -58,6 +59,10 @@ const heroBadge = lang === 'en' ? 'Available for freelance — remote worldwide'
           <Download size={18} />
         </a>
       </div>
+
+      <p class="hero-reassurance reveal reveal-stagger-4">
+        {heroGuarantee}
+      </p>
     </div>
     
     <div class="hero-visual reveal" style={{ animationDelay: '0.2s' }}>

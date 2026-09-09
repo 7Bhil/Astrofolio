@@ -24,10 +24,10 @@ const formLabels = lang === 'en' ? {
   email: 'Email address',
   subject: 'Project type',
   message: 'Tell me about your project',
-  send: 'Send message',
-  sending: 'Sending...',
-  success: '✅ Message sent! I will reply within 24h.',
-  error: '❌ Error sending. Please try WhatsApp directly.',
+  send: 'Send via WhatsApp',
+  sending: 'Opening WhatsApp...',
+  success: 'Redirection to WhatsApp in progress...',
+  error: 'Please contact directly on WhatsApp.',
   placeholder_name: 'Jean Dupont',
   placeholder_email: 'jean@company.com',
   placeholder_subject: 'e.g. Mobile app, Fintech system, Landing page...',
@@ -38,10 +38,10 @@ const formLabels = lang === 'en' ? {
   email: 'Adresse email',
   subject: 'Type de projet',
   message: 'Parlez-moi de votre projet',
-  send: 'Envoyer le message',
-  sending: 'Envoi en cours...',
-  success: '✅ Message envoyé ! Je vous réponds sous 24h.',
-  error: '❌ Erreur d\'envoi. Essayez WhatsApp directement.',
+  send: 'Envoyer sur WhatsApp',
+  sending: 'Ouverture de WhatsApp...',
+  success: 'Redirection vers WhatsApp en cours...',
+  error: 'Veuillez contacter directement sur WhatsApp.',
   placeholder_name: 'Jean Dupont',
   placeholder_email: 'jean@entreprise.com',
   placeholder_subject: 'ex : Application mobile, Système fintech, Landing page...',
@@ -164,51 +164,37 @@ const contactSteps = lang === 'en' ? [
   </div>
 </section>
 
-<script define:vars={{ formLabels, whatsappUrl }}>
+<script define:vars={{ formLabels, whatsappNumber }}>
   const form = document.getElementById('contact-form');
   const alert = document.getElementById('form-alert');
   const submitBtn = document.getElementById('form-submit');
   const submitLabel = document.getElementById('form-submit-label');
 
-  const API_BASE = window.location.hostname === 'localhost'
-    ? 'http://localhost:5005/api'
-    : 'https://portfolio-backend-7bhil.onrender.com/api';
-
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     submitLabel.textContent = formLabels.sending;
     submitBtn.disabled = true;
 
-    const data = {
-      name: form.name.value.trim(),
-      email: form.email.value.trim(),
-      subject: form.subject.value,
-      message: form.message.value.trim()
-    };
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const subject = form.subject.value;
+    const message = form.message.value.trim();
 
-    try {
-      const res = await fetch(`${API_BASE}/messages`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-      });
+    // Construction du message clair et formaté pour WhatsApp
+    const whatsappText = `Bonjour Bhilal,\n\nJe vous contacte depuis votre portfolio concernant un projet :\n\n- Nom : ${name}\n- Email : ${email}\n- Type de projet : ${subject}\n\nMessage :\n${message}`;
+    const targetUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
 
-      if (res.ok) {
-        alert.textContent = formLabels.success;
-        alert.className = 'form-alert form-alert-success';
-        alert.style.display = 'block';
-        form.reset();
-      } else {
-        throw new Error('API error');
-      }
-    } catch (err) {
-      alert.innerHTML = `${formLabels.error} <a href="${whatsappUrl}" target="_blank" rel="noopener noreferrer">WhatsApp</a>`;
-      alert.className = 'form-alert form-alert-error';
-      alert.style.display = 'block';
-    } finally {
+    alert.textContent = formLabels.success;
+    alert.className = 'form-alert form-alert-success';
+    alert.style.display = 'block';
+
+    // Ouvre immédiatement la discussion WhatsApp
+    setTimeout(() => {
+      window.open(targetUrl, '_blank');
       submitLabel.textContent = formLabels.send;
       submitBtn.disabled = false;
-    }
+      form.reset();
+    }, 400);
   });
 </script>
 

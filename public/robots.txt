@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /admin
 
 # Directives pour les robots d'IA et modèles LLM (OpenAI, Anthropic, Perplexity, Google, Meta, etc.)
 User-agent: GPTBot
