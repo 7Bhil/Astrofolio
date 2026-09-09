@@ -1,6 +1,8 @@
-const API_BASE_URL = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-  ? 'http://localhost:5005/api'
-  : 'https://portfolio-backend-7bhil.onrender.com/api'; // Or relative/Vercel URL
+const API_BASE_URL = import.meta.env.PUBLIC_API_URL || (
+  typeof window !== 'undefined' && window.location.hostname === 'localhost'
+    ? 'http://localhost:5005/api'
+    : 'https://portfolio-backend-7bhil.onrender.com/api'
+);
 
 export function getAuthToken() {
   if (typeof window === 'undefined') return null;
