@@ -1,7 +1,7 @@
 const API_BASE_URL = import.meta.env.PUBLIC_API_URL || (
   typeof window !== 'undefined' && window.location.hostname === 'localhost'
     ? 'http://localhost:5005/api'
-    : 'https://portfolio-backend-7bhil.onrender.com/api'
+    : 'https://portfolio-server-frmx.onrender.com/api'
 );
 
 export function getAuthToken() {
