@@ -190,14 +190,19 @@ const structuredData = [
 
 		<meta name="theme-color" content="#030712" />
 
-		<!-- Google tag (gtag.js) -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-FR241H4MHP"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
+		<!-- Google tag (gtag.js) - Only in Production -->
+		<script is:inline>
+			if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) {
+				const s = document.createElement('script');
+				s.async = true;
+				s.src = 'https://www.googletagmanager.com/gtag/js?id=G-FR241H4MHP';
+				document.head.appendChild(s);
 
-			gtag('config', 'G-FR241H4MHP');
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+				gtag('config', 'G-FR241H4MHP');
+			}
 		</script>
 
 		<!-- Structured Data JSON-LD for Search Engines & LLMs Knowledge Graph -->
