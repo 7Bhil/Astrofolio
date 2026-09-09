@@ -390,25 +390,13 @@ const Chatbot = ({ lang = 'fr', standalone = false }) => {
     return t.responses.fallback;
   };
 
-  const handleSend = (textToSend) => {
+  const handleSend = async (textToSend) => {
     const userPrompt = (textToSend || inputValue).trim();
     if (!userPrompt || isTyping) return;
 
     if (briefMode) {
       setInputValue('');
       handleBriefAnswer(userPrompt);
-      return;
-    }
-
-    const botAnswer = matchAnswer(userPrompt);
-
-    if (botAnswer === "START_BRIEF") {
-      setInputValue('');
-      setMessages(prev => [
-        ...prev,
-        { id: `usr-${Date.now()}`, role: 'user', text: userPrompt, time: new Date() }
-      ]);
-      startBriefFlow();
       return;
     }
 
@@ -419,22 +407,61 @@ const Chatbot = ({ lang = 'fr', standalone = false }) => {
       time: new Date()
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    const updatedMessages = [...messages, userMessage];
+    setMessages(updatedMessages);
     setInputValue('');
     setIsTyping(true);
 
-    setTimeout(() => {
+    try {
+      // Appel direct à l'API IA de ton backend (propulsée par Gemini 3.6 Flash)
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: updatedMessages.map(m => ({ role: m.role, text: m.text })),
+          lang
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `bot-${Date.now()}`,
+            role: 'assistant',
+            text: data.reply,
+            time: new Date()
+          }
+        ]);
+      } else {
+        // En cas de coupure réseau ou quota dépassé, repli élégant
+        const fallbackText = matchAnswer(userPrompt);
+        setMessages(prev => [
+          ...prev,
+          {
+            id: `bot-${Date.now()}`,
+            role: 'assistant',
+            text: fallbackText === 'START_BRIEF' ? t.responses.pricing : fallbackText,
+            time: new Date()
+          }
+        ]);
+      }
+    } catch (err) {
+      console.warn("API chat unreachable, using local fallback:", err);
+      const fallbackText = matchAnswer(userPrompt);
       setMessages(prev => [
         ...prev,
         {
           id: `bot-${Date.now()}`,
           role: 'assistant',
-          text: botAnswer,
+          text: fallbackText === 'START_BRIEF' ? t.responses.pricing : fallbackText,
           time: new Date()
         }
       ]);
+    } finally {
       setIsTyping(false);
-    }, 600);
+    }
   };
 
   const formatText = (text) => {
