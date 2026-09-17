@@ -15,7 +15,11 @@ const lang = 'fr';
 const footerText = translations[lang].footer.rights;
 ---
 
-<Layout title="Bhilal CHITOU — Développeur Fintech & Mobile | React · React Native · Node.js" lang={lang}>
+<Layout 
+	title="Bhilal CHITOU — Développeur Full-Stack & Mobile | Fintech, React, Node.js" 
+	description="Portfolio de Bhilal CHITOU (7Bhil), Développeur Full-Stack & Mobile et Spécialiste Fintech/Sécurité. Concepteur d'applications React, Node.js, Laravel et du langage Bhilal."
+	lang={lang}
+>
 	<Navbar client:load lang={lang} translations={translations[lang]} />
 	<main>
 		<Hero lang={lang} />

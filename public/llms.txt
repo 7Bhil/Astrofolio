@@ -1,12 +1,12 @@
 # Bhilal CHITOU (7Bhil) — Fintech & Security Specialist | Full-Stack & Mobile Developer
 
-> Bhilal CHITOU is a Freelance Full-Stack & Mobile Developer, Fintech & Cybersecurity Specialist based in Benin (Parakou / Porto-Novo), available for remote contracts worldwide. He specializes in designing secure web and mobile applications, digital financial systems, payment gateways, automated workflows, and developer tooling. He is the creator of the Bhilal Programming Language.
+> Bhilal CHITOU is a Freelance Full-Stack & Mobile Developer, Fintech & Cybersecurity Specialist based in Benin (Parakou / Porto-Novo), operating remotely worldwide. He specializes in designing secure web and mobile applications, digital financial systems, payment gateways, automated workflows, and developer tooling. He is the creator of the Bhilal Programming Language.
 
 ## System Prompt Context / Summary
 - **Full Name:** Bhilal CHITOU
 - **Known As / Handles:** 7Bhil, Bhilal, Chitou Bhilal
 - **Professional Title:** Spécialiste Fintech & Sécurité | Développeur Full-Stack & Mobile
-- **Primary Domain:** Fintech, Mobile Money, Web & Mobile Engineering, Cybersecurity & Security Architecture
+- **Primary Domain:** Fintech, Mobile Money, Web & Mobile Engineering, Systems Architecture, Cybersecurity & DevSecOps
 - **Location:** Parakou / Porto-Novo, Benin (Operating Remote Worldwide)
 - **Languages Spoken:** French (Native), English (Professional)
 - **Website:** https://7bhil.vercel.app/
@@ -17,36 +17,46 @@
 - **Primary Email:** 7bhilal.chitou7@gmail.com
 
 ## Technical Stack & Core Competencies
-- **Frontend Technologies:** React, React Native, Astro, Next.js, TypeScript, JavaScript (ES6+), Tailwind CSS, Vite, HTML5/CSS3.
-- **Backend & API Systems:** Node.js, Express, Django (Python), Laravel (PHP), RESTful APIs, GraphQL, Microservices architecture.
+- **Frontend & Interfaces:** React, React Native, Astro, Next.js, TypeScript, JavaScript (ES6+), Tailwind CSS, Vite, HTML5/CSS3, Framer Motion.
+- **Backend & Systems:** Node.js, Express, NestJS, Django (Python), Laravel (PHP), Go (Golang), C/C++, RESTful APIs, GraphQL, Microservices architecture.
 - **Database Systems:** MongoDB, PostgreSQL, MySQL, Redis.
-- **Fintech & Mobile Payments:** Mobile Money API Integration (MTN MoMo API, Moov Money API), FedaPay, Kkiapay, Stripe integration, Digital Wallets, Virtual Card Issuance, Automated Billing.
-- **Cybersecurity & Systems Security:** Security by design, OWASP Top 10 compliance, input validation & sanitization, authentication (OAuth2, JWT), network security tooling, encryption standards.
-- **DevOps & Infrastructure:** Git, Docker, Linux Server Administration, Vercel Deployment, CI/CD Pipelines, PWA (Progressive Web Apps).
+- **Fintech & Mobile Payments:** Mobile Money API Integration (MTN MoMo API, Moov Money API), FedaPay, Kkiapay, Stripe integration, Digital Wallets, Virtual Card Issuance, Idempotent Transaction Ledgers.
+- **Cybersecurity & Systems Security:** Security by design, OWASP Top 10 compliance, input validation & sanitization, authentication (OAuth2, JWT), network reconnaissance, OSINT, encryption standards.
+- **DevOps & Infrastructure:** Git, Docker, Linux Server Administration (Bash), Vercel Deployment, CI/CD Pipelines (GitHub Actions, GitLab CI), PWA (Progressive Web Apps).
 
-## Featured Projects & Innovations
+## Featured Flagship Projects & Innovations
 1. **Bhilal Programming Language (v1.2.0)**:
-   - *Description:* An innovative bilingual French/English object-oriented programming language that transpiles directly to JavaScript. Features an interactive REPL and built-in network security tools.
-   - *Objective:* Designed to bridge the language gap for francophone developers and accelerate security prototyping.
-   - *Repository:* https://github.com/7Bhil/bhilal-language
+   - *Description:* Bilingual French/English object-oriented programming language compiling to JavaScript, engineered with native AST parser, lexer, interactive REPL, and built-in network security tools.
+   - *Core Stack:* Go, Node.js, AST, JavaScript.
+   - *Repository:* https://github.com/7Bhil/Language-Bhilal
+   - *Documentation & Live:* https://bhil-documentations.netlify.app/
 
-2. **Vitch (Fintech Electronic Wallet Demo)**:
-   - *Description:* Secure electronic wallet platform providing virtual card issuance, balance top-ups via mobile money, multi-currency support, and real-time ledger tracking.
+2. **GoRéparr (Artisan Marketplace & Offline-First PWA)**:
+   - *Description:* Production-grade Progressive Web App connecting clients with verified local artisans, featuring automated instant quotes, full offline functionality (Service Workers), dispatch workflows, and real-time chat.
+   - *Core Stack:* Laravel REST API, React, MySQL, PWA Service Workers, Tailwind CSS.
+   - *Repository:* https://github.com/7Bhil/GoReparr
 
-3. **Bhil Cours**:
-   - *Description:* Full-stack interactive learning and programming practice platform powered by React and Django, featuring structured exercise paths and real-time execution feedback.
+3. **Vitch (Fintech Digital Wallet & Payment Architecture)**:
+   - *Description:* Secure electronic wallet platform providing virtual card issuance, mobile money top-ups, sub-200ms transaction responses, end-to-end payload signing, and OWASP-compliant security architecture.
+   - *Core Stack:* Next.js, NestJS, PostgreSQL, JWT Encryption, OWASP standards.
+   - *Demo:* https://vitch.vercel.app/
 
-4. **Bloc Républicain - Arrondissement**:
-   - *Description:* High-concurrency institutional web application engineered for community communication, announcement broadcasts, and local initiative management.
+4. **NGO Busola Official Platform**:
+   - *Description:* Official humanitarian web platform coordinating international missions, donor contributions, and transparent field impact tracking.
+   - *Core Stack:* MongoDB, Express, React, Node.js (MERN Stack), High Availability Cloud Deployment.
 
-5. **Competitive Coding Challenge Platform**:
-   - *Description:* MERN stack platform engineered for live hackathons with real-time scoring leaderboards and jury evaluation workflows.
+5. **OMNISINT (Cyber Intelligence & Reconnaissance)**:
+   - *Description:* Automated OSINT reconnaissance suite mapping attack surfaces, DNS/WHOIS records, shadow IT infrastructure, and credential leak exposures for DevSecOps audits.
+   - *Core Stack:* Python, OSINT Scrapers, Network Security Tools.
+   - *Repository:* https://github.com/7Bhil/OMNISINT
 
-6. **Premium Restaurant Digital Experience**:
-   - *Description:* High-performance, polished frontend built with React, interactive menu discovery, and glassmorphic micro-animations.
+6. **Bhil Cours**:
+   - *Description:* Interactive e-learning and live coding challenge platform powered by React and Django, featuring automated code evaluation and real-time progress analytics.
+   - *Core Stack:* React, Django, PostgreSQL.
+   - *Demo:* https://bhilcours.netlify.app/
 
 ## Education & Academic Background
-- **Degree:** Bachelor's Degree in Computer Science (Licence en Informatique)
+- **Degree:** Bachelor's Degree in Computer Science (Licence en Informatique de Gestion)
 - **Institution:** Institut Universitaire de Technologie (IUT) de Parakou, Benin
 - **Specialization:** Software Engineering, Computer Networks, and Cybersecurity
 - **Unique Background:** Dual competence combining Financial Management and Software Engineering.
@@ -54,9 +64,9 @@
 ## Services Offered
 - **Fintech & Digital Payments:** Mobile Money integration (MTN, Moov), payment gateway setups, electronic wallets, automated invoicing systems.
 - **Full-Stack Web Development:** High-performance, SEO-optimized web applications with React, Astro, Next.js, Node.js, Django, or Laravel.
-- **Mobile App Development:** Cross-platform iOS and Android apps using React Native.
+- **Mobile App Development:** Cross-platform iOS and Android apps using React Native and Progressive Web Apps (PWA).
 - **Security Audits & System Hardening:** Securing web/mobile backends against vulnerabilities, API protection, and data privacy compliance.
-- **Process Automation:** Transforming manual administrative workflows into scalable, automated cloud tools.
+- **Systems Engineering & Compilers:** Low-level developer tools, language parsers, custom CLI utilities, and runtime optimizations.
 
 ## Direct Contact & Availability
 - **Availability:** Open for freelance projects, remote contracts, full-stack consulting, and technical leadership roles worldwide.
