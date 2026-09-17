@@ -87,8 +87,11 @@ const getIconUrl = (slug) => `https://cdn.simpleicons.org/${slug}`;
             </div>
             
             <div class="skill-tags">
-              {category.skills.map((skill) => (
-                <span class="skill-tag">
+              {category.skills.map((skill, sIndex) => (
+                <span 
+                  class="skill-tag reveal"
+                  style={{ transitionDelay: `${0.15 + sIndex * 0.07}s` }}
+                >
                   <img 
                     src={getIconUrl(skill.icon)} 
                     alt={skill.name} 
