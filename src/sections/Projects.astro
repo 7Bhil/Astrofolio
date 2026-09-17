@@ -4,89 +4,125 @@ import { getTranslations } from '../utils/t';
 import '../styles/Projects.css';
 
 import bhilalImg from '../assets/images/language.webp';
-import bhilCoursImg from '../assets/images/cours.webp';
-import arrondissementImg from '../assets/images/arrondissement.webp';
-import challengeImg from '../assets/images/challenge.webp';
-import restoImg from '../assets/images/resto.webp';
+import goreparrImg from '../assets/images/goreparr.png';
 import vitchImg from '../assets/images/vitch.webp';
+import busolaImg from '../assets/images/Busola.png';
+import omnisintImg from '../assets/images/OMNISINT.png';
+import bhilCoursImg from '../assets/images/cours.webp';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
 
 const featuredProjects = [
   {
+    id: 'bhilal',
+    category: 'systems',
+    categoryLabel: lang === 'en' ? 'Systems & Compilers' : 'Systèmes & Compilateurs',
+    metric: lang === 'en' ? 'Lexer AST · JS Transpiler' : 'Lexer AST · Transpilation JS',
     title: t('projects.bhilal.title'),
     description: t('projects.bhilal.description'),
     problem: t('projects.bhilal.problem'),
     decision: t('projects.bhilal.decision'),
     impact: t('projects.bhilal.impact'),
     solved: t('projects.bhilal.solved'),
-    tags: ['Node.js', 'Go', 'Cybersecurity', 'Custom Language'],
+    tags: ['Go', 'Node.js', 'Compilateur', 'AST', 'Cybersécurité'],
     image: bhilalImg,
     githubUrl: 'https://github.com/7Bhil/Language-Bhilal',
     liveUrl: 'https://bhil-documentations.netlify.app/'
   },
   {
-    title: t('projects.bhilcours.title'),
-    description: t('projects.bhilcours.description'),
-    problem: t('projects.bhilcours.problem'),
-    decision: t('projects.bhilcours.decision'),
-    impact: t('projects.bhilcours.impact'),
-    solved: t('projects.bhilcours.solved'),
-    tags: ['React', 'Django', 'PostgreSQL'],
-    image: bhilCoursImg,
-    githubUrl: 'https://github.com/7Bhil/Cours-front',
-    liveUrl: 'https://bhilcours.netlify.app/'
+    id: 'goreparr',
+    category: 'web',
+    categoryLabel: lang === 'en' ? 'Marketplace & PWA' : 'Marketplace & PWA',
+    metric: lang === 'en' ? '100% PWA Offline · Real-time Quotes' : '100% PWA Offline · Devis temps réel',
+    title: t('projects.goreparr.title'),
+    description: t('projects.goreparr.description'),
+    problem: t('projects.goreparr.problem'),
+    decision: t('projects.goreparr.decision'),
+    impact: t('projects.goreparr.impact'),
+    solved: t('projects.goreparr.solved'),
+    tags: ['Laravel', 'React', 'MySQL', 'PWA Offline', 'Tailwind CSS'],
+    image: goreparrImg,
+    githubUrl: 'https://github.com/7Bhil/GoReparr',
+    liveUrl: 'https://goreparr.vercel.app/'
   },
   {
-    title: t('projects.arrondissement.title'),
-    description: t('projects.arrondissement.description'),
-    problem: t('projects.arrondissement.problem'),
-    decision: t('projects.arrondissement.decision'),
-    impact: t('projects.arrondissement.impact'),
-    solved: t('projects.arrondissement.solved'),
-    tags: ['React', 'UI/UX', 'Political Party'],
-    image: arrondissementImg,
-    githubUrl: 'https://github.com/7Bhil/Arrondissement',
-    liveUrl: 'https://chef-d-arrondissement.netlify.app/'
-  },
-  {
-    title: t('projects.challenge.title'),
-    description: t('projects.challenge.description'),
-    problem: t('projects.challenge.problem'),
-    decision: t('projects.challenge.decision'),
-    impact: t('projects.challenge.impact'),
-    solved: t('projects.challenge.solved'),
-    tags: ['MERN Stack', 'State Management', 'Leaderboard'],
-    image: challengeImg,
-    githubUrl: 'https://github.com/7Bhil/Challenge-react',
-    liveUrl: 'https://challenge-react-delta.vercel.app/'
-  },
-  {
-    title: t('projects.resto.title'),
-    description: t('projects.resto.description'),
-    problem: t('projects.resto.problem'),
-    decision: t('projects.resto.decision'),
-    impact: t('projects.resto.impact'),
-    solved: t('projects.resto.solved'),
-    tags: ['React', 'Tailwind CSS', 'Premium UI'],
-    image: restoImg,
-    githubUrl: 'https://github.com/7Bhil/Restaurant',
-    liveUrl: 'https://restaurant-nine-tau.vercel.app/'
-  },
-  {
+    id: 'vitch',
+    category: 'fintech',
+    categoryLabel: lang === 'en' ? 'Fintech & Security' : 'Fintech & Sécurité',
+    metric: lang === 'en' ? '<200ms Transaction · OWASP Audited' : 'Latence <200ms · Sécurisé OWASP',
     title: t('projects.vitch.title'),
     description: t('projects.vitch.description'),
     problem: t('projects.vitch.problem'),
     decision: t('projects.vitch.decision'),
     impact: t('projects.vitch.impact'),
     solved: t('projects.vitch.solved'),
-    tags: ['React', 'Fintech', 'Online Payment'],
+    tags: ['Next.js', 'NestJS', 'Fintech', 'OWASP', 'Cartes Virtuelles'],
     image: vitchImg,
     githubUrl: 'https://github.com/7Bhil/wallet-next',
     liveUrl: 'https://vitch.vercel.app/'
+  },
+  {
+    id: 'busola',
+    category: 'web',
+    categoryLabel: lang === 'en' ? 'Production Web Platform' : 'Plateforme Web en Prod',
+    metric: lang === 'en' ? 'Zero Downtime · International NGOs' : 'Haute Dispo · Impact Communautaire',
+    title: t('projects.busola.title'),
+    description: t('projects.busola.description'),
+    problem: t('projects.busola.problem'),
+    decision: t('projects.busola.decision'),
+    impact: t('projects.busola.impact'),
+    solved: t('projects.busola.solved'),
+    tags: ['MongoDB', 'Express', 'React', 'Node.js', 'MERN'],
+    image: busolaImg,
+    githubUrl: 'https://github.com/7Bhil/Busola',
+    liveUrl: 'https://ongbusola.org'
+  },
+  {
+    id: 'omnisint',
+    category: 'systems',
+    categoryLabel: lang === 'en' ? 'Cybersecurity & OSINT' : 'Cybersécurité & OSINT',
+    metric: lang === 'en' ? 'Audits 5x Faster · Attack Surface Mapping' : 'Audit divisé par 5 · Reconnaissance',
+    title: t('projects.omnisint.title'),
+    description: t('projects.omnisint.description'),
+    problem: t('projects.omnisint.problem'),
+    decision: t('projects.omnisint.decision'),
+    impact: t('projects.omnisint.impact'),
+    solved: t('projects.omnisint.solved'),
+    tags: ['Python', 'OSINT', 'Reconnaissance Réseau', 'DevSecOps'],
+    image: omnisintImg,
+    githubUrl: 'https://github.com/7Bhil/OMNISINT',
+    liveUrl: 'https://github.com/7Bhil/OMNISINT'
+  },
+  {
+    id: 'bhilcours',
+    category: 'web',
+    categoryLabel: lang === 'en' ? 'Interactive E-Learning' : 'E-Learning & Code',
+    metric: lang === 'en' ? '3x Completion Rate · Live Tests' : 'Rétention x3 · Challenges Live',
+    title: t('projects.bhilcours.title'),
+    description: t('projects.bhilcours.description'),
+    problem: t('projects.bhilcours.problem'),
+    decision: t('projects.bhilcours.decision'),
+    impact: t('projects.bhilcours.impact'),
+    solved: t('projects.bhilcours.solved'),
+    tags: ['React', 'Django', 'PostgreSQL', 'Algorithmique'],
+    image: bhilCoursImg,
+    githubUrl: 'https://github.com/7Bhil/Cours-front',
+    liveUrl: 'https://bhilcours.netlify.app/'
   }
 ];
+
+const categoryLabels = lang === 'en' ? {
+  all: 'All Projects',
+  fintech: 'Fintech & Security',
+  web: 'Web & PWA',
+  systems: 'Systems & Compilers'
+} : {
+  all: 'Tous les projets',
+  fintech: 'Fintech & Sécurité',
+  web: 'Web & PWA',
+  systems: 'Systèmes & Compilateurs'
+};
 ---
 
 <section id="projects" class="section-padding projects-section">
@@ -98,7 +134,15 @@ const featuredProjects = [
 
     <ExpandableProjects
       projects={featuredProjects}
-      labels={{ demo: t('projects.demo'), viewDetails: t('projects.viewDetails') }}
+      categories={categoryLabels}
+      labels={{ 
+        demo: t('projects.demo'), 
+        viewDetails: t('projects.viewDetails'),
+        caseStudy: lang === 'en' ? 'Technical Case Study' : 'Étude de cas technique',
+        sourceCode: lang === 'en' ? 'Source Code' : 'Code source',
+        liveDemo: lang === 'en' ? 'Live Demo' : 'Démo en direct'
+      }}
+      lang={lang}
       client:load
     />
   </div>
