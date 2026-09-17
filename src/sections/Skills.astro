@@ -1,5 +1,5 @@
 ---
-import { Code2, Server, Smartphone, ShieldCheck, Terminal, Cpu } from 'lucide-react';
+import { Code2, Server, Smartphone, ShieldCheck, Terminal } from 'lucide-react';
 import { getTranslations } from '../utils/t';
 import '../styles/Skills.css';
 
@@ -8,56 +8,82 @@ const t = getTranslations(lang);
 
 const skillCategories = [
   {
-    id: 'frontend',
-    title: t('skills.frontend'),
-    icon: Code2,
+    id: 'systems',
+    title: t('skills.systems_lang'),
+    badge: lang === 'en' ? 'Core Engineering' : 'Cœur d\'ingénierie',
+    icon: Terminal,
+    gradient: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+    bentoClass: 'bento-large',
     skills: [
-      { name: 'TypeScript', icon: 'typescript' },
-      { name: 'JavaScript (ES6+)', icon: 'javascript' },
-      { name: 'React', icon: 'react' },
-      { name: 'Next.js', icon: 'nextdotjs' },
-      { name: 'Astro', icon: 'astro' },
-      { name: 'Tailwind CSS', icon: 'tailwindcss' },
-      { name: 'HTML5 / CSS3', icon: 'html5' }
+      { name: 'Go (Golang)', icon: 'go' },
+      { name: 'Compilateurs & AST', icon: 'javascript' },
+      { name: 'C / C++', icon: 'cplusplus' },
+      { name: 'Architecture Système', icon: 'gnubash' },
+      { name: 'Optimisation Mémoire', icon: 'assemblyscript' },
+      { name: 'Transpilation & REPL', icon: 'nodedotjs' }
     ]
   },
   {
     id: 'backend',
     title: t('skills.backend'),
+    badge: lang === 'en' ? 'Scalable & High Concurrency' : 'Scalable & Haute Dispo',
     icon: Server,
+    gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+    bentoClass: 'bento-medium',
     skills: [
       { name: 'NestJS', icon: 'nestjs' },
       { name: 'Node.js', icon: 'nodedotjs' },
       { name: 'Express', icon: 'express' },
-      { name: 'Python', icon: 'python' },
-      { name: 'Django', icon: 'django' },
+      { name: 'Python / Django', icon: 'django' },
       { name: 'PHP / Laravel', icon: 'laravel' },
       { name: 'PostgreSQL', icon: 'postgresql' },
       { name: 'MongoDB', icon: 'mongodb' }
     ]
   },
   {
+    id: 'frontend',
+    title: t('skills.frontend'),
+    badge: lang === 'en' ? 'Fluid UI/UX & Speed' : 'Interfaces & Réactivité',
+    icon: Code2,
+    gradient: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+    bentoClass: 'bento-medium',
+    skills: [
+      { name: 'TypeScript', icon: 'typescript' },
+      { name: 'React', icon: 'react' },
+      { name: 'Next.js', icon: 'nextdotjs' },
+      { name: 'Astro', icon: 'astro' },
+      { name: 'Tailwind CSS', icon: 'tailwindcss' },
+      { name: 'Framer Motion', icon: 'framer' }
+    ]
+  },
+  {
     id: 'mobile',
     title: t('skills.mobile'),
+    badge: lang === 'en' ? 'Offline First' : 'Offline First & PWA',
     icon: Smartphone,
+    gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+    bentoClass: 'bento-small',
     skills: [
       { name: 'React Native', icon: 'react' },
       { name: 'Expo', icon: 'expo' },
-      { name: 'Mobile Architecture', icon: 'android' },
-      { name: 'PWA (Progressive Web Apps)', icon: 'pwa' }
+      { name: 'PWA (Service Workers)', icon: 'pwa' },
+      { name: 'Mobile Architecture', icon: 'android' }
     ]
   },
   {
     id: 'devops_security',
     title: t('skills.tools_security'),
+    badge: lang === 'en' ? 'DevSecOps & Audit' : 'DevSecOps & Audit',
     icon: ShieldCheck,
+    gradient: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
+    bentoClass: 'bento-small',
     skills: [
       { name: 'Docker', icon: 'docker' },
       { name: 'Linux / Bash', icon: 'linux' },
+      { name: 'OWASP Sécurité', icon: 'kalilinux' },
+      { name: 'CI/CD Pipelines', icon: 'githubactions' },
       { name: 'Git & GitHub', icon: 'git' },
-      { name: 'OWASP & Sécurité Web', icon: 'kalilinux' },
-      { name: 'Vercel / Cloud', icon: 'vercel' },
-      { name: 'CI/CD Pipelines', icon: 'githubactions' }
+      { name: 'Audit OSINT', icon: 'wireshark' }
     ]
   }
 ];
@@ -72,25 +98,28 @@ const getIconUrl = (slug) => `https://cdn.simpleicons.org/${slug}`;
       <p class="section-subtitle">{t('skills.subtitle')}</p>
     </div>
 
-    <div class="skills-grid">
+    <div class="skills-bento-grid">
       {skillCategories.map((category, index) => (
         <div 
-          class="skill-card glass-panel reveal" 
-          style={{ transitionDelay: `${index * 0.1}s` }}
+          class={`skill-card glass-panel reveal ${category.bentoClass}`} 
+          style={{ transitionDelay: `${index * 0.08}s` }}
         >
           <div class="bento-content">
             <div class="bento-header">
-              <div class="icon-wrapper">
+              <div class="icon-wrapper" style={`background: ${category.gradient}`}>
                 <category.icon class="skill-icon" />
               </div>
-              <h3>{category.title}</h3>
+              <div class="bento-titles">
+                <span class="category-badge">{category.badge}</span>
+                <h3>{category.title}</h3>
+              </div>
             </div>
             
             <div class="skill-tags">
               {category.skills.map((skill, sIndex) => (
                 <span 
                   class="skill-tag reveal"
-                  style={{ transitionDelay: `${0.15 + sIndex * 0.07}s` }}
+                  style={{ transitionDelay: `${0.12 + sIndex * 0.05}s` }}
                 >
                   <img 
                     src={getIconUrl(skill.icon)} 
@@ -98,12 +127,12 @@ const getIconUrl = (slug) => `https://cdn.simpleicons.org/${slug}`;
                     class="tech-logo"
                     loading="lazy"
                   />
-                  {skill.name}
+                  <span>{skill.name}</span>
                 </span>
               ))}
             </div>
           </div>
-          <div class="bento-bg-glow"></div>
+          <div class="bento-bg-glow" style={`background: radial-gradient(circle at top right, ${category.gradient}, transparent 70%)`}></div>
         </div>
       ))}
     </div>
