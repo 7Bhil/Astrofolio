@@ -10,9 +10,15 @@ import Chatbot from '../components/Chatbot.jsx';
 
 const { 
 	title, 
-	description = "Portfolio de Bhilal CHITOU (7Bhil), Spécialiste Fintech & Sécurité basé au Bénin. Expert en systèmes sécurisés avec React, React Native, Node.js, Django et Laravel. Créateur du langage Bhilal.",
+	description: propDescription, 
 	lang = "fr" 
 } = Astro.props;
+
+const defaultDescription = lang === 'en'
+	? "Portfolio of Bhilal CHITOU (7Bhil) — Full-Stack & Mobile Engineer, Fintech & Systems Specialist. React, React Native, Node.js, Laravel & Creator of Language Bhilal."
+	: "Portfolio de Bhilal CHITOU (7Bhil) — Développeur Full-Stack & Mobile, Spécialiste Fintech & Sécurité. Concepteur d'applications React, Node.js, Laravel et du langage Bhilal.";
+
+const description = propDescription || defaultDescription;
 
 import '../styles/global.css';
 
@@ -34,7 +40,7 @@ const structuredData = [
 		"alternateName": ["7Bhil", "Chitou Bhilal", "Bhilal"],
 		"url": "https://7bhil.vercel.app/",
 		"image": "https://7bhil.vercel.app/pro.webp",
-		"jobTitle": "Spécialiste Fintech & Sécurité | Développeur Full-Stack & Mobile",
+		"jobTitle": lang === 'en' ? "Full-Stack & Mobile Engineer | Fintech & Systems Specialist" : "Spécialiste Fintech & Sécurité | Développeur Full-Stack & Mobile",
 		"description": description,
 		"knowsLanguage": ["fr", "en"],
 		"address": {
@@ -64,16 +70,17 @@ const structuredData = [
 			"JavaScript",
 			"TypeScript",
 			"Python",
+			"Go",
 			"Full-Stack Development"
 		],
 		"hasOccupation": {
 			"@type": "Occupation",
-			"name": "Spécialiste Fintech & Sécurité / Développeur Full-Stack",
+			"name": lang === 'en' ? "Full-Stack Engineer & Fintech Specialist" : "Spécialiste Fintech & Sécurité / Développeur Full-Stack",
 			"occupationLocation": {
 				"@type": "Country",
 				"name": "Benin"
 			},
-			"skills": "React, React Native, Node.js, Django, Laravel, Cybersécurité, Mobile Money, REST APIs"
+			"skills": "React, React Native, Node.js, Django, Laravel, Go, Cybersécurité, Mobile Money, REST APIs, PWA"
 		},
 		"alumniOf": {
 			"@type": "EducationalOrganization",
@@ -86,7 +93,7 @@ const structuredData = [
 		"@id": "https://7bhil.vercel.app/#website",
 		"url": "https://7bhil.vercel.app/",
 		"name": "7Bhil — Bhilal CHITOU Portfolio",
-		"description": "Portfolio de Bhilal CHITOU, Développeur Full-Stack & Mobile et Spécialiste Fintech & Sécurité.",
+		"description": description,
 		"author": {
 			"@id": "https://7bhil.vercel.app/#person"
 		},
@@ -106,11 +113,47 @@ const structuredData = [
 		"@context": "https://schema.org",
 		"@type": "SoftwareSourceCode",
 		"@id": "https://7bhil.vercel.app/#bhilal-language",
-		"name": "Bhilal Programming Language",
+		"name": "Language Bhilal v1.2.0",
 		"version": "1.2.0",
-		"description": "Langage de programmation bilingue (Français/Anglais) transpilant vers JavaScript avec outils de sécurité réseau intégrés.",
-		"codeRepository": "https://github.com/7Bhil/bhilal-language",
+		"description": "Langage de programmation bilingue (Français/Anglais) transpilant vers JavaScript avec analyseur lexical AST et outils de sécurité réseau intégrés.",
+		"codeRepository": "https://github.com/7Bhil/Language-Bhilal",
 		"programmingLanguage": "JavaScript",
+		"author": {
+			"@id": "https://7bhil.vercel.app/#person"
+		}
+	},
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"@id": "https://7bhil.vercel.app/#goreparr",
+		"name": "GoRéparr",
+		"applicationCategory": "BusinessApplication",
+		"operatingSystem": "All (Progressive Web App)",
+		"description": "Progressive Web App de mise en relation client-artisan avec devis automatisés, mode hors-ligne et messagerie intégrée.",
+		"author": {
+			"@id": "https://7bhil.vercel.app/#person"
+		}
+	},
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"@id": "https://7bhil.vercel.app/#vitch",
+		"name": "Vitch — Digital Wallet",
+		"applicationCategory": "FinanceApplication",
+		"operatingSystem": "Web / Mobile",
+		"description": "Portefeuille électronique fintech haute sécurité avec émission instantanée de cartes virtuelles et conformité OWASP.",
+		"author": {
+			"@id": "https://7bhil.vercel.app/#person"
+		}
+	},
+	{
+		"@context": "https://schema.org",
+		"@type": "WebApplication",
+		"@id": "https://7bhil.vercel.app/#busola",
+		"name": "Plateforme ONG Busola",
+		"applicationCategory": "CommunityApplication",
+		"operatingSystem": "Web",
+		"description": "Portail web officiel MERN pour le suivi des missions humanitaires et la coordination des flux communautaires.",
 		"author": {
 			"@id": "https://7bhil.vercel.app/#person"
 		}
