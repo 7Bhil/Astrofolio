@@ -254,6 +254,25 @@ const structuredData = [
 		<script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 	</head>
 	<body>
+		{isAdminPage && (
+			<script is:inline>
+				// Ensure admin panels always bypass stale Service Worker cache
+				if ('serviceWorker' in navigator) {
+					navigator.serviceWorker.getRegistrations().then(function(registrations) {
+						for (let registration of registrations) {
+							registration.update();
+						}
+					});
+					if ('caches' in window) {
+						caches.keys().then(function(names) {
+							for (let name of names) {
+								if (name.includes('admin')) caches.delete(name);
+							}
+						});
+					}
+				}
+			</script>
+		)}
 		<ScrollProgress client:load />
 		<slot />
 		{!isAdminPage && !isAiPage && <Chatbot client:load lang={lang} />}

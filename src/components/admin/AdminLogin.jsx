@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { authApi, setAuthToken } from '../../services/api';
+import React, { useState, useEffect } from 'react';
+import { authApi, setAuthToken, getAuthToken, removeAuthToken } from '../../services/api';
 import { Lock, Mail, ArrowRight, ShieldCheck, AlertCircle, Sparkles } from 'lucide-react';
 import '../../styles/Admin.css';
 
@@ -9,6 +9,19 @@ export default function AdminLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    const token = getAuthToken();
+    if (token) {
+      authApi.getMe().then(res => {
+        if (res && res.user) {
+          window.location.replace('/admin/dashboard');
+        }
+      }).catch(() => {
+        removeAuthToken();
+      });
+    }
+  }, []);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -17,7 +30,7 @@ export default function AdminLogin() {
     try {
       const response = await authApi.login(email, password);
       setAuthToken(response.token);
-      window.location.href = '/admin/dashboard';
+      window.location.replace('/admin/dashboard');
     } catch (err) {
       setError(err.message || 'Identifiants invalides.');
     } finally {

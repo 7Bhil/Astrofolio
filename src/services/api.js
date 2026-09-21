@@ -1,6 +1,14 @@
+const isLocalNetwork = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' || 
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.startsWith('192.168.') ||
+  window.location.hostname.startsWith('10.') ||
+  window.location.hostname.endsWith('.local')
+);
+
 const API_BASE_URL = import.meta.env.PUBLIC_API_URL || (
-  typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-    ? 'http://localhost:5005/api'
+  isLocalNetwork
+    ? `http://${typeof window !== 'undefined' ? window.location.hostname : 'localhost'}:5005/api`
     : 'https://portfolio-server-frmx.onrender.com/api'
 );
 

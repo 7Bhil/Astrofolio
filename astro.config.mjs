@@ -44,7 +44,19 @@ export default defineConfig({
     },
     workbox: {
       globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg}'],
+      globIgnores: ['**/admin/**', '**/admin*'],
       navigateFallback: null,
+      navigateFallbackDenylist: [/^\/admin/],
+      runtimeCaching: [
+        {
+          urlPattern: /^\/admin/,
+          handler: 'NetworkOnly'
+        },
+        {
+          urlPattern: /^https?:\/\/.*\/api\/.*/,
+          handler: 'NetworkOnly'
+        }
+      ],
       maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB
     }
   }), tailwind()],
