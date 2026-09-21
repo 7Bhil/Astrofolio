@@ -140,14 +140,27 @@ export default function AdminDashboard() {
 
   const checkAuthAndLoadData = async () => {
     setLoading(true);
+    
+    // Safety timeout: never stay stuck indefinitely
+    const timeoutId = setTimeout(() => {
+      setLoading(false);
+    }, 6000);
+
     try {
       const userData = await authApi.getMe();
-      setUser(userData.user);
-      await loadDashboardData();
+      if (userData && userData.user) {
+        setUser(userData.user);
+        await loadDashboardData();
+      } else {
+        window.location.href = '/admin';
+      }
     } catch (err) {
       console.error("Auth error:", err);
+      // If token expired or invalid, redirect to login
+      removeAuthToken();
       window.location.href = '/admin';
     } finally {
+      clearTimeout(timeoutId);
       setLoading(false);
     }
   };
