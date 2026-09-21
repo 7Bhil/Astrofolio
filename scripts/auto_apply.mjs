@@ -63,7 +63,13 @@ async function main() {
       : `Remote Full-Stack Developer Internship Application — Bhilal CHITOU`;
 
     const cvFilename = isFrench ? 'CV_CHITOU_Bhilal_FR.pdf' : 'CV_CHITOU_Bhilal_EN.pdf';
-    const cvPath = path.join(ROOT_DIR, cvFilename);
+    const candidatePaths = [
+      path.join(__dirname, '../public', cvFilename),
+      path.join(ROOT_DIR, cvFilename),
+      path.join(process.cwd(), 'public', cvFilename),
+      path.join(process.cwd(), cvFilename)
+    ];
+    const cvPath = candidatePaths.find(p => fs.existsSync(p)) || null;
 
     const emailBody = isFrench
       ? `Bonjour l'équipe ${prospect.name},
