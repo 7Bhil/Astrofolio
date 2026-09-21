@@ -29,7 +29,9 @@ const isAdminPage = currentPath.startsWith('/admin');
 const isAiPage = currentPath.includes('/ai');
 const ogLocale = lang === 'en' ? 'en_US' : 'fr_FR';
 const alternateLang = lang === 'fr' ? 'en' : 'fr';
-const alternateURL = lang === 'fr' ? `${siteUrl}en/` : siteUrl;
+const currentPathClean = currentPath.replace(/^\/en\//, '/').replace(/^\/en$/, '/');
+const frURL = new URL(currentPathClean, siteUrl).href;
+const enURL = new URL(`/en${currentPathClean === '/' ? '/' : currentPathClean}`, siteUrl).href;
 
 const structuredData = [
 	{
@@ -176,9 +178,9 @@ const structuredData = [
 		
 		<!-- Canonical & Language Alternates -->
 		<link rel="canonical" href={canonicalURL.href} />
-		<link rel="alternate" hreflang="fr" href="https://7bhil.vercel.app/" />
-		<link rel="alternate" hreflang="en" href="https://7bhil.vercel.app/en/" />
-		<link rel="alternate" hreflang="x-default" href="https://7bhil.vercel.app/" />
+		<link rel="alternate" hreflang="fr" href={frURL} />
+		<link rel="alternate" hreflang="en" href={enURL} />
+		<link rel="alternate" hreflang="x-default" href={frURL} />
 
 		<!-- Verification Google & Bing Webmaster -->
 		<meta name="google-site-verification" content="KrRDN87OdCwPlcy2HMmE4XdV_MGYa2VTp03WX50eeJE" />
