@@ -30,9 +30,12 @@ import {
   Upload,
   ArrowUp,
   ArrowDown,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Send
 } from 'lucide-react';
 import '../../styles/Admin.css';
+import ProspectsCRM from './ProspectsCRM';
+
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
@@ -392,6 +395,7 @@ export default function AdminDashboard() {
         <nav className="admin-nav">
           {[
             { id: 'overview', label: 'Vue d\'ensemble', icon: LayoutDashboard },
+            { id: 'prospects', label: 'Prospection Stages', icon: Send },
             { id: 'projects', label: 'Projets', icon: FolderGit2, count: projects.length },
             { id: 'skills', label: 'Compétences', icon: Wrench, count: skills.length },
             { id: 'experiences', label: 'Parcours', icon: Briefcase, count: experiences.length },
@@ -440,12 +444,14 @@ export default function AdminDashboard() {
           <div className="admin-header-title">
             <h1>
               {activeTab === 'overview' && 'Vue d\'ensemble'}
+              {activeTab === 'prospects' && 'CRM Prospection & Recherche de Stage'}
               {activeTab === 'projects' && 'Gestion des Projets'}
               {activeTab === 'skills' && 'Gestion des Compétences'}
               {activeTab === 'experiences' && 'Parcours & Formations'}
               {activeTab === 'messages' && 'Messages Reçus'}
               {activeTab === 'security' && 'Sécurité & Identifiants'}
             </h1>
+
             <p>
               Base de données Neon PostgreSQL • Admin Panel
             </p>
@@ -541,6 +547,11 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* TAB: PROSPECTS CRM */}
+        {activeTab === 'prospects' && (
+          <ProspectsCRM />
         )}
 
         {/* TAB 2: PROJECTS MANAGER */}

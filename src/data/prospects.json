@@ -1,0 +1,72 @@
+[
+  {
+    "id": "talenteum",
+    "name": "Talenteum",
+    "website": "https://talenteum.com",
+    "country": "Maurice / Bénin (Cotonou)",
+    "flag": "🇧🇯",
+    "status": "SENT",
+    "sentDate": "2026-09-21T11:16:53Z",
+    "recipient": "recrutement@talenteum.com",
+    "description": "Plateforme pionnière de télémigration connectant les talents africains avec des entreprises internationales. Dispose d'un bureau direct à Cotonou (portage salarial EOR).",
+    "techStack": "React, Next.js, Node.js, Python, Laravel, TypeScript",
+    "whyFit": "Bureau légal direct au Bénin, match culturel parfait avec le concept de télémigration pour travailler à l'international sans quitter le pays.",
+    "notes": "Candidature envoyée en FR avec CV français. Connecter avec Nicolas Goldstein (CEO) sur LinkedIn."
+  },
+  {
+    "id": "sendexa",
+    "name": "Sendexa",
+    "website": "https://sendexa.co",
+    "country": "Accra, Ghana",
+    "flag": "🇬🇭",
+    "status": "SENT",
+    "sentDate": "2026-09-21T11:16:57Z",
+    "recipient": "careers@sendexa.co",
+    "description": "Fintech remote-first offrant des APIs unifiées de communication (SMS/USSD/WhatsApp) et de paiement (Xtopay) à travers l'Afrique.",
+    "techStack": "Go 1.21+, Node.js, Python, Laravel, PostgreSQL",
+    "whyFit": "Série A de $10M récente. Même fuseau horaire (UTC+0 / UTC+1). SDK Go officiel et infrastructure de paiement basse latence.",
+    "notes": "Candidature envoyée en EN avec CV anglais. Mentionné le CEO Collins Vidzro et les SDKs Go/Node."
+  },
+  {
+    "id": "pezesha",
+    "name": "Pezesha",
+    "website": "https://pezesha.com",
+    "country": "Nairobi, Kenya",
+    "flag": "🇰🇪",
+    "status": "READY",
+    "sentDate": null,
+    "recipient": "jobs@pezesha.com",
+    "description": "Fintech B2B spécialisée dans le crédit scoring par IA (moteur Patascore) et le prêt embarqué pour les PME en Afrique. Seule fintech africaine WEF Tech Pioneer 2026.",
+    "techStack": "Go (Gin), Laravel, Java (Spring Boot), PostgreSQL, React",
+    "whyFit": "Recherche activement des ingénieurs Go et Laravel pour ses pipelines de données. Expansion vers l'Afrique de l'Ouest.",
+    "notes": "Email préparé pour le CTO Simon Ngunjiri Muraya mettant en avant Vitch (Postgres) et la pratique de Go."
+  },
+  {
+    "id": "matcha",
+    "name": "Matcha.fm",
+    "website": "https://matcha.fm",
+    "country": "Canada / Remote-first",
+    "flag": "🇨🇦",
+    "status": "READY",
+    "sentDate": null,
+    "recipient": "Via site / LinkedIn Fico",
+    "description": "Agent de recherche d'emploi zéro-bruit pour développeurs en startup. Fondé par Fico, ex-VP Engineering d'une fintech ayant traité 5 milliards de dollars.",
+    "techStack": "Next.js, TypeScript, PostgreSQL, Python/Go",
+    "whyFit": "Outil destiné aux développeurs. Valorise la création d'outils dev (compilateur Bhilal) et la stack Next.js/PostgreSQL.",
+    "notes": "Contacter directement Fico sur LinkedIn ou via le formulaire matcha.fm."
+  },
+  {
+    "id": "supabase",
+    "name": "Supabase",
+    "website": "https://supabase.com",
+    "country": "Monde entier (Remote)",
+    "flag": "🌍",
+    "status": "PREPARING",
+    "sentDate": null,
+    "recipient": "jobs.ashbyhq.com/supabase",
+    "description": "L'alternative open-source à Firebase basée sur PostgreSQL. Équipe 100% remote dans plus de 60 pays.",
+    "techStack": "PostgreSQL, Go, TypeScript, Next.js, Elixir, Rust",
+    "whyFit": "Culture du code ouvert et de la haute autonomie ('batteries included'). Forte utilisation de Go pour les outils CLI/Auth.",
+    "notes": "Conseil : soumettre une PR ou résoudre une issue GitHub avant d'envoyer la candidature."
+  }
+]

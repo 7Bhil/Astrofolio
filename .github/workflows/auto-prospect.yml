@@ -1,0 +1,46 @@
+name: Auto Prospect Remote Internships
+
+on:
+  schedule:
+    # Du lundi au vendredi à 08h30 UTC (09h30 heure du Bénin)
+    - cron: '30 8 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      max_emails:
+        description: 'Nombre max d emails à envoyer (défaut 3)'
+        required: false
+        default: '3'
+
+permissions:
+  contents: write
+
+jobs:
+  prospect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Auto Apply Script
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          MAX_EMAILS: ${{ github.event.inputs.max_emails || '3' }}
+        run: |
+          node scripts/auto_apply.mjs
+
+      - name: Commit updated prospects database
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/prospects.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore(crm): update prospects status [skip ci]" && git push)
