@@ -40,9 +40,7 @@ import '../../styles/Admin.css';
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [slowLoading, setSlowLoading] = useState(false);
-  const [loadError, setLoadError] = useState(null);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [stats, setStats] = useState(null);
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -141,36 +139,24 @@ export default function AdminDashboard() {
   }, []);
 
   const checkAuthAndLoadData = async () => {
-    // 1. Synchronous token guard
+    // Synchronous token guard: redirect immediately if no token
     const token = getAuthToken();
     if (!token) {
       window.location.replace('/admin');
       return;
     }
 
-    setLoading(true);
-    setLoadError(null);
-    setSlowLoading(false);
-
-    const slowTimer = setTimeout(() => {
-      setSlowLoading(true);
-    }, 3000);
-
+    setIsSyncing(true);
     try {
       const userData = await authApi.getMe();
-      clearTimeout(slowTimer);
-
       if (userData && userData.user) {
         setUser(userData.user);
-        setLoading(false);
-        // Asynchronously load all datasets without blocking the main dashboard view
-        loadDashboardData();
+        await loadDashboardData();
       } else {
         removeAuthToken();
         window.location.replace('/admin');
       }
     } catch (err) {
-      clearTimeout(slowTimer);
       console.error("Auth error:", err);
       const isAuthIssue = err.message && (
         err.message.includes('non autorisé') || 
@@ -183,13 +169,15 @@ export default function AdminDashboard() {
         removeAuthToken();
         window.location.replace('/admin');
       } else {
-        setLoadError(err.message || 'Impossible de se connecter au serveur.');
-        setLoading(false);
+        showAlert('danger', err.message || 'Impossible de synchroniser avec le serveur.');
       }
+    } finally {
+      setIsSyncing(false);
     }
   };
 
   const loadDashboardData = async () => {
+    setIsSyncing(true);
     try {
       const [statsRes, projectsRes, skillsRes, expRes, msgRes] = await Promise.all([
         statsApi.getStats().catch(() => null),
@@ -208,6 +196,8 @@ export default function AdminDashboard() {
       return { stats: statsRes, projects: projectsRes, skills: skillsRes, experiences: expRes, messages: msgRes };
     } catch (err) {
       showAlert('danger', 'Erreur lors du chargement des données.');
+    } finally {
+      setIsSyncing(false);
     }
   };
 
@@ -413,165 +403,6 @@ export default function AdminDashboard() {
     }
   };
 
-  if (loading) {
-    return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        background: '#060b18',
-        color: '#fff',
-        padding: '2rem',
-        textAlign: 'center',
-        fontFamily: 'Inter, system-ui, sans-serif'
-      }}>
-        <div style={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '16px',
-          background: 'linear-gradient(135deg, #2563eb, #06b6d4)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '1.5rem',
-          boxShadow: '0 8px 32px rgba(37, 99, 235, 0.3)'
-        }}>
-          <RefreshCw size={28} style={{ animation: 'spin 1.2s linear infinite', color: '#fff' }} />
-        </div>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: '#f8fafc' }}>
-          Studio Admin
-        </h2>
-        <p style={{ color: '#94a3b8', fontSize: '0.92rem', margin: 0, maxWidth: '360px', lineHeight: 1.5 }}>
-          {slowLoading 
-            ? "Le serveur met un peu de temps à répondre (connexion base Neon)..."
-            : "Chargement sécurisé de vos données..."}
-        </p>
-
-        {slowLoading && (
-          <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-            <button 
-              onClick={() => checkAuthAndLoadData()} 
-              style={{
-                background: '#2563eb',
-                color: '#fff',
-                border: 'none',
-                padding: '0.6rem 1.2rem',
-                borderRadius: '8px',
-                fontWeight: 600,
-                fontSize: '0.88rem',
-                cursor: 'pointer'
-              }}
-            >
-              Réessayer
-            </button>
-            <button 
-              onClick={() => { removeAuthToken(); window.location.replace('/admin'); }} 
-              style={{
-                background: 'rgba(255,255,255,0.08)',
-                color: '#cbd5e1',
-                border: '1px solid rgba(255,255,255,0.15)',
-                padding: '0.6rem 1.2rem',
-                borderRadius: '8px',
-                fontWeight: 600,
-                fontSize: '0.88rem',
-                cursor: 'pointer'
-              }}
-            >
-              Se reconnecter
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  if (loadError) {
-    return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '100vh',
-        background: '#060b18',
-        color: '#fff',
-        padding: '2rem',
-        textAlign: 'center',
-        fontFamily: 'Inter, system-ui, sans-serif'
-      }}>
-        <div style={{
-          width: '56px',
-          height: '56px',
-          borderRadius: '16px',
-          background: 'rgba(239, 68, 68, 0.15)',
-          border: '1px solid rgba(239, 68, 68, 0.3)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: '1.25rem',
-          color: '#f87171'
-        }}>
-          <AlertCircle size={28} />
-        </div>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: '#f8fafc' }}>
-          Erreur de connexion
-        </h2>
-        <p style={{ color: '#94a3b8', fontSize: '0.92rem', margin: '0 0 1.5rem 0', maxWidth: '380px' }}>
-          {loadError}
-        </p>
-        <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-          <button 
-            onClick={() => checkAuthAndLoadData()} 
-            style={{
-              background: '#2563eb',
-              color: '#fff',
-              border: 'none',
-              padding: '0.6rem 1.2rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '0.88rem',
-              cursor: 'pointer'
-            }}
-          >
-            Réessayer
-          </button>
-          <button 
-            onClick={() => { removeAuthToken(); window.location.replace('/admin'); }} 
-            style={{
-              background: 'rgba(255,255,255,0.08)',
-              color: '#cbd5e1',
-              border: '1px solid rgba(255,255,255,0.15)',
-              padding: '0.6rem 1.2rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '0.88rem',
-              cursor: 'pointer'
-            }}
-          >
-            Se reconnecter
-          </button>
-          <a
-            href="/"
-            style={{
-              background: 'transparent',
-              color: '#94a3b8',
-              border: '1px solid rgba(255,255,255,0.1)',
-              padding: '0.6rem 1.2rem',
-              borderRadius: '8px',
-              fontWeight: 600,
-              fontSize: '0.88rem',
-              textDecoration: 'none'
-            }}
-          >
-            Retour au site
-          </a>
-        </div>
-      </div>
-    );
-  }
-
   const unreadCount = messages.filter(m => !m.read).length;
 
   return (
@@ -591,7 +422,7 @@ export default function AdminDashboard() {
             <Globe size={18} />
           </a>
           <button onClick={loadDashboardData} className="admin-mobile-icon-btn" title="Actualiser">
-            <RefreshCw size={18} />
+            <RefreshCw size={18} style={isSyncing ? { animation: 'spin 1s linear infinite' } : {}} />
           </button>
           <button onClick={handleLogout} className="admin-mobile-icon-btn" style={{ color: '#f87171' }} title="Déconnexion">
             <LogOut size={18} />
@@ -683,7 +514,7 @@ export default function AdminDashboard() {
               <Globe size={16} /> Voir le site
             </a>
             <button onClick={loadDashboardData} className="btn-admin-secondary">
-              <RefreshCw size={16} /> Actualiser
+              <RefreshCw size={16} style={isSyncing ? { animation: 'spin 1s linear infinite' } : {}} /> {isSyncing ? 'Synchronisation...' : 'Actualiser'}
             </button>
           </div>
         </header>
