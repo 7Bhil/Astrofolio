@@ -362,18 +362,26 @@ export default function AdminDashboard() {
   return (
     <div className="admin-layout">
 
-      {/* MOBILE TOP BAR */}
+      {/* MOBILE TOP APP BAR */}
       <header className="admin-mobile-header">
         <div className="admin-mobile-brand">
           <div className="admin-brand-icon">7B</div>
           <div>
-            <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700 }}>Admin 7Bhil</h3>
-            <span style={{ fontSize: '0.75rem', color: '#06b6d4' }}>PostgreSQL Neon</span>
+            <h3>Studio Admin</h3>
+            <span>Neon PostgreSQL</span>
           </div>
         </div>
-        <button className="admin-mobile-toggle" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-          {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-        </button>
+        <div className="admin-mobile-quick-actions">
+          <a href="/" target="_blank" rel="noopener noreferrer" className="admin-mobile-icon-btn" title="Voir le site">
+            <Globe size={18} />
+          </a>
+          <button onClick={loadDashboardData} className="admin-mobile-icon-btn" title="Actualiser">
+            <RefreshCw size={18} />
+          </button>
+          <button onClick={handleLogout} className="admin-mobile-icon-btn" style={{ color: '#f87171' }} title="Déconnexion">
+            <LogOut size={18} />
+          </button>
+        </div>
       </header>
 
       {/* MOBILE BACKDROP OVERLAY */}
@@ -1180,6 +1188,34 @@ export default function AdminDashboard() {
         )}
 
       </main>
+
+      {/* MOBILE BOTTOM NAVIGATION BAR */}
+      <nav className="admin-bottom-nav">
+        {[
+          { id: 'overview', label: 'Accueil', icon: LayoutDashboard },
+          { id: 'projects', label: 'Projets', icon: FolderGit2 },
+          { id: 'prospects', label: 'CRM', icon: Send },
+          { id: 'messages', label: 'Messages', icon: Mail, count: unreadCount },
+          { id: 'skills', label: 'Skills', icon: Wrench },
+          { id: 'security', label: 'Sécurité', icon: ShieldCheck }
+        ].map(tab => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`admin-bottom-nav-item ${isActive ? 'active' : ''}`}
+            >
+              <Icon size={20} />
+              <span>{tab.label}</span>
+              {tab.count !== undefined && tab.count > 0 && (
+                <span className="admin-bottom-badge">{tab.count}</span>
+              )}
+            </button>
+          );
+        })}
+      </nav>
     </div>
   );
 }
