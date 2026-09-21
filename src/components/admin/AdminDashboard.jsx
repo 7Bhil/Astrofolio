@@ -34,7 +34,7 @@ import {
   Send
 } from 'lucide-react';
 import '../../styles/Admin.css';
-import ProspectsCRM from './ProspectsCRM';
+
 
 
 export default function AdminDashboard() {
@@ -431,7 +431,6 @@ export default function AdminDashboard() {
         <nav className="admin-nav">
           {[
             { id: 'overview', label: 'Vue d\'ensemble', icon: LayoutDashboard },
-            { id: 'prospects', label: 'Prospection Stages', icon: Send },
             { id: 'projects', label: 'Projets', icon: FolderGit2, count: projects.length },
             { id: 'skills', label: 'Compétences', icon: Wrench, count: skills.length },
             { id: 'experiences', label: 'Parcours', icon: Briefcase, count: experiences.length },
@@ -480,7 +479,6 @@ export default function AdminDashboard() {
           <div className="admin-header-title">
             <h1>
               {activeTab === 'overview' && 'Vue d\'ensemble'}
-              {activeTab === 'prospects' && 'CRM Prospection & Recherche de Stage'}
               {activeTab === 'projects' && 'Gestion des Projets'}
               {activeTab === 'skills' && 'Gestion des Compétences'}
               {activeTab === 'experiences' && 'Parcours & Formations'}
@@ -591,11 +589,6 @@ export default function AdminDashboard() {
               </div>
             </div>
           </div>
-        )}
-
-        {/* TAB: PROSPECTS CRM */}
-        {activeTab === 'prospects' && (
-          <ProspectsCRM />
         )}
 
         {/* TAB 2: PROJECTS MANAGER */}
@@ -1230,7 +1223,6 @@ export default function AdminDashboard() {
         {[
           { id: 'overview', label: 'Accueil', icon: LayoutDashboard },
           { id: 'projects', label: 'Projets', icon: FolderGit2 },
-          { id: 'prospects', label: 'CRM', icon: Send },
           { id: 'messages', label: 'Messages', icon: Mail, count: unreadCount },
           { id: 'skills', label: 'Skills', icon: Wrench },
           { id: 'security', label: 'Sécurité', icon: ShieldCheck }
