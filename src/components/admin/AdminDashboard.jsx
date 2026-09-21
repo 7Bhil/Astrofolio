@@ -529,7 +529,9 @@ export default function AdminDashboard() {
               <div className="admin-kpi-card">
                 <div className="admin-kpi-header">
                   <span>Projets Réalisés</span>
-                  <FolderGit2 size={20} color="#2563eb" />
+                  <div className="admin-kpi-icon-pill">
+                    <FolderGit2 size={16} color="#38bdf8" />
+                  </div>
                 </div>
                 <div className="admin-kpi-value">{projects.length}</div>
                 <span className="admin-kpi-subtitle">Stockés sur Neon DB</span>
@@ -538,7 +540,9 @@ export default function AdminDashboard() {
               <div className="admin-kpi-card">
                 <div className="admin-kpi-header">
                   <span>Compétences</span>
-                  <Wrench size={20} color="#06b6d4" />
+                  <div className="admin-kpi-icon-pill">
+                    <Wrench size={16} color="#10b981" />
+                  </div>
                 </div>
                 <div className="admin-kpi-value">{skills.length}</div>
                 <span className="admin-kpi-subtitle">Stack Technique</span>
@@ -547,10 +551,12 @@ export default function AdminDashboard() {
               <div className="admin-kpi-card">
                 <div className="admin-kpi-header">
                   <span>Messages Reçus</span>
-                  <Mail size={20} color="#8b5cf6" />
+                  <div className="admin-kpi-icon-pill">
+                    <Mail size={16} color="#a855f7" />
+                  </div>
                 </div>
                 <div className="admin-kpi-value">{messages.length}</div>
-                <span className="admin-kpi-subtitle" style={{ color: unreadCount > 0 ? '#fbbf24' : '#06b6d4' }}>
+                <span className="admin-kpi-subtitle" style={{ color: unreadCount > 0 ? '#fbbf24' : '#38bdf8' }}>
                   {unreadCount > 0 ? `${unreadCount} non lue(s)` : 'Tous lus'}
                 </span>
               </div>
@@ -558,9 +564,11 @@ export default function AdminDashboard() {
               <div className="admin-kpi-card">
                 <div className="admin-kpi-header">
                   <span>Base de Données</span>
-                  <Database size={20} color="#10b981" />
+                  <div className="admin-kpi-icon-pill">
+                    <Database size={16} color="#10b981" />
+                  </div>
                 </div>
-                <div className="admin-kpi-value" style={{ fontSize: '1.25rem', marginTop: '0.4rem', color: '#4ade80' }}>
+                <div className="admin-kpi-value" style={{ fontSize: '1.25rem', marginTop: '0.4rem', color: '#34d399' }}>
                   PostgreSQL Neon
                 </div>
                 <span className="admin-kpi-subtitle">Cloud AWS Pooler</span>
