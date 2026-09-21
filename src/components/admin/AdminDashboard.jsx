@@ -48,6 +48,7 @@ export default function AdminDashboard() {
   const [messages, setMessages] = useState([]);
   const [alert, setAlert] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Form states
   const [editingProject, setEditingProject] = useState(null);
@@ -162,10 +163,12 @@ export default function AdminDashboard() {
       ]);
 
       if (statsRes) setStats(statsRes);
-      if (projectsRes) setProjects(projectsRes);
-      if (skillsRes) setSkills(skillsRes);
-      if (expRes) setExperiences(expRes);
-      if (msgRes) setMessages(msgRes);
+      if (Array.isArray(projectsRes)) setProjects(projectsRes);
+      if (Array.isArray(skillsRes)) setSkills(skillsRes);
+      if (Array.isArray(expRes)) setExperiences(expRes);
+      if (Array.isArray(msgRes)) setMessages(msgRes);
+
+      return { stats: statsRes, projects: projectsRes, skills: skillsRes, experiences: expRes, messages: msgRes };
     } catch (err) {
       showAlert('danger', 'Erreur lors du chargement des données.');
     }
@@ -184,12 +187,15 @@ export default function AdminDashboard() {
   // --- PROJECT ACTIONS ---
   const handleSaveProject = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       if (editingProject) {
-        await projectsApi.update(editingProject.id, projectForm);
+        const updated = await projectsApi.update(editingProject.id, projectForm);
+        setProjects(prev => prev.map(p => p.id === editingProject.id ? { ...p, ...projectForm, ...updated } : p));
         showAlert('success', 'Projet mis à jour avec succès !');
       } else {
-        await projectsApi.create(projectForm);
+        const created = await projectsApi.create(projectForm);
+        setProjects(prev => [...prev, created || { ...projectForm, id: Date.now().toString() }]);
         showAlert('success', 'Nouveau projet créé avec succès !');
       }
       setShowProjectModal(false);
@@ -198,17 +204,21 @@ export default function AdminDashboard() {
       loadDashboardData();
     } catch (err) {
       showAlert('danger', err.message || 'Erreur lors de l\'enregistrement du projet.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleDeleteProject = async (id) => {
     if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) return;
     try {
+      setProjects(prev => prev.filter(p => p.id !== id));
       await projectsApi.delete(id);
       showAlert('success', 'Projet supprimé !');
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de la suppression.');
+      loadDashboardData();
     }
   };
 
@@ -233,12 +243,15 @@ export default function AdminDashboard() {
   // --- SKILL ACTIONS ---
   const handleSaveSkill = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       if (editingSkill) {
-        await skillsApi.update(editingSkill.id, skillForm);
+        const updated = await skillsApi.update(editingSkill.id, skillForm);
+        setSkills(prev => prev.map(s => s.id === editingSkill.id ? { ...s, ...skillForm, ...updated } : s));
         showAlert('success', 'Compétence mise à jour !');
       } else {
-        await skillsApi.create(skillForm);
+        const created = await skillsApi.create(skillForm);
+        setSkills(prev => [...prev, created || { ...skillForm, id: Date.now().toString() }]);
         showAlert('success', 'Compétence ajoutée !');
       }
       setShowSkillModal(false);
@@ -247,6 +260,8 @@ export default function AdminDashboard() {
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de l\'enregistrement de la compétence.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -259,23 +274,28 @@ export default function AdminDashboard() {
   const handleDeleteSkill = async (id) => {
     if (!window.confirm('Supprimer cette compétence ?')) return;
     try {
+      setSkills(prev => prev.filter(s => s.id !== id));
       await skillsApi.delete(id);
       showAlert('success', 'Compétence supprimée.');
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de la suppression.');
+      loadDashboardData();
     }
   };
 
   // --- EXPERIENCE ACTIONS ---
   const handleSaveExp = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       if (editingExp) {
-        await experiencesApi.update(editingExp.id, expForm);
+        const updated = await experiencesApi.update(editingExp.id, expForm);
+        setExperiences(prev => prev.map(exp => exp.id === editingExp.id ? { ...exp, ...expForm, ...updated } : exp));
         showAlert('success', 'Élément mis à jour !');
       } else {
-        await experiencesApi.create(expForm);
+        const created = await experiencesApi.create(expForm);
+        setExperiences(prev => [...prev, created || { ...expForm, id: Date.now().toString() }]);
         showAlert('success', 'Élément ajouté au parcours !');
       }
       setShowExpModal(false);
@@ -284,6 +304,8 @@ export default function AdminDashboard() {
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur d\'enregistrement.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -303,32 +325,38 @@ export default function AdminDashboard() {
   const handleDeleteExp = async (id) => {
     if (!window.confirm('Supprimer cet élément du parcours ?')) return;
     try {
+      setExperiences(prev => prev.filter(e => e.id !== id));
       await experiencesApi.delete(id);
       showAlert('success', 'Élément supprimé.');
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur de suppression.');
+      loadDashboardData();
     }
   };
 
   // --- MESSAGE ACTIONS ---
   const handleMarkMessageRead = async (id, read) => {
     try {
+      setMessages(prev => prev.map(m => m.id === id ? { ...m, read } : m));
       await messagesApi.markRead(id, read);
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de la mise à jour.');
+      loadDashboardData();
     }
   };
 
   const handleDeleteMessage = async (id) => {
     if (!window.confirm('Supprimer ce message ?')) return;
     try {
+      setMessages(prev => prev.filter(m => m.id !== id));
       await messagesApi.delete(id);
       showAlert('success', 'Message supprimé.');
       loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur de suppression.');
+      loadDashboardData();
     }
   };
 
