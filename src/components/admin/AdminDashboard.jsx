@@ -150,10 +150,26 @@ export default function AdminDashboard() {
 
     setIsSyncing(true);
     try {
-      const userData = await authApi.getMe();
+      // Parallelize auth check AND data loading simultaneously
+      const [userData, dashData] = await Promise.all([
+        authApi.getMe(),
+        Promise.all([
+          statsApi.getStats().catch(() => null),
+          projectsApi.getAll().catch(() => []),
+          skillsApi.getAll().catch(() => []),
+          experiencesApi.getAll().catch(() => []),
+          messagesApi.getAll().catch(() => [])
+        ])
+      ]);
+
       if (userData && userData.user) {
         setUser(userData.user);
-        await loadDashboardData();
+        const [statsRes, projectsRes, skillsRes, expRes, msgRes] = dashData;
+        if (statsRes) setStats(statsRes);
+        if (Array.isArray(projectsRes)) setProjects(projectsRes);
+        if (Array.isArray(skillsRes)) setSkills(skillsRes);
+        if (Array.isArray(expRes)) setExperiences(expRes);
+        if (Array.isArray(msgRes)) setMessages(msgRes);
       } else {
         removeAuthToken();
         window.location.replace('/admin');
@@ -175,6 +191,7 @@ export default function AdminDashboard() {
       }
     } finally {
       setIsSyncing(false);
+      setInitialLoaded(true);
     }
   };
 
@@ -232,7 +249,6 @@ export default function AdminDashboard() {
       setShowProjectModal(false);
       setEditingProject(null);
       setProjectForm({ slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', githubUrl: '', demoUrl: '', featured: true, order: 0 });
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', err.message || 'Erreur lors de l\'enregistrement du projet.');
     } finally {
@@ -246,7 +262,6 @@ export default function AdminDashboard() {
       setProjects(prev => prev.filter(p => p.id !== id));
       await projectsApi.delete(id);
       showAlert('success', 'Projet supprimé !');
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de la suppression.');
       loadDashboardData();
@@ -288,7 +303,6 @@ export default function AdminDashboard() {
       setShowSkillModal(false);
       setEditingSkill(null);
       setSkillForm({ name: '', category: 'frontend', level: 90 });
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de l\'enregistrement de la compétence.');
     } finally {
@@ -308,7 +322,6 @@ export default function AdminDashboard() {
       setSkills(prev => prev.filter(s => s.id !== id));
       await skillsApi.delete(id);
       showAlert('success', 'Compétence supprimée.');
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de la suppression.');
       loadDashboardData();
@@ -332,7 +345,6 @@ export default function AdminDashboard() {
       setShowExpModal(false);
       setEditingExp(null);
       setExpForm({ type: 'experience', roleFr: '', roleEn: '', companyFr: '', companyEn: '', dateFr: '', dateEn: '', descFr: '', descEn: '', order: 0 });
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur d\'enregistrement.');
     } finally {
@@ -359,7 +371,6 @@ export default function AdminDashboard() {
       setExperiences(prev => prev.filter(e => e.id !== id));
       await experiencesApi.delete(id);
       showAlert('success', 'Élément supprimé.');
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur de suppression.');
       loadDashboardData();
@@ -371,7 +382,6 @@ export default function AdminDashboard() {
     try {
       setMessages(prev => prev.map(m => m.id === id ? { ...m, read } : m));
       await messagesApi.markRead(id, read);
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur lors de la mise à jour.');
       loadDashboardData();
@@ -384,7 +394,6 @@ export default function AdminDashboard() {
       setMessages(prev => prev.filter(m => m.id !== id));
       await messagesApi.delete(id);
       showAlert('success', 'Message supprimé.');
-      loadDashboardData();
     } catch (err) {
       showAlert('danger', 'Erreur de suppression.');
       loadDashboardData();
