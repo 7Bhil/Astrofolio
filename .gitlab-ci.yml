@@ -24,8 +24,9 @@ build_job:
 
 test_job:
   stage: test
-  image: mcr.microsoft.com/playwright:v1.45.0-jammy
+  image: mcr.microsoft.com/playwright:v1.50.0-jammy
   script:
+    - npx playwright install chromium
     - npx playwright test
   artifacts:
     when: on_failure
