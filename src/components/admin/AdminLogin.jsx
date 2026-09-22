@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { authApi, setAuthToken, getAuthToken, removeAuthToken } from '../../services/api';
-import { Lock, Mail, ArrowRight, ShieldCheck, AlertCircle, Sparkles } from 'lucide-react';
-import '../../styles/Admin.css';
+import { Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('admin@7bhil.com');
@@ -39,118 +38,63 @@ export default function AdminLogin() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: '#030712',
-      fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-      color: '#f8fafc',
-      padding: '1.25rem',
-      position: 'relative',
-      overflow: 'hidden'
-    }}>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-slate-100 p-4 relative overflow-hidden font-sans">
       {/* Background ambient orbs */}
-      <div style={{
-        position: 'absolute',
-        top: '15%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        width: '320px',
-        height: '320px',
-        background: 'radial-gradient(circle, rgba(37, 99, 235, 0.18) 0%, transparent 70%)',
-        pointerEvents: 'none',
-        filter: 'blur(40px)',
-        zIndex: 0
-      }} />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
 
-      <div style={{
-        width: '100%',
-        maxWidth: '400px',
-        background: '#0a0f1d',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
-        borderRadius: '24px',
-        padding: '2.25rem 1.75rem',
-        boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.04)',
-        position: 'relative',
-        zIndex: 1,
-        boxSizing: 'border-box'
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-          <div style={{
-            width: '54px',
-            height: '54px',
-            borderRadius: '16px',
-            background: 'linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '1.15rem',
-            boxShadow: '0 8px 24px rgba(37, 99, 235, 0.35)',
-            fontFamily: 'Outfit, sans-serif',
-            fontWeight: 900,
-            fontSize: '1.25rem',
-            color: '#fff'
-          }}>
+      {/* Login Box */}
+      <div className="w-full max-w-md bg-slate-900/80 border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10 backdrop-blur-xl">
+        <div className="text-center mb-6">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 inline-flex items-center justify-center font-black font-['Outfit'] text-white text-xl shadow-lg shadow-blue-500/30 mb-4">
             7B
           </div>
-          <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800, fontFamily: 'Outfit, sans-serif', color: '#fff', letterSpacing: '-0.02em' }}>
+          <h1 className="text-2xl font-extrabold font-['Outfit'] text-white tracking-tight">
             Studio Admin
           </h1>
-          <p style={{ margin: '0.4rem 0 0 0', color: '#94a3b8', fontSize: '0.86rem' }}>
+          <p className="text-xs text-slate-400 mt-1">
             Accès sécurisé • PostgreSQL Neon
           </p>
         </div>
 
         {error && (
-          <div style={{
-            padding: '0.85rem 1rem',
-            borderRadius: '12px',
-            background: 'rgba(239, 68, 68, 0.12)',
-            border: '1px solid rgba(239, 68, 68, 0.25)',
-            color: '#fca5a5',
-            marginBottom: '1.5rem',
-            fontSize: '0.88rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.6rem'
-          }}>
-            <AlertCircle size={18} style={{ flexShrink: 0 }} />
+          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 mb-5 text-xs font-semibold flex items-center gap-2.5">
+            <AlertCircle size={16} className="flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
-          <div className="admin-form-group" style={{ marginBottom: 0 }}>
-            <label style={{ fontSize: '0.84rem', fontWeight: 600, color: '#94a3b8' }}>Email</label>
-            <div style={{ position: 'relative' }}>
-              <Mail size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+              Adresse Email
+            </label>
+            <div className="relative">
+              <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                className="admin-input"
-                style={{ paddingLeft: '2.75rem', height: '46px' }}
+                className="w-full bg-slate-950/80 border border-white/10 focus:border-cyan-500/80 focus:ring-2 focus:ring-cyan-500/20 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-all"
                 placeholder="admin@7bhil.com"
                 autoComplete="email"
               />
             </div>
           </div>
 
-          <div className="admin-form-group" style={{ marginBottom: 0 }}>
-            <label style={{ fontSize: '0.84rem', fontWeight: 600, color: '#94a3b8' }}>Mot de passe</label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={18} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+          <div>
+            <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+              Mot de passe
+            </label>
+            <div className="relative">
+              <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
-                className="admin-input"
-                style={{ paddingLeft: '2.75rem', height: '46px' }}
+                className="w-full bg-slate-950/80 border border-white/10 focus:border-cyan-500/80 focus:ring-2 focus:ring-cyan-500/20 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-all"
                 placeholder="••••••••"
                 autoComplete="current-password"
               />
@@ -160,20 +104,12 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-admin-primary"
-            style={{
-              width: '100%',
-              justifyContent: 'center',
-              padding: '0.85rem',
-              fontSize: '0.96rem',
-              marginTop: '0.5rem',
-              borderRadius: '12px'
-            }}
+            className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-cyan-500/25 active:scale-98 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {loading ? 'Connexion en cours...' : (
               <>
-                Déverrouiller l'espace
-                <ArrowRight size={18} />
+                <span>Déverrouiller l'espace</span>
+                <ArrowRight size={16} />
               </>
             )}
           </button>
@@ -182,19 +118,7 @@ export default function AdminLogin() {
 
       <a 
         href="/" 
-        style={{
-          marginTop: '1.75rem',
-          color: '#64748b',
-          fontSize: '0.85rem',
-          textDecoration: 'none',
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.4rem',
-          transition: 'color 0.2s ease',
-          zIndex: 1
-        }}
-        onMouseEnter={e => e.currentTarget.style.color = '#38bdf8'}
-        onMouseLeave={e => e.currentTarget.style.color = '#64748b'}
+        className="mt-6 text-xs text-slate-500 hover:text-cyan-400 transition-colors z-10"
       >
         ← Retourner au portfolio public
       </a>

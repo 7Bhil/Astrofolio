@@ -106,7 +106,16 @@ export const messagesApi = {
   delete: (id) => apiRequest(`/messages/${id}`, 'DELETE', null, true)
 };
 
+// Certifications API
+export const certificationsApi = {
+  getAll: () => apiRequest('/certifications'),
+  create: (data) => apiRequest('/certifications', 'POST', data, true),
+  update: (id, data) => apiRequest(`/certifications/${id}`, 'PUT', data, true),
+  delete: (id) => apiRequest(`/certifications/${id}`, 'DELETE', null, true)
+};
+
 // Stats API
 export const statsApi = {
   getStats: () => apiRequest('/stats', 'GET', null, true)
 };
+
