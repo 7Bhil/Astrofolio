@@ -6,6 +6,7 @@ import {
   experiencesApi, 
   messagesApi, 
   statsApi, 
+  getAuthToken,
   removeAuthToken 
 } from '../../services/api';
 import { 
