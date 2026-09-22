@@ -42,6 +42,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('overview');
   const [user, setUser] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
+  const [initialLoaded, setInitialLoaded] = useState(false);
   const [stats, setStats] = useState(null);
   const [projects, setProjects] = useState([]);
   const [skills, setSkills] = useState([]);
@@ -194,11 +195,13 @@ export default function AdminDashboard() {
       if (Array.isArray(expRes)) setExperiences(expRes);
       if (Array.isArray(msgRes)) setMessages(msgRes);
 
+      setInitialLoaded(true);
       return { stats: statsRes, projects: projectsRes, skills: skillsRes, experiences: expRes, messages: msgRes };
     } catch (err) {
       showAlert('danger', 'Erreur lors du chargement des données.');
     } finally {
       setIsSyncing(false);
+      setInitialLoaded(true);
     }
   };
 
@@ -469,10 +472,14 @@ export default function AdminDashboard() {
               >
                 <Icon size={18} />
                 <span>{tab.label}</span>
-                {tab.count !== undefined && tab.count > 0 && (
-                  <span className={`admin-nav-badge ${tab.isUnread ? 'unread' : ''}`}>
-                    {tab.count}
-                  </span>
+                {!initialLoaded ? (
+                  tab.count !== undefined && <span className="admin-skeleton admin-skeleton-pill" style={{ marginLeft: 'auto' }} />
+                ) : (
+                  tab.count !== undefined && tab.count > 0 && (
+                    <span className={`admin-nav-badge ${tab.isUnread ? 'unread' : ''}`}>
+                      {tab.count}
+                    </span>
+                  )
                 )}
               </button>
             );
@@ -550,7 +557,9 @@ export default function AdminDashboard() {
                     <FolderGit2 size={16} color="#38bdf8" />
                   </div>
                 </div>
-                <div className="admin-kpi-value">{projects.length}</div>
+                <div className="admin-kpi-value">
+                  {!initialLoaded ? <span className="admin-skeleton admin-skeleton-kpi" /> : projects.length}
+                </div>
                 <span className="admin-kpi-subtitle">Stockés sur Neon DB</span>
               </div>
 
@@ -561,7 +570,9 @@ export default function AdminDashboard() {
                     <Wrench size={16} color="#10b981" />
                   </div>
                 </div>
-                <div className="admin-kpi-value">{skills.length}</div>
+                <div className="admin-kpi-value">
+                  {!initialLoaded ? <span className="admin-skeleton admin-skeleton-kpi" /> : skills.length}
+                </div>
                 <span className="admin-kpi-subtitle">Stack Technique</span>
               </div>
 
@@ -572,9 +583,11 @@ export default function AdminDashboard() {
                     <Mail size={16} color="#a855f7" />
                   </div>
                 </div>
-                <div className="admin-kpi-value">{messages.length}</div>
+                <div className="admin-kpi-value">
+                  {!initialLoaded ? <span className="admin-skeleton admin-skeleton-kpi" /> : messages.length}
+                </div>
                 <span className="admin-kpi-subtitle" style={{ color: unreadCount > 0 ? '#fbbf24' : '#38bdf8' }}>
-                  {unreadCount > 0 ? `${unreadCount} non lue(s)` : 'Tous lus'}
+                  {!initialLoaded ? <span className="admin-skeleton admin-skeleton-pill" style={{ width: '48px' }} /> : (unreadCount > 0 ? `${unreadCount} non lue(s)` : 'Tous lus')}
                 </span>
               </div>
 
@@ -603,7 +616,7 @@ export default function AdminDashboard() {
                   <Plus size={18} /> Ajouter une Compétence
                 </button>
                 <button onClick={() => setActiveTab('messages')} className="btn-admin-secondary">
-                  <Mail size={18} /> Messages ({unreadCount})
+                  <Mail size={18} /> Messages {!initialLoaded ? <span className="admin-skeleton admin-skeleton-pill" /> : `(${unreadCount})`}
                 </button>
               </div>
             </div>
@@ -614,7 +627,7 @@ export default function AdminDashboard() {
         {activeTab === 'projects' && (
           <div>
             <div className="admin-panel-title">
-              <span>Projets Catalogués ({projects.length})</span>
+              <span>Projets Catalogués {!initialLoaded ? <span className="admin-skeleton admin-skeleton-pill" style={{ width: '28px' }} /> : `(${projects.length})`}</span>
               <button onClick={() => { setProjectForm({ slug: '', titleFr: '', titleEn: '', descFr: '', descEn: '', category: 'web', image: '', githubUrl: '', demoUrl: '', featured: true, order: projects.length }); setEditingProject(null); setShowProjectModal(true); }} className="btn-admin-primary">
                 <Plus size={18} /> Nouveau Projet
               </button>
@@ -926,7 +939,7 @@ export default function AdminDashboard() {
         {activeTab === 'skills' && (
           <div>
             <div className="admin-panel-title">
-              <span>Compétences ({skills.length})</span>
+              <span>Compétences {!initialLoaded ? <span className="admin-skeleton admin-skeleton-pill" style={{ width: '28px' }} /> : `(${skills.length})`}</span>
               <button onClick={() => { setSkillForm({ name: '', category: 'frontend', level: 90 }); setEditingSkill(null); setShowSkillModal(true); }} className="btn-admin-primary">
                 <Plus size={18} /> Ajouter une compétence
               </button>
@@ -1023,7 +1036,7 @@ export default function AdminDashboard() {
         {activeTab === 'experiences' && (
           <div>
             <div className="admin-panel-title">
-              <span>Parcours & Formations ({experiences.length})</span>
+              <span>Parcours & Formations {!initialLoaded ? <span className="admin-skeleton admin-skeleton-pill" style={{ width: '28px' }} /> : `(${experiences.length})`}</span>
               <button onClick={() => { setExpForm({ type: 'experience', roleFr: '', roleEn: '', companyFr: '', companyEn: '', dateFr: '', dateEn: '', descFr: '', descEn: '', order: 0 }); setEditingExp(null); setShowExpModal(true); }} className="btn-admin-primary">
                 <Plus size={18} /> Ajouter
               </button>
@@ -1141,7 +1154,9 @@ export default function AdminDashboard() {
         {/* TAB 4: MESSAGES INBOX */}
         {activeTab === 'messages' && (
           <div>
-            <h3 className="admin-panel-title">Boîte de Réception des Messages ({messages.length})</h3>
+            <h3 className="admin-panel-title">
+              Boîte de Réception des Messages {!initialLoaded ? <span className="admin-skeleton admin-skeleton-pill" style={{ width: '28px' }} /> : `(${messages.length})`}
+            </h3>
             {messages.length === 0 ? (
               <p style={{ color: '#94a3b8' }}>Aucun message reçu pour le moment.</p>
             ) : (
@@ -1256,8 +1271,12 @@ export default function AdminDashboard() {
             >
               <Icon size={20} />
               <span>{tab.label}</span>
-              {tab.count !== undefined && tab.count > 0 && (
-                <span className="admin-bottom-badge">{tab.count}</span>
+              {!initialLoaded ? (
+                tab.count !== undefined && <span className="admin-skeleton admin-skeleton-pill" style={{ position: 'absolute', top: '4px', right: '22%', width: '14px', height: '14px' }} />
+              ) : (
+                tab.count !== undefined && tab.count > 0 && (
+                  <span className="admin-bottom-badge">{tab.count}</span>
+                )
               )}
             </button>
           );

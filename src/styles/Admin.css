@@ -579,6 +579,39 @@
   font-family: 'Outfit', sans-serif;
   margin: 0.85rem 0 0.25rem 0;
   letter-spacing: -0.03em;
+  display: flex;
+  align-items: center;
+}
+
+/* Skeleton Loading Effect */
+.admin-skeleton {
+  display: inline-block;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: adminSkeletonShimmer 1.5s infinite ease-in-out;
+  border-radius: 6px;
+}
+
+.admin-skeleton-kpi {
+  width: 52px;
+  height: 34px;
+  border-radius: 8px;
+}
+
+.admin-skeleton-pill {
+  width: 18px;
+  height: 16px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+@keyframes adminSkeletonShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .admin-kpi-subtitle {
