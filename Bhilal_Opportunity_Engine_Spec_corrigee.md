@@ -225,6 +225,7 @@ CREATE TABLE opportunities (
         'RESEARCHED',
         'READY',
         'APPROVED',
+        'SENDING',
         'SENT',
         'FOLLOW_UP',
         'REPLIED',
@@ -324,6 +325,17 @@ CREATE TABLE system_logs (
 
 
 -- =========================================================
+-- ÉTAT DES ALERTES (Anti-Spam & Cooldown)
+-- =========================================================
+
+CREATE TABLE alert_state (
+  alert_key TEXT PRIMARY KEY,       -- ex: 'health_check_critical', 'pipeline_failure'
+  last_alerted_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  cooldown_minutes INT NOT NULL DEFAULT 60
+);
+
+
+-- =========================================================
 -- RUNS DU PIPELINE
 -- =========================================================
 
@@ -389,6 +401,8 @@ READY
  ↓
 APPROVED
  ↓
+SENDING  (Verrou atomique anti-double-clic)
+ ↓
 SENT
  ↓
 FOLLOW_UP
@@ -401,6 +415,7 @@ Cas alternatifs :
 ```text
 NEW → REJECTED
 READY → REJECTED
+SENDING → READY (en cas d'erreur de transmission)
 SENT → CLOSED
 FOLLOW_UP → CLOSED
 ```
@@ -410,8 +425,9 @@ FOLLOW_UP → CLOSED
 - `NEW` : opportunité détectée mais pas encore traitée.
 - `RESEARCHED` : entreprise et opportunité analysées.
 - `READY` : score et message disponibles, prête à être validée.
-- `APPROVED` : validée par l’utilisateur, avant l’envoi.
-- `SENT` : candidature envoyée.
+- `APPROVED` : validée par l’utilisateur, prête pour la file d'envoi.
+- `SENDING` : **état transitoire de verrouillage atomique**. Permet d'éviter tout double envoi si l'utilisateur double-clique ou si deux requêtes réseau simultanées se produisent.
+- `SENT` : candidature envoyée et confirmée par l'API e-mail.
 - `FOLLOW_UP` : relance disponible.
 - `REPLIED` : réponse reçue.
 - `REJECTED` : ignorée/rejetée.
@@ -538,11 +554,13 @@ Chaque source doit être implémentée comme un adaptateur indépendant :
 
 ```text
 sources/
-├── remoteok.py
-├── wellfound.py
-├── linkedin.py
-├── indeed.py
-├── company_sites.py
+├── base.py
+├── remotive.py        # API JSON ouverte & gratuite
+├── jobicy.py          # API JSON avec filtre localisation & remote
+├── weworkremotely.py  # Flux RSS officiel jamais bloqué
+├── himalayas.py       # API JSON offres remote vérifiées
+├── remoteok.py        # API JSON publique
+├── company_sites.py   # Pages carrières d'entreprises cibles locales/africaines
 └── ...
 ```
 
@@ -820,17 +838,15 @@ Les alertes sont envoyées à :
 | Aucun résultat pendant 3 jours consécutifs | WARNING | Oui |
 | Erreur d'authentification critique | CRITICAL | Oui |
 
-### Éviter le spam d'alertes
+### Éviter le spam d'alertes (Mécanisme de Cooldown)
 
-Une même erreur critique répétée doit pouvoir être regroupée ou limitée.
+Comme les runners CI sont éphémères et sans mémoire locale, le contrôle anti-spam est persisté en base via la table `alert_state`.
 
-Exemple :
-
-```text
-Première erreur → email
-Erreurs identiques suivantes → log uniquement
-Retour à la normale → email de récupération
-```
+Règle :
+- Lors d'une erreur critique (ex: `health_check_critical`), le système consulte `alert_state` :
+  - Si aucune alerte n'a été émise pour cette clé depuis plus de `cooldown_minutes` (par défaut 60 min) : l'e-mail est envoyé et `last_alerted_at` est mis à jour à `NOW()`.
+  - Si l'erreur se reproduit dans l'intervalle de 60 minutes : **l'e-mail n'est pas envoyé**, l'événement est uniquement consigné dans `system_logs`.
+- Lors du retour à la normale : un e-mail unique de résolution est envoyé et l'entrée dans `alert_state` est réinitialisée.
 
 ---
 
@@ -1279,28 +1295,31 @@ doit être la dernière étape humaine.
 Flux :
 
 ```text
-READY
+READY / APPROVED
   ↓
-Utilisateur consulte
-  ↓
-Utilisateur modifie si nécessaire
+Utilisateur consulte & modifie si nécessaire
   ↓
 Utilisateur clique « Envoyer »
   ↓
-Backend vérifie l'autorisation
+Backend exécute le VERROU ATOMIQUE SQL :
+UPDATE opportunities 
+SET status = 'SENDING' 
+WHERE id = $1 AND status IN ('READY', 'APPROVED') 
+RETURNING id;
   ↓
-Backend envoie
+0 ligne modifiée ? ➔ ABANDON IMMÉDIAT (déjà en cours d'envoi ou déjà envoyé)
+1 ligne modifiée ? ➔ Poursuite vers Resend API
   ↓
-Succès ?
+Succès de l'API e-mail ?
  ┌──────┴──────┐
 Oui           Non
  ↓             ↓
-SENT         READY
+SENT         READY (Rollback du statut)
  ↓             ↓
 sent_at      ERROR log
 ```
 
-Il est recommandé d'utiliser une **clé d'idempotence** pour éviter un double envoi si l'utilisateur double-clique ou si la requête est répétée.
+Ce verrouillage optimiste au niveau de la requête SQL élimine mathématiquement tout risque de double envoi en cas de double-clic rapide ou de rejeu réseau.
 
 ---
 
