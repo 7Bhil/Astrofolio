@@ -33,39 +33,50 @@ import SkillModal from './modals/SkillModal';
 import ExperienceModal from './modals/ExperienceModal';
 import CertificationModal from './modals/CertificationModal';
 
-export default function AdminDashboard() {
+export default function AdminDashboard({ initialTab }) {
   const validTabs = ['overview', 'projects', 'skills', 'experiences', 'certifications', 'messages', 'opportunities', 'prospects', 'profile'];
 
-  const getTabFromHash = () => {
+  const getTabFromUrl = () => {
+    if (typeof window === 'undefined') return initialTab || 'overview';
+    
+    // 1. Priorité au pathname (ex: /admin/dashboard/projects ou /admin/opportunities)
+    const segments = window.location.pathname.replace(/\/$/, '').split('/');
+    const lastSegment = segments[segments.length - 1];
+    if (validTabs.includes(lastSegment)) return lastSegment;
+
+    // 2. Repli vers le hash s'il existe
     const hash = window.location.hash.replace('#', '');
-    return validTabs.includes(hash) ? hash : 'overview';
+    if (validTabs.includes(hash)) return hash;
+
+    return initialTab && validTabs.includes(initialTab) ? initialTab : 'overview';
   };
 
   const [activeTab, setActiveTab] = useState(() => {
-    try { return getTabFromHash(); } catch { return 'overview'; }
+    try { return getTabFromUrl(); } catch { return initialTab || 'overview'; }
   });
   const [user, setUser] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [initialLoaded, setInitialLoaded] = useState(false);
   const [alert, setAlert] = useState(null);
 
-  // Synchronisation activeTab → URL hash
+  // Synchronisation activeTab → URL propre (/admin/dashboard/[tab]) sans recharger la page
   const handleSetActiveTab = (tab) => {
     setActiveTab(tab);
-    window.history.pushState(null, '', `#${tab}`);
+    const targetUrl = tab === 'overview' ? '/admin/dashboard' : `/admin/dashboard/${tab}`;
+    window.history.pushState({ tab }, '', targetUrl);
   };
 
-  // Écoute du bouton « Retour » du navigateur
+  // Écoute des boutons Précédent / Suivant du navigateur
   useEffect(() => {
-    const onHashChange = () => {
-      const tab = getTabFromHash();
+    const onLocationChange = () => {
+      const tab = getTabFromUrl();
       setActiveTab(tab);
     };
-    window.addEventListener('hashchange', onHashChange);
-    window.addEventListener('popstate', onHashChange);
+    window.addEventListener('popstate', onLocationChange);
+    window.addEventListener('hashchange', onLocationChange);
     return () => {
-      window.removeEventListener('hashchange', onHashChange);
-      window.removeEventListener('popstate', onHashChange);
+      window.removeEventListener('popstate', onLocationChange);
+      window.removeEventListener('hashchange', onLocationChange);
     };
   }, []);
 

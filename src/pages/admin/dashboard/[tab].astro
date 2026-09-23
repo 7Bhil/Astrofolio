@@ -1,0 +1,23 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import AdminDashboard from '../../../components/admin/AdminDashboard.jsx';
+
+export function getStaticPaths() {
+  return [
+    { params: { tab: 'projects' }, props: { tab: 'projects', title: 'Projets' } },
+    { params: { tab: 'skills' }, props: { tab: 'skills', title: 'Compétences' } },
+    { params: { tab: 'experiences' }, props: { tab: 'experiences', title: 'Parcours' } },
+    { params: { tab: 'certifications' }, props: { tab: 'certifications', title: 'Certifications' } },
+    { params: { tab: 'messages' }, props: { tab: 'messages', title: 'Messages' } },
+    { params: { tab: 'opportunities' }, props: { tab: 'opportunities', title: 'Opportunités IA' } },
+    { params: { tab: 'prospects' }, props: { tab: 'prospects', title: 'CRM Prospects' } },
+    { params: { tab: 'profile' }, props: { tab: 'profile', title: 'Mon Profil' } }
+  ];
+}
+
+const { tab, title } = Astro.props;
+---
+
+<Layout title={`Admin Studio — ${title} — Bhilal CHITOU (7Bhil)`} lang="fr">
+	<AdminDashboard client:only="react" initialTab={tab} />
+</Layout>
