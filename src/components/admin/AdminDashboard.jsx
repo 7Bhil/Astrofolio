@@ -34,11 +34,40 @@ import ExperienceModal from './modals/ExperienceModal';
 import CertificationModal from './modals/CertificationModal';
 
 export default function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('overview');
+  const validTabs = ['overview', 'projects', 'skills', 'experiences', 'certifications', 'messages', 'opportunities', 'prospects', 'profile'];
+
+  const getTabFromHash = () => {
+    const hash = window.location.hash.replace('#', '');
+    return validTabs.includes(hash) ? hash : 'overview';
+  };
+
+  const [activeTab, setActiveTab] = useState(() => {
+    try { return getTabFromHash(); } catch { return 'overview'; }
+  });
   const [user, setUser] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [initialLoaded, setInitialLoaded] = useState(false);
   const [alert, setAlert] = useState(null);
+
+  // Synchronisation activeTab → URL hash
+  const handleSetActiveTab = (tab) => {
+    setActiveTab(tab);
+    window.history.pushState(null, '', `#${tab}`);
+  };
+
+  // Écoute du bouton « Retour » du navigateur
+  useEffect(() => {
+    const onHashChange = () => {
+      const tab = getTabFromHash();
+      setActiveTab(tab);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    window.addEventListener('popstate', onHashChange);
+    return () => {
+      window.removeEventListener('hashchange', onHashChange);
+      window.removeEventListener('popstate', onHashChange);
+    };
+  }, []);
 
   // Entities state
   const [projects, setProjects] = useState([]);
@@ -425,7 +454,7 @@ export default function AdminDashboard() {
       {/* Sidebar Desktop */}
       <AdminSidebar
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleSetActiveTab}
         user={user}
         counts={{
           projects: projects.length,
@@ -459,7 +488,7 @@ export default function AdminDashboard() {
             experiences={experiences}
             certifications={certifications}
             initialLoaded={initialLoaded}
-            setActiveTab={setActiveTab}
+            setActiveTab={handleSetActiveTab}
             onOpenProjectModal={() => handleOpenProjectModal()}
             onOpenSkillModal={() => handleOpenSkillModal()}
             onOpenCertModal={() => handleOpenCertModal()}
@@ -527,7 +556,7 @@ export default function AdminDashboard() {
       {/* Mobile Bottom Navigation */}
       <AdminBottomNav
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleSetActiveTab}
         unreadCount={unreadCount}
       />
 
