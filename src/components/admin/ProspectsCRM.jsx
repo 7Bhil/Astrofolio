@@ -107,7 +107,7 @@ LinkedIn : https://linkedin.com/in/bhilal-chitou
 
 Bien cordialement,
 Bhilal CHITOU
-+229 97 00 00 00 • Cotonou, Bénin`;
++229 01 44 24 29 64 • Cotonou, Bénin`;
 
     const templateEn = `Hi ${prospect.name} team,
 

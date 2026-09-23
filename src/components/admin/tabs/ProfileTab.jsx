@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   User, Lock, LogOut, Mail, Globe, Github, Linkedin, 
-  ShieldCheck, CheckCircle2, ExternalLink
+  ShieldCheck, CheckCircle2, ExternalLink, Phone
 } from 'lucide-react';
 import { Input } from '../ui/FormGroup';
 import { authApi } from '../../../services/api';
@@ -100,6 +100,15 @@ export default function ProfileTab({ onAlert, user, onLogout }) {
               <a href="https://linkedin.com/in/bhilal-chitou" target="_blank" rel="noopener noreferrer"
                 className="text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-1 transition-colors">
                 linkedin.com/in/bhilal-chitou
+                <ExternalLink size={11} />
+              </a>
+            </div>
+
+            <div className="flex items-center gap-3 text-xs">
+              <Phone size={14} className="text-cyan-400 shrink-0" />
+              <a href="https://wa.me/2290144242964" target="_blank" rel="noopener noreferrer"
+                className="text-cyan-300 hover:text-cyan-200 font-medium font-mono flex items-center gap-1 transition-colors">
+                +229 01 44 24 29 64 (WhatsApp)
                 <ExternalLink size={11} />
               </a>
             </div>
