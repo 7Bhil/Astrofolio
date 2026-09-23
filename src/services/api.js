@@ -126,7 +126,13 @@ export const opportunitiesApi = {
   approve: (id) => apiRequest(`/opportunities/${id}/approve`, 'POST', null, true),
   reject: (id) => apiRequest(`/opportunities/${id}/reject`, 'POST', null, true),
   send: (id) => apiRequest(`/opportunities/${id}/send`, 'POST', null, true),
-  reconcile: (id) => apiRequest(`/opportunities/${id}/reconcile`, 'POST', null, true)
+  reconcile: (id) => apiRequest(`/opportunities/${id}/reconcile`, 'POST', null, true),
+  getLogs: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return apiRequest(`/opportunities/system/logs${query ? `?${query}` : ''}`, 'GET', null, true);
+  },
+  getRuns: () => apiRequest('/opportunities/system/runs', 'GET', null, true),
+  getSystemHealth: () => apiRequest('/opportunities/system/health', 'GET', null, true)
 };
 
 
