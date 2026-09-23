@@ -170,7 +170,11 @@ const contactSteps = lang === 'en' ? [
   const submitBtn = document.getElementById('form-submit');
   const submitLabel = document.getElementById('form-submit-label');
 
-  form.addEventListener('submit', (e) => {
+  const API_BASE_URL = window.location.hostname === 'localhost'
+    ? 'http://localhost:5005/api'
+    : 'https://portfolio-server-frmx.onrender.com/api';
+
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     submitLabel.textContent = formLabels.sending;
     submitBtn.disabled = true;
@@ -180,7 +184,18 @@ const contactSteps = lang === 'en' ? [
     const subject = form.subject.value;
     const message = form.message.value.trim();
 
-    // Construction du message clair et formaté pour WhatsApp
+    // 1. Save to database first (non-blocking on failure)
+    try {
+      await fetch(`${API_BASE_URL}/messages`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, subject, message })
+      });
+    } catch (err) {
+      console.warn('Could not save message to backend:', err);
+    }
+
+    // 2. Then redirect to WhatsApp
     const whatsappText = `Bonjour Bhilal,\n\nJe vous contacte depuis votre portfolio concernant un projet :\n\n- Nom : ${name}\n- Email : ${email}\n- Type de projet : ${subject}\n\nMessage :\n${message}`;
     const targetUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappText)}`;
 
@@ -188,7 +203,6 @@ const contactSteps = lang === 'en' ? [
     alert.className = 'form-alert form-alert-success';
     alert.style.display = 'block';
 
-    // Ouvre immédiatement la discussion WhatsApp
     setTimeout(() => {
       window.open(targetUrl, '_blank');
       submitLabel.textContent = formLabels.send;

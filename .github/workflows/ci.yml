@@ -1,0 +1,44 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-and-test:
+    name: Build & Tests E2E
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupération du code source
+        uses: actions/checkout@v4
+
+      - name: Configuration de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Installation des dépendances
+        run: npm ci
+
+      - name: Compilation Astro (Build)
+        run: npm run build
+
+      - name: Installation du navigateur Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Exécution des tests E2E
+        run: npx playwright test
+        env:
+          CI: true
+
+      - name: Archivage du rapport Playwright en cas d'échec
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

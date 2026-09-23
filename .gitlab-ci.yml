@@ -1,0 +1,35 @@
+image: node:20
+
+stages:
+  - build
+  - test
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .npm/
+    - node_modules/
+
+before_script:
+  - npm ci --cache .npm --prefer-offline
+
+build_job:
+  stage: build
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 1 week
+
+test_job:
+  stage: test
+  image: mcr.microsoft.com/playwright:v1.50.0-jammy
+  script:
+    - npx playwright install chromium
+    - npx playwright test
+  artifacts:
+    when: on_failure
+    paths:
+      - playwright-report/
+    expire_in: 1 week

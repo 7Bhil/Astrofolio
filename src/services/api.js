@@ -1,6 +1,14 @@
+const isLocalNetwork = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' || 
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname.startsWith('192.168.') ||
+  window.location.hostname.startsWith('10.') ||
+  window.location.hostname.endsWith('.local')
+);
+
 const API_BASE_URL = import.meta.env.PUBLIC_API_URL || (
-  typeof window !== 'undefined' && window.location.hostname === 'localhost'
-    ? 'http://localhost:5005/api'
+  isLocalNetwork
+    ? `http://${typeof window !== 'undefined' ? window.location.hostname : 'localhost'}:5005/api`
     : 'https://portfolio-server-frmx.onrender.com/api'
 );
 
@@ -98,7 +106,34 @@ export const messagesApi = {
   delete: (id) => apiRequest(`/messages/${id}`, 'DELETE', null, true)
 };
 
-// Stats API
-export const statsApi = {
-  getStats: () => apiRequest('/stats', 'GET', null, true)
+// Certifications API
+export const certificationsApi = {
+  getAll: () => apiRequest('/certifications'),
+  create: (data) => apiRequest('/certifications', 'POST', data, true),
+  update: (id, data) => apiRequest(`/certifications/${id}`, 'PUT', data, true),
+  delete: (id) => apiRequest(`/certifications/${id}`, 'DELETE', null, true)
 };
+
+// Opportunities API (Opportunity Engine)
+export const opportunitiesApi = {
+  getAll: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return apiRequest(`/opportunities${query ? `?${query}` : ''}`, 'GET', null, true);
+  },
+  getById: (id) => apiRequest(`/opportunities/${id}`, 'GET', null, true),
+  update: (id, data) => apiRequest(`/opportunities/${id}`, 'PATCH', data, true),
+  updateMessage: (id, content) => apiRequest(`/opportunities/${id}/message`, 'PATCH', { content }, true),
+  approve: (id) => apiRequest(`/opportunities/${id}/approve`, 'POST', null, true),
+  reject: (id) => apiRequest(`/opportunities/${id}/reject`, 'POST', null, true),
+  send: (id) => apiRequest(`/opportunities/${id}/send`, 'POST', null, true),
+  reconcile: (id) => apiRequest(`/opportunities/${id}/reconcile`, 'POST', null, true),
+  getLogs: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return apiRequest(`/opportunities/system/logs${query ? `?${query}` : ''}`, 'GET', null, true);
+  },
+  getRuns: () => apiRequest('/opportunities/system/runs', 'GET', null, true),
+  getSystemHealth: () => apiRequest('/opportunities/system/health', 'GET', null, true),
+  sendToProspect: (data) => apiRequest('/opportunities/prospect-send', 'POST', data, true)
+};
+
+

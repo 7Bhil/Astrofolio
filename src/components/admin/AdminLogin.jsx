@@ -1,13 +1,25 @@
-import React, { useState } from 'react';
-import { authApi, setAuthToken } from '../../services/api';
-import { Lock, Mail, ArrowRight, ShieldCheck, AlertCircle } from 'lucide-react';
-import '../../styles/Admin.css';
+import React, { useState, useEffect } from 'react';
+import { authApi, setAuthToken, getAuthToken, removeAuthToken } from '../../services/api';
+import { Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
 
 export default function AdminLogin() {
   const [email, setEmail] = useState('admin@7bhil.com');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const token = getAuthToken();
+    if (token) {
+      authApi.getMe().then(res => {
+        if (res && res.user) {
+          window.location.replace('/admin/dashboard');
+        }
+      }).catch(() => {
+        removeAuthToken();
+      });
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +29,7 @@ export default function AdminLogin() {
     try {
       const response = await authApi.login(email, password);
       setAuthToken(response.token);
-      window.location.href = '/admin/dashboard';
+      window.location.replace('/admin/dashboard');
     } catch (err) {
       setError(err.message || 'Identifiants invalides.');
     } finally {
@@ -26,92 +38,65 @@ export default function AdminLogin() {
   };
 
   return (
-    <div style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: 'radial-gradient(circle at top, #0b1329 0%, #060b18 100%)',
-      fontFamily: 'Inter, system-ui, sans-serif',
-      color: '#f8fafc',
-      padding: '1.25rem'
-    }}>
-      <div style={{
-        width: '100%',
-        maxWidth: '420px',
-        background: '#0b1329',
-        border: '1px solid rgba(6, 182, 212, 0.2)',
-        borderRadius: '16px',
-        padding: '2.5rem 2rem',
-        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)'
-      }}>
-        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            borderRadius: '16px',
-            background: 'linear-gradient(135deg, #2563eb, #06b6d4)',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justify: 'center',
-            marginBottom: '1rem',
-            boxShadow: '0 8px 20px rgba(6, 182, 212, 0.35)'
-          }}>
-            <ShieldCheck size={32} color="#fff" />
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-slate-100 p-4 relative overflow-hidden font-sans">
+      {/* Background ambient orbs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/4 left-1/3 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Login Box */}
+      <div className="w-full max-w-md bg-slate-900/80 border border-white/10 rounded-3xl p-6 sm:p-8 shadow-2xl relative z-10 backdrop-blur-xl">
+        <div className="text-center mb-6">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 inline-flex items-center justify-center font-black font-['Outfit'] text-white text-xl shadow-lg shadow-blue-500/30 mb-4">
+            7B
           </div>
-          <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: 800, color: '#fff' }}>Espace Administrateur</h2>
-          <p style={{ margin: '0.5rem 0 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>
-            Gestion du Portfolio 7Bhil • Neon PostgreSQL
+          <h1 className="text-2xl font-extrabold font-['Outfit'] text-white tracking-tight">
+            Studio Admin
+          </h1>
+          <p className="text-xs text-slate-400 mt-1">
+            Accès sécurisé • PostgreSQL Neon
           </p>
         </div>
 
         {error && (
-          <div style={{
-            padding: '0.85rem',
-            borderRadius: '8px',
-            background: 'rgba(239, 68, 68, 0.15)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
-            color: '#f87171',
-            marginBottom: '1.5rem',
-            fontSize: '0.9rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem'
-          }}>
-            <AlertCircle size={18} />
+          <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/25 text-rose-300 mb-5 text-xs font-semibold flex items-center gap-2.5">
+            <AlertCircle size={16} className="flex-shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div className="admin-form-group">
-            <label>Adresse Email</label>
-            <div style={{ position: 'relative' }}>
-              <Mail size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <div>
+            <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+              Adresse Email
+            </label>
+            <div className="relative">
+              <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="email"
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                className="admin-input"
-                style={{ paddingLeft: '2.5rem' }}
+                className="w-full bg-slate-950/80 border border-white/10 focus:border-cyan-500/80 focus:ring-2 focus:ring-cyan-500/20 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-all"
                 placeholder="admin@7bhil.com"
+                autoComplete="email"
               />
             </div>
           </div>
 
-          <div className="admin-form-group">
-            <label>Mot de passe</label>
-            <div style={{ position: 'relative' }}>
-              <Lock size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#64748b' }} />
+          <div>
+            <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+              Mot de passe
+            </label>
+            <div className="relative">
+              <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
               <input
                 type="password"
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
-                className="admin-input"
-                style={{ paddingLeft: '2.5rem' }}
+                className="w-full bg-slate-950/80 border border-white/10 focus:border-cyan-500/80 focus:ring-2 focus:ring-cyan-500/20 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-all"
                 placeholder="••••••••"
+                autoComplete="current-password"
               />
             </div>
           </div>
@@ -119,24 +104,24 @@ export default function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-admin-primary"
-            style={{
-              width: '100%',
-              justify: 'center',
-              padding: '0.85rem',
-              fontSize: '1rem',
-              marginTop: '0.5rem'
-            }}
+            className="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs sm:text-sm font-semibold shadow-lg shadow-cyan-500/25 active:scale-98 transition-all flex items-center justify-center gap-2 disabled:opacity-50"
           >
-            {loading ? 'Connexion...' : (
+            {loading ? 'Connexion en cours...' : (
               <>
-                Se connecter
-                <ArrowRight size={18} />
+                <span>Déverrouiller l'espace</span>
+                <ArrowRight size={16} />
               </>
             )}
           </button>
         </form>
       </div>
+
+      <a 
+        href="/" 
+        className="mt-6 text-xs text-slate-500 hover:text-cyan-400 transition-colors z-10"
+      >
+        ← Retourner au portfolio public
+      </a>
     </div>
   );
 }

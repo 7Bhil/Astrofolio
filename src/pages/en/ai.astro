@@ -9,7 +9,11 @@ const lang = 'en';
 const footerText = translations[lang].footer.rights;
 ---
 
-<Layout title="AI Assistant & Scoping Console — Bhilal CHITOU (7Bhil)" lang={lang}>
+<Layout 
+  title="AI Console & Recruiter Assistant — Bhilal CHITOU (7Bhil)" 
+  description="Chat live with Bhilal CHITOU's AI assistant to explore his fintech systems, compiler architecture, tech stack, and contract availability."
+  lang={lang}
+>
   <Navbar client:load lang={lang} translations={translations[lang]} />
   
   <main class="ai-page-fullscreen">

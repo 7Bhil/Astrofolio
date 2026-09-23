@@ -91,6 +91,30 @@ export const translations = {
         impact: "Engineered sub-200ms transaction responses with end-to-end payload signing and strict idempotency.",
         solved: "Transaction fraud risks and sluggish checkout experiences."
       },
+      goreparr: {
+        title: "GoRéparr — Artisan Marketplace & PWA",
+        description: "Progressive Web App connecting clients with certified local artisans, featuring real-time quotes, offline mode, and direct chat.",
+        problem: "Finding vetted artisans quickly was unreliable, with no transparent quotes, no offline access, and severe payment dispute risks.",
+        decision: "Built an offline-first PWA with Laravel REST API, React/Tailwind frontend, strict role authorization, and real-time push notifications.",
+        impact: "100% offline-ready PWA, standardized quote generation, and automated artisan dispatch workflows.",
+        solved: "Informal service friction, lack of transparent artisan pricing and offline accessibility."
+      },
+      busola: {
+        title: "NGO Busola Official Platform",
+        description: "Full-scale humanitarian web platform managing international missions, donors, and transparent community impact tracking.",
+        problem: "NGO initiatives lacked an interactive digital platform to showcase field operations and mobilize international partners transparently.",
+        decision: "Architected an end-to-end MERN solution (MongoDB, Express, React, Node.js) with secure donation workflows and high-availability cloud deployment.",
+        impact: "Centralized all field actions and expanded donor engagement across international stakeholders with zero downtime.",
+        solved: "Donor opacity, manual coordination, and fragmented field reporting."
+      },
+      omnisint: {
+        title: "OMNISINT — Cyber Intelligence & Reconnaissance",
+        description: "Automated OSINT and cybersecurity reconnaissance engine mapping digital attack surfaces and vulnerability vectors.",
+        problem: "Manual asset discovery and footprinting took days and frequently missed shadow IT infrastructure and credential exposures.",
+        decision: "Engineered modular reconnaissance scrapers, DNS/WHOIS mapping modules, and risk-scoring telemetry adhering to DevSecOps standards.",
+        impact: "Cut attack-surface auditing time by 80% with automated threat intelligence reporting.",
+        solved: "Manual footprinting overhead and unmonitored attack vectors."
+      },
       demo: "Demo",
       viewDetails: "View details"
     },
@@ -231,6 +255,30 @@ export const translations = {
         decision: "Architecture backend conforme aux standards OWASP, tokens chiffrés, signature des payloads et réconciliation comptable instantanée.",
         impact: "Temps de réponse transactionnel inférieur à 200ms avec idempotence stricte et zéro anomalie de double débit.",
         solved: "Prévention des failles de sécurité transactionnelles et fluidification des flux de paiement."
+      },
+      goreparr: {
+        title: "GoRéparr — Marketplace & PWA Artisans",
+        description: "Progressive Web App de mise en relation client-artisan avec devis automatisés, mode hors-ligne et messagerie intégrée.",
+        problem: "Trouver des artisans qualifiés était risqué, sans grille tarifaire transparente ni accès fiable en zone à connectivité instable.",
+        decision: "Architecture PWA offline-first avec backend Laravel, interface React moderne, calcul de devis instantané et notifications push.",
+        impact: "Disponibilité continue même hors-ligne (PWA Service Workers), standardisation des devis et suivi transparent des interventions.",
+        solved: "Frictions de mise en relation, absence de traçabilité des prix et indisponibilité réseau."
+      },
+      busola: {
+        title: "Plateforme Officielle ONG Busola",
+        description: "Portail digital institutionnel à fort impact dédié à la visibilité des missions humanitaires et aux flux de soutien communautaire.",
+        problem: "L'organisation manquait d'une vitrine centralisée moderne pour fédérer ses partenaires internationaux et mesurer l'impact de terrain.",
+        decision: "Conception complète en architecture MERN (MongoDB, Express, React, Node.js), optimisation SEO et infrastructure haute disponibilité.",
+        impact: "Augmentation significative de l'engagement des donateurs et centralisation fluide de toutes les initiatives régionales.",
+        solved: "Dispersion des communications et manque de transparence opérationnelle."
+      },
+      omnisint: {
+        title: "OMNISINT — Renseignement Cyber & Reconnaissance",
+        description: "Suite d'outils OSINT et de cartographie de surface d'attaque pour l'analyse de vulnérabilités et l'audit de sécurité.",
+        problem: "La collecte d'informations sur les infrastructures réseau était manuelle, chronophage et sujette aux omissions critiques.",
+        decision: "Développement d'un moteur automatisé de footprinting (DNS, WHOIS, fuites d'identifiants, scan passif) orienté bonnes pratiques DevSecOps.",
+        impact: "Division par 5 du temps d'audit préliminaire et identification proactive des failles avant exploitation.",
+        solved: "Audit de sécurité manuel lourd et angles morts sur la surface d'attaque."
       },
       demo: "Démo",
       viewDetails: "Voir les détails"
