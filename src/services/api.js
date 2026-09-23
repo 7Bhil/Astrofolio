@@ -132,7 +132,8 @@ export const opportunitiesApi = {
     return apiRequest(`/opportunities/system/logs${query ? `?${query}` : ''}`, 'GET', null, true);
   },
   getRuns: () => apiRequest('/opportunities/system/runs', 'GET', null, true),
-  getSystemHealth: () => apiRequest('/opportunities/system/health', 'GET', null, true)
+  getSystemHealth: () => apiRequest('/opportunities/system/health', 'GET', null, true),
+  sendToProspect: (data) => apiRequest('/opportunities/prospect-send', 'POST', data, true)
 };
 
 
