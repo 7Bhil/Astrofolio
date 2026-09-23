@@ -87,23 +87,23 @@ export default function ProspectsCRM() {
     const isEn = prospect.country && !prospect.country.toLowerCase().includes('bénin') && !prospect.country.toLowerCase().includes('france') && !prospect.country.toLowerCase().includes('maurice');
     
     const subject = isEn 
-      ? `Senior Full-Stack & Fintech Engineer Application — Bhilal CHITOU (${prospect.name})`
-      : `Candidature Ingénieur Full-Stack & Fintech — Bhilal CHITOU (${prospect.name})`;
+      ? `Full-Stack & Mobile Developer Application — Bhilal CHITOU (${prospect.name})`
+      : `Candidature Développeur Full-Stack & Mobile — Bhilal CHITOU (${prospect.name})`;
 
     const templateFr = `Bonjour l'équipe ${prospect.name},
 
-Je me permets de vous contacter car je suis de très près les innovations de ${prospect.name} dans la fintech.
+Je me permets de vous contacter pour vous soumettre ma candidature en tant que Développeur Full-Stack & Mobile au sein de ${prospect.name}.
 
-Spécialisé en ingénierie Full-Stack & Fintech (Node.js, TypeScript, Python, React, PostgreSQL), j'ai conçu et déployé des architectures critiques à haute disponibilité et conformité stricte (ex: intégration passerelles de paiement, moteur de transactions bancaires).
+Formé en informatique et développement logiciel, je conçois et déploie des applications web et mobiles modernes (React, React Native, Node.js, Python/Django, TypeScript, PostgreSQL). Je suis notamment le créateur du langage de programmation Bhilal (compilateur transpilant vers JS) et de plusieurs projets applicatifs en production.
 
 Pourquoi ${prospect.name} ?
-${prospect.whyFit || 'Votre positionnement et votre stack correspondent exactement aux défis techniques que je relève au quotidien.'}
+${prospect.whyFit || 'Vos projets et vos standards techniques correspondent à mon profil et à ma volonté d\'apporter une réelle valeur ajoutée.'}
 
-Je serais ravi d'échanger 15 minutes sur la manière dont mon expertise technique peut accélérer votre roadmap.
+Je serais ravi d'échanger avec vous lors d'un court entretien pour vous présenter mon parcours et mes réalisations.
 
-Portfolio en ligne : https://7bhil.com
+Portfolio : https://7bhil.vercel.app
 GitHub : https://github.com/7Bhil
-LinkedIn : https://linkedin.com/in/bhilal-chitou
+LinkedIn : https://www.linkedin.com/in/bhilal-chitou/
 
 Bien cordialement,
 Bhilal CHITOU
@@ -111,21 +111,22 @@ Bhilal CHITOU
 
     const templateEn = `Hi ${prospect.name} team,
 
-I've been following ${prospect.name}'s impressive growth and tech infrastructure across fintech.
+I am writing to express my strong interest in joining ${prospect.name} as a Full-Stack & Mobile Developer.
 
-As a Senior Full-Stack Engineer specializing in high-throughput transactional systems (Node.js, TypeScript, Python, React, PostgreSQL), I build resilient payment and financial architectures.
+With a background in computer science, I build high-performance web and mobile solutions using React, React Native, Node.js, Python/Django, TypeScript, and PostgreSQL. I am also the creator of the Bhilal programming language compiler and several production-ready platforms.
 
 Why ${prospect.name}?
-${prospect.whyFit || 'Your technical challenges and remote-first fintech culture perfectly match my background and skill set.'}
+${prospect.whyFit || 'Your engineering challenges and culture strongly resonate with my skills and eagerness to contribute meaningfully.'}
 
-I would welcome a brief 15-minute introductory call to explore how my experience can contribute to your engineering milestones.
+I would welcome the opportunity to discuss how my hands-on background can support your upcoming milestones.
 
-Portfolio: https://7bhil.com
+Portfolio: https://7bhil.vercel.app
 GitHub: https://github.com/7Bhil
-LinkedIn: https://linkedin.com/in/bhilal-chitou
+LinkedIn: https://www.linkedin.com/in/bhilal-chitou/
 
 Best regards,
-Bhilal CHITOU`;
+Bhilal CHITOU
++229 01 44 24 29 64`;
 
     setEmailSubject(subject);
     setEmailDraft(isEn ? templateEn : templateFr);

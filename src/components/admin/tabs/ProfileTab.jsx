@@ -74,14 +74,14 @@ export default function ProfileTab({ onAlert, user, onLogout }) {
           <div className="flex flex-col gap-3 pt-4 border-t border-white/5">
             <div className="flex items-center gap-3 text-xs">
               <Mail size={14} className="text-cyan-400 shrink-0" />
-              <span className="text-slate-300 font-mono truncate">{user?.email || 'admin@7bhil.com'}</span>
+              <span className="text-slate-300 font-mono truncate">{user?.email || '7bhilal.chitou7@gmail.com'}</span>
             </div>
 
             <div className="flex items-center gap-3 text-xs">
               <Globe size={14} className="text-cyan-400 shrink-0" />
-              <a href="https://7bhil.com" target="_blank" rel="noopener noreferrer"
+              <a href="https://7bhil.vercel.app" target="_blank" rel="noopener noreferrer"
                 className="text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-1 transition-colors">
-                7bhil.com
+                7bhil.vercel.app
                 <ExternalLink size={11} />
               </a>
             </div>
@@ -97,7 +97,7 @@ export default function ProfileTab({ onAlert, user, onLogout }) {
 
             <div className="flex items-center gap-3 text-xs">
               <Linkedin size={14} className="text-cyan-400 shrink-0" />
-              <a href="https://linkedin.com/in/bhilal-chitou" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.linkedin.com/in/bhilal-chitou/" target="_blank" rel="noopener noreferrer"
                 className="text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-1 transition-colors">
                 linkedin.com/in/bhilal-chitou
                 <ExternalLink size={11} />
