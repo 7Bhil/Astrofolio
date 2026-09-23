@@ -114,8 +114,19 @@ export const certificationsApi = {
   delete: (id) => apiRequest(`/certifications/${id}`, 'DELETE', null, true)
 };
 
-// Stats API
-export const statsApi = {
-  getStats: () => apiRequest('/stats', 'GET', null, true)
+// Opportunities API (Opportunity Engine)
+export const opportunitiesApi = {
+  getAll: (params = {}) => {
+    const query = new URLSearchParams(params).toString();
+    return apiRequest(`/opportunities${query ? `?${query}` : ''}`, 'GET', null, true);
+  },
+  getById: (id) => apiRequest(`/opportunities/${id}`, 'GET', null, true),
+  update: (id, data) => apiRequest(`/opportunities/${id}`, 'PATCH', data, true),
+  updateMessage: (id, content) => apiRequest(`/opportunities/${id}/message`, 'PATCH', { content }, true),
+  approve: (id) => apiRequest(`/opportunities/${id}/approve`, 'POST', null, true),
+  reject: (id) => apiRequest(`/opportunities/${id}/reject`, 'POST', null, true),
+  send: (id) => apiRequest(`/opportunities/${id}/send`, 'POST', null, true),
+  reconcile: (id) => apiRequest(`/opportunities/${id}/reconcile`, 'POST', null, true)
 };
+
 

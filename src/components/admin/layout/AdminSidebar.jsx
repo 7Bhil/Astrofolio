@@ -6,6 +6,7 @@ import {
   Briefcase, 
   Award, 
   Mail, 
+  Sparkles,
   Building2, 
   ShieldCheck, 
   LogOut 
@@ -25,6 +26,7 @@ export default function AdminSidebar({
     { id: 'experiences', label: 'Parcours', icon: Briefcase, count: counts.experiences },
     { id: 'certifications', label: 'Certifications', icon: Award, count: counts.certifications },
     { id: 'messages', label: 'Messages', icon: Mail, count: counts.unreadMessages, isBadgeAlert: counts.unreadMessages > 0 },
+    { id: 'opportunities', label: 'Opportunités IA', icon: Sparkles, count: counts.opportunities, isBadgeAlert: counts.opportunities > 0 },
     { id: 'prospects', label: 'CRM Prospects', icon: Building2, count: counts.prospects },
     { id: 'security', label: 'Sécurité & Accès', icon: ShieldCheck }
   ];

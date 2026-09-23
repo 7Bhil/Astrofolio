@@ -3,6 +3,7 @@ import {
   LayoutDashboard, 
   FolderGit2, 
   Mail, 
+  Sparkles,
   Building2, 
   ShieldCheck 
 } from 'lucide-react';
@@ -11,6 +12,7 @@ export default function AdminBottomNav({ activeTab, setActiveTab, unreadCount = 
   const tabs = [
     { id: 'overview', label: 'Accueil', icon: LayoutDashboard },
     { id: 'projects', label: 'Projets', icon: FolderGit2 },
+    { id: 'opportunities', label: 'Opportunités', icon: Sparkles },
     { id: 'messages', label: 'Messages', icon: Mail, count: unreadCount },
     { id: 'prospects', label: 'CRM', icon: Building2 },
     { id: 'security', label: 'Accès', icon: ShieldCheck }

@@ -6,7 +6,6 @@ import {
   experiencesApi, 
   certificationsApi,
   messagesApi, 
-  statsApi, 
   getAuthToken,
   removeAuthToken 
 } from '../../services/api';
@@ -24,6 +23,7 @@ import SkillsTab from './tabs/SkillsTab';
 import ExperiencesTab from './tabs/ExperiencesTab';
 import CertificationsTab from './tabs/CertificationsTab';
 import MessagesTab from './tabs/MessagesTab';
+import OpportunitiesTab from './tabs/OpportunitiesTab';
 import ProspectsCRM from './ProspectsCRM';
 import SecurityTab from './tabs/SecurityTab';
 
@@ -509,6 +509,10 @@ export default function AdminDashboard() {
             onMarkRead={handleMarkMessageRead}
             onDeleteMessage={handleDeleteMessage}
           />
+        )}
+
+        {activeTab === 'opportunities' && (
+          <OpportunitiesTab onAlert={showAlert} />
         )}
 
         {activeTab === 'prospects' && (
