@@ -480,8 +480,18 @@ export default function AdminDashboard({ initialTab }) {
 
       {/* Mobile Top Header */}
       <AdminMobileHeader
-        onRefresh={refreshData}
-        isSyncing={isSyncing}
+        activeTab={activeTab}
+        setActiveTab={handleSetActiveTab}
+        user={user}
+        counts={{
+          projects: projects.length,
+          skills: skills.length,
+          experiences: experiences.length,
+          certifications: certifications.length,
+          unreadMessages: unreadCount,
+          opportunities: 0,
+          prospects: 34
+        }}
         onLogout={handleLogout}
       />
 
