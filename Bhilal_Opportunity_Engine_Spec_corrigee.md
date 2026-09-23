@@ -174,6 +174,8 @@ CREATE TABLE sources (
   last_success_at TIMESTAMPTZ,
   last_failure_at TIMESTAMPTZ,
   last_failure_reason TEXT,
+  disabled_at TIMESTAMPTZ,
+  disabled_reason TEXT,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
@@ -287,6 +289,16 @@ CREATE TABLE messages (
   edited_by_user BOOLEAN NOT NULL DEFAULT FALSE,
 
   -- Métadonnées d'envoi et réconciliation
+  send_status TEXT NOT NULL DEFAULT 'NOT_SENT'
+    CHECK (
+      send_status IN (
+        'NOT_SENT',
+        'SENDING',
+        'SENT',
+        'FAILED',
+        'UNKNOWN'
+      )
+    ),
   provider TEXT,                    -- ex: 'resend', 'gmail'
   idempotency_key TEXT UNIQUE,      -- clé unique transmise au fournisseur
   provider_message_id TEXT,         -- identifiant unique renvoyé par Resend
@@ -378,9 +390,18 @@ CREATE TABLE pipeline_runs (
 CREATE INDEX idx_opportunities_status ON opportunities(status);
 CREATE INDEX idx_opportunities_score ON opportunities(score DESC);
 CREATE INDEX idx_opportunities_created_at ON opportunities(created_at DESC);
-CREATE INDEX idx_system_logs_run_id ON system_logs(run_id);
-CREATE INDEX idx_system_logs_status ON system_logs(status);
+CREATE INDEX idx_opportunities_source_id ON opportunities(source_id);
+CREATE INDEX idx_opportunities_company_id ON opportunities(company_id);
+
+CREATE INDEX idx_contacts_opportunity_id ON contacts(opportunity_id);
+
 CREATE INDEX idx_messages_idempotency_key ON messages(idempotency_key);
+CREATE INDEX idx_messages_send_status ON messages(send_status);
+
+CREATE INDEX idx_system_logs_run_id ON system_logs(run_id);
+CREATE INDEX idx_system_logs_status_created_at ON system_logs(status, created_at DESC);
+
+CREATE INDEX idx_pipeline_runs_status_started_at ON pipeline_runs(status, started_at DESC);
 ```
 
 ### Pourquoi `dedupe_key` ?
@@ -478,8 +499,6 @@ def run_pipeline():
         try:
             results = scrape(source)
 
-            save_raw_results(results)
-
             log(
                 run_id,
                 f"scrape_{source.name}",
@@ -573,12 +592,12 @@ Chaque source doit être implémentée comme un adaptateur indépendant :
 ```text
 sources/
 ├── base.py
-├── remotive.py        # API JSON ouverte & gratuite
-├── jobicy.py          # API JSON avec filtre localisation & remote
-├── weworkremotely.py  # Flux RSS officiel jamais bloqué
-├── himalayas.py       # API JSON offres remote vérifiées
-├── remoteok.py        # API JSON publique
-├── company_sites.py   # Pages carrières d'entreprises cibles locales/africaines
+├── remotive.py        # API publique sous réserve de ses conditions actuelles
+├── jobicy.py          # API publique avec filtre localisation & remote
+├── weworkremotely.py  # Flux RSS public de syndication
+├── himalayas.py       # API publique d'offres d'emploi
+├── remoteok.py        # Endpoint public
+├── company_sites.py   # Pages carrières publiques d'entreprises cibles
 └── ...
 ```
 
@@ -641,10 +660,12 @@ Exemple :
 | Afrique | +10 |
 | International avec remote | +5 |
 | Contact professionnel identifié | +5 |
-| Email vérifié | +5 |
-| **Maximum** | **95** |
+| **Maximum brut** | **95** |
 
-Le score peut ensuite être normalisé sur 100.
+Le score final est normalisé sur 100 avec la formule déterministe :
+```python
+score_final = round((score_brut / 95) * 100)
+```
 
 ### Exemple
 
@@ -882,10 +903,10 @@ Message :
 Backend Render indisponible après 2 tentatives.
 
 Tentative 1 :
-timeout après 10 secondes
+timeout après 30 secondes
 
 Tentative 2 :
-timeout après 10 secondes
+timeout après 30 secondes
 
 Lien :
 https://ton-panel-admin.com/logs/2026-09-22-0700
@@ -1138,10 +1159,14 @@ name: Opportunity Engine
 on:
   schedule:
     # Exécutions deux fois par jour (fuseau horaire UTC)
-    - cron: "0 7 * * *"    # 08h00 heure de Cotonou / Paris
-    - cron: "0 19 * * *"   # 20h00 heure de Cotonou / Paris
+    - cron: "0 7 * * *"    # 08h00 heure de Cotonou (UTC+1 fixe)
+    - cron: "0 19 * * *"   # 20h00 heure de Cotonou (UTC+1 fixe)
   workflow_dispatch:
     inputs:
+      job_type:
+        description: "health (vérification seule) ou full (pipeline complet)"
+        required: true
+        default: "full"
       dry_run:
         description: "Mode test sans écriture en base (true/false)"
         required: false
@@ -1175,24 +1200,9 @@ jobs:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           ALERT_EMAIL: 7bhil.chitou7@gmail.com
+          JOB_TYPE: ${{ github.event.inputs.job_type || 'full' }}
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
 ```
-
-### Attention au déclenchement manuel
-
-Pour `workflow_dispatch`, le workflow ci-dessus lancerait les deux jobs.
-
-Il est préférable d'utiliser une entrée explicite :
-
-```yaml
-workflow_dispatch:
-  inputs:
-    job_type:
-      description: "health ou full"
-      required: true
-      default: "full"
-```
-
-Puis de conditionner les jobs sur cette valeur.
 
 ---
 
@@ -1311,11 +1321,14 @@ doit être la dernière étape humaine.
 Flux :
 
 ```text
-READY / APPROVED
+READY
   ↓
-Utilisateur consulte & modifie si nécessaire
+Validation humaine
   ↓
-Utilisateur clique « Envoyer »
+APPROVED
+  ↓
+1. Backend génère l'idempotency_key unique (ex: "send_opp_123_uuidv4")
+2. Enregistrement en DB dans la table messages (send_status = 'SENDING')
   ↓
 Backend exécute le VERROU ATOMIQUE SQL :
 UPDATE opportunities 
@@ -1324,20 +1337,30 @@ WHERE id = $1 AND status IN ('READY', 'APPROVED')
 RETURNING id;
   ↓
 0 ligne modifiée ? ➔ ABANDON IMMÉDIAT (déjà en cours d'envoi ou déjà envoyé)
-1 ligne modifiée ? ➔ Poursuite vers Resend API
+1 ligne modifiée ? ➔ Poursuite vers Resend API avec l'en-tête Idempotency-Key
   ↓
-Succès de l'API e-mail ?
- ┌──────────────┼──────────────┐
-Oui         Erreur franche    Timeout ambigu
- ↓              ↓              ↓
-SENT          READY       SEND_UNKNOWN
- ↓              ↓              ↓
-sent_at     ERROR log     (Message ID / Idempotence à réconcilier)
+Résultat de l'API e-mail ?
+ ┌──────────────────────┼──────────────────────┐
+Succès confirmé       Erreur franche       Timeout / Coupure ambiguë
+(Code 200 OK)         (ex: 400 Bad Request)  (Pas de réponse HTTP)
+ ↓                      ↓                      ↓
+SENT                  READY                SEND_UNKNOWN
+(send_status='SENT')  (Rollback status)    (Interdiction nouvel envoi)
+                                               ↓
+                                           Bouton Réconciliation
+                                           auprès du fournisseur
+                                            ┌──────┴──────┐
+                                         Envoyé        Non envoyé
+                                            ↓              ↓
+                                          SENT           READY
 ```
 
-**Distinction critique d'envoi :**
-- **Erreur franche** (ex: 400 Bad Request, clé API invalide) : L'e-mail n'a pas été envoyé. Le système peut sans danger repasser l'opportunité au statut `READY` pour correction.
-- **Timeout réseau ou coupure ambiguë** : La requête a pu atteindre le fournisseur (Resend) et être envoyée sans que notre serveur n'ait reçu la réponse 200. Le statut passe alors en **`SEND_UNKNOWN`** avec l'`idempotency_key` enregistrée. Le panel admin affiche une alerte permettant de vérifier l'état auprès du fournisseur avant toute nouvelle tentative pour garantir qu'aucun recruteur ne reçoive de doublon.
+**Règles strictes de réconciliation :**
+- Une opportunité au statut **`SEND_UNKNOWN` ne peut PAS être réexpédiée directement**. Le bouton "Envoyer" est désactivé pour éviter tout doublon chez le recruteur.
+- Le panel admin propose un bouton **« Vérifier auprès de Resend »** qui interroge l'API du fournisseur avec l'`idempotency_key` enregistrée :
+  - Si Resend confirme l'envoi : passage automatique à `SENT` et mise à jour de `provider_message_id`.
+  - Si Resend confirme qu'aucun message n'existe pour cette clé : retour sécurisé à `READY` pour permettre à l'utilisateur de retenter.
+  - Si l'état reste indéterminé : intervention manuelle requise avec consultation des logs.
 
 ---
 
@@ -1665,11 +1688,11 @@ WARNING
 ### Phase 6 — CI
 
 35. Configurer GitHub Actions.
-36. Ajouter le health check périodique.
-37. Ajouter les deux exécutions quotidiennes du pipeline.
-38. Empêcher deux pipelines de tourner simultanément.
+36. Intégrer le health check / readiness au démarrage des deux exécutions quotidiennes (07h00 et 19h00 UTC).
+37. Configurer les déclencheurs manuels (`job_type` et `dry_run`).
+38. Empêcher deux pipelines de tourner simultanément (`concurrency`).
 39. Tester manuellement le workflow.
-40. Vérifier les quotas gratuits du compte utilisé.
+40. Vérifier la préservation du quota gratuit de 2 000 minutes/mois.
 
 ### Phase 7 — Sécurité
 
