@@ -8,7 +8,7 @@ import {
   Mail, 
   Sparkles,
   Building2, 
-  ShieldCheck, 
+  User, 
   LogOut 
 } from 'lucide-react';
 
@@ -28,7 +28,7 @@ export default function AdminSidebar({
     { id: 'messages', label: 'Messages', icon: Mail, count: counts.unreadMessages, isBadgeAlert: counts.unreadMessages > 0 },
     { id: 'opportunities', label: 'Opportunités IA', icon: Sparkles, count: counts.opportunities, isBadgeAlert: counts.opportunities > 0 },
     { id: 'prospects', label: 'CRM Prospects', icon: Building2, count: counts.prospects },
-    { id: 'security', label: 'Sécurité & Accès', icon: ShieldCheck }
+    { id: 'profile', label: 'Mon Profil', icon: User }
   ];
 
   return (

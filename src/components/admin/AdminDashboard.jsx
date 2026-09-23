@@ -25,7 +25,7 @@ import CertificationsTab from './tabs/CertificationsTab';
 import MessagesTab from './tabs/MessagesTab';
 import OpportunitiesTab from './tabs/OpportunitiesTab';
 import ProspectsCRM from './ProspectsCRM';
-import SecurityTab from './tabs/SecurityTab';
+import ProfileTab from './tabs/ProfileTab';
 
 // Modals
 import ProjectModal from './modals/ProjectModal';
@@ -519,8 +519,8 @@ export default function AdminDashboard() {
           <ProspectsCRM />
         )}
 
-        {activeTab === 'security' && (
-          <SecurityTab onAlert={showAlert} />
+        {activeTab === 'profile' && (
+          <ProfileTab onAlert={showAlert} user={user} onLogout={handleLogout} />
         )}
       </main>
 
