@@ -163,9 +163,12 @@ export default function OpportunitiesTab({ onAlert }) {
     }
   };
 
-  const filteredOpportunities = opportunities.filter(opp => {
+  const safeOpportunities = Array.isArray(opportunities) ? opportunities : [];
+
+  const filteredOpportunities = safeOpportunities.filter(opp => {
+    if (!opp) return false;
     const matchesStatus = filterStatus === 'ALL' || opp.status === filterStatus;
-    const query = searchQuery.toLowerCase();
+    const query = (searchQuery || '').toLowerCase();
     const matchesSearch = 
       (opp.role || '').toLowerCase().includes(query) ||
       (opp.company?.name || '').toLowerCase().includes(query) ||
@@ -216,7 +219,7 @@ export default function OpportunitiesTab({ onAlert }) {
             <Sparkles size={20} className="text-cyan-400" />
             <span>Opportunity Engine</span>
             <span className="text-xs px-2.5 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/20">
-              {opportunities.length} Total
+              {safeOpportunities.length} Total
             </span>
           </h2>
           <p className="text-xs text-slate-400 mt-1">

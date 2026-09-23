@@ -17,15 +17,20 @@ export default function AdminBottomNav({ activeTab, setActiveTab, unreadCount = 
   ];
 
   return (
-    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/90 backdrop-blur-2xl border-t border-white/10 px-2 py-1.5 flex justify-around items-center">
+    <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-2xl border-t border-white/10 px-2 py-2 flex justify-around items-center select-none shadow-2xl">
       {tabs.map((tab) => {
         const Icon = tab.icon;
         const isActive = activeTab === tab.id;
         return (
           <button
+            type="button"
             key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`flex flex-col items-center justify-center py-1 px-3 rounded-xl transition-all relative ${
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setActiveTab(tab.id);
+            }}
+            className={`flex flex-col items-center justify-center py-1.5 px-3 rounded-xl transition-all relative touch-manipulation cursor-pointer active:scale-95 ${
               isActive ? 'text-cyan-400 font-bold' : 'text-slate-400 hover:text-white'
             }`}
           >
