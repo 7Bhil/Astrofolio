@@ -136,21 +136,21 @@ Réponse 200 ?
    ┌──┴──┐
   Oui    Non
    ↓      ↓
-GET /ready  Retry après 15 s
+GET /ready  2 retries espacés de 20 s
    ↓      ↓
-Pipeline  Échec
+Pipeline  Échec (au bout de ~70 s)
           ↓
       Log CRITICAL
           ↓
-      Email d'alerte
+      Email d'alerte (avec cooldown)
           ↓
        STOP
 ```
 
 ### Règles
 
-- Timeout d’une requête : **30 secondes maximum** (adapté au démarrage à froid des conteneurs Render Free).
-- En cas d’échec : **2 retries espacés de 20 secondes** (délai cumulé de ~70s suffisant pour le boot complet).
+- Timeout d’une requête : **30 secondes maximum** (adapté au démarrage à froid des conteneurs Render Free et au réveil concomitant de Neon PostgreSQL).
+- En cas d’échec : **2 retries espacés de 20 secondes** (délai cumulé de ~70s suffisant pour absorber le double cold start croisé Render + Neon).
 - Après le retry, si le backend reste indisponible : log `CRITICAL`, alerte e-mail et arrêt du run.
 - Le pipeline ne doit pas poursuivre une opération nécessitant le backend si celui-ci n’est pas disponible.
 - Le health check peut être exécuté indépendamment du pipeline complet.
@@ -1466,8 +1466,11 @@ opportunity-engine/
 │
 ├── sources/
 │   ├── base.py
+│   ├── remotive.py
+│   ├── jobicy.py
+│   ├── weworkremotely.py
+│   ├── himalayas.py
 │   ├── remoteok.py
-│   ├── wellfound.py
 │   └── company_sites.py
 │
 ├── services/
