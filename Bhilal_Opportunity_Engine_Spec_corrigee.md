@@ -138,7 +138,7 @@ Réponse 200 ?
    ↓      ↓
 GET /ready  2 retries espacés de 20 s
    ↓      ↓
-Pipeline  Échec (au bout de ~70 s)
+Pipeline  Échec (au bout de ~120-130 s en pire cas)
           ↓
       Log CRITICAL
           ↓
@@ -150,7 +150,7 @@ Pipeline  Échec (au bout de ~70 s)
 ### Règles
 
 - Timeout d’une requête : **30 secondes maximum** (adapté au démarrage à froid des conteneurs Render Free et au réveil concomitant de Neon PostgreSQL).
-- En cas d’échec : **2 retries espacés de 20 secondes** (délai cumulé de ~70s suffisant pour absorber le double cold start croisé Render + Neon).
+- En cas d’échec : **2 retries espacés de 20 secondes** (soit un délai cumulé maximal de ~120-130s en pire cas : 3 requêtes de 30s + 2 pauses de 20s, largement suffisant pour absorber le double cold start croisé Render + Neon).
 - Après le retry, si le backend reste indisponible : log `CRITICAL`, alerte e-mail et arrêt du run.
 - Le pipeline ne doit pas poursuivre une opération nécessitant le backend si celui-ci n’est pas disponible.
 - Le health check peut être exécuté indépendamment du pipeline complet.
@@ -226,6 +226,7 @@ CREATE TABLE opportunities (
         'READY',
         'APPROVED',
         'SENDING',
+        'SEND_UNKNOWN',
         'SENT',
         'FOLLOW_UP',
         'REPLIED',
@@ -284,6 +285,11 @@ CREATE TABLE messages (
   content TEXT NOT NULL,
 
   edited_by_user BOOLEAN NOT NULL DEFAULT FALSE,
+
+  -- Métadonnées d'envoi et réconciliation
+  provider TEXT,                    -- ex: 'resend', 'gmail'
+  idempotency_key TEXT UNIQUE,      -- clé unique transmise au fournisseur
+  provider_message_id TEXT,         -- identifiant unique renvoyé par Resend
 
   sent_at TIMESTAMPTZ,
 
@@ -363,6 +369,18 @@ CREATE TABLE pipeline_runs (
 
   error_count INT NOT NULL DEFAULT 0
 );
+
+
+-- =========================================================
+-- INDEX DE PERFORMANCE RECOMMANDÉS
+-- =========================================================
+
+CREATE INDEX idx_opportunities_status ON opportunities(status);
+CREATE INDEX idx_opportunities_score ON opportunities(score DESC);
+CREATE INDEX idx_opportunities_created_at ON opportunities(created_at DESC);
+CREATE INDEX idx_system_logs_run_id ON system_logs(run_id);
+CREATE INDEX idx_system_logs_status ON system_logs(status);
+CREATE INDEX idx_messages_idempotency_key ON messages(idempotency_key);
 ```
 
 ### Pourquoi `dedupe_key` ?
@@ -1104,6 +1122,14 @@ GitHub Actions est le choix recommandé si le code du pipeline est déjà héber
 
 Pour un dépôt privé GitHub Free, l'allocation standard actuelle inclut **2 000 minutes GitHub Actions par mois**. Les dépôts publics bénéficient gratuitement des runners standard hébergés par GitHub. Les quotas et conditions peuvent évoluer : ils doivent être vérifiés dans le compte avant la mise en production. citeturn0search1turn0search16
 
+### Optimisation des quotas (2 000 minutes / mois)
+
+> ⚠️ **Attention au piège du health check toutes les 30 min** :
+> 48 vérifications par jour = ~1 440 minutes facturées par mois (car GitHub Actions arrondit chaque exécution à la minute supérieure).
+> Cela consommerait à lui seul 72 % de votre quota mensuel gratuit !
+>
+> **Solution adoptée :** Supprimer le cron toutes les 30 min. Le réveil de Render est effectué directement au début du pipeline principal (07h00 et 19h00 UTC) avec la tolérance de démarrage de 120-130 secondes.
+
 ### Workflow recommandé
 
 ```yaml
@@ -1111,32 +1137,22 @@ name: Opportunity Engine
 
 on:
   schedule:
-    - cron: "*/30 * * * *"
-    - cron: "0 7 * * *"
-    - cron: "0 19 * * *"
+    # Exécutions deux fois par jour (fuseau horaire UTC)
+    - cron: "0 7 * * *"    # 08h00 heure de Cotonou / Paris
+    - cron: "0 19 * * *"   # 20h00 heure de Cotonou / Paris
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Mode test sans écriture en base (true/false)"
+        required: false
+        default: "false"
+
+concurrency:
+  group: opportunity-engine
+  cancel-in-progress: false
 
 jobs:
-
-  health_check:
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      github.event.schedule == '*/30 * * * *'
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check backend health
-        run: |
-          curl -fsS \
-            --max-time 10 \
-            https://ton-backend.onrender.com/health
-
   full_pipeline:
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      github.event.schedule == '0 7 * * *' ||
-      github.event.schedule == '0 19 * * *'
-
     runs-on: ubuntu-latest
 
     steps:
@@ -1311,15 +1327,17 @@ RETURNING id;
 1 ligne modifiée ? ➔ Poursuite vers Resend API
   ↓
 Succès de l'API e-mail ?
- ┌──────┴──────┐
-Oui           Non
- ↓             ↓
-SENT         READY (Rollback du statut)
- ↓             ↓
-sent_at      ERROR log
+ ┌──────────────┼──────────────┐
+Oui         Erreur franche    Timeout ambigu
+ ↓              ↓              ↓
+SENT          READY       SEND_UNKNOWN
+ ↓              ↓              ↓
+sent_at     ERROR log     (Message ID / Idempotence à réconcilier)
 ```
 
-Ce verrouillage optimiste au niveau de la requête SQL élimine mathématiquement tout risque de double envoi en cas de double-clic rapide ou de rejeu réseau.
+**Distinction critique d'envoi :**
+- **Erreur franche** (ex: 400 Bad Request, clé API invalide) : L'e-mail n'a pas été envoyé. Le système peut sans danger repasser l'opportunité au statut `READY` pour correction.
+- **Timeout réseau ou coupure ambiguë** : La requête a pu atteindre le fournisseur (Resend) et être envoyée sans que notre serveur n'ait reçu la réponse 200. Le statut passe alors en **`SEND_UNKNOWN`** avec l'`idempotency_key` enregistrée. Le panel admin affiche une alerte permettant de vérifier l'état auprès du fournisseur avant toute nouvelle tentative pour garantir qu'aucun recruteur ne reçoive de doublon.
 
 ---
 
