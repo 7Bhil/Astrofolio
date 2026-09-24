@@ -1,39 +1,23 @@
 import React, { useState } from 'react';
 import { 
-  Menu, 
-  X, 
-  Globe, 
-  LayoutDashboard, 
-  FolderGit2, 
-  Wrench, 
-  Briefcase, 
-  Award, 
-  Mail, 
-  Sparkles, 
-  Building2, 
-  User, 
-  LogOut 
+  Menu, X, Globe, 
+  LayoutDashboard, FolderGit2, Wrench, Briefcase, Award, Mail, Sparkles, Building2, User, LogOut,
+  ChevronRight
 } from 'lucide-react';
 
-export default function AdminMobileHeader({ 
-  activeTab, 
-  setActiveTab, 
-  user, 
-  counts = {}, 
-  onLogout 
-}) {
+export default function AdminMobileHeader({ activeTab, setActiveTab, user, counts = {}, onLogout }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
-    { id: 'overview', label: 'Vue d\'ensemble', icon: LayoutDashboard },
-    { id: 'projects', label: 'Projets', icon: FolderGit2, count: counts.projects },
-    { id: 'skills', label: 'Compétences', icon: Wrench, count: counts.skills },
-    { id: 'experiences', label: 'Parcours', icon: Briefcase, count: counts.experiences },
-    { id: 'certifications', label: 'Certifications', icon: Award, count: counts.certifications },
-    { id: 'messages', label: 'Messages', icon: Mail, count: counts.unreadMessages, isBadgeAlert: counts.unreadMessages > 0 },
-    { id: 'opportunities', label: 'Opportunités IA', icon: Sparkles, count: counts.opportunities, isBadgeAlert: counts.opportunities > 0 },
-    { id: 'prospects', label: 'CRM Prospects', icon: Building2, count: counts.prospects },
-    { id: 'profile', label: 'Mon Profil', icon: User }
+    { id: 'overview',       label: "Vue d'ensemble", icon: LayoutDashboard, group: 'main' },
+    { id: 'projects',       label: 'Projets',         icon: FolderGit2,     group: 'content', count: counts.projects },
+    { id: 'skills',         label: 'Compétences',     icon: Wrench,         group: 'content', count: counts.skills },
+    { id: 'experiences',    label: 'Parcours',        icon: Briefcase,      group: 'content', count: counts.experiences },
+    { id: 'certifications', label: 'Certifications',  icon: Award,          group: 'content', count: counts.certifications },
+    { id: 'messages',       label: 'Messages',        icon: Mail,           group: 'comms',   count: counts.unreadMessages, isBadgeAlert: counts.unreadMessages > 0 },
+    { id: 'opportunities',  label: 'Opportunités IA', icon: Sparkles,       group: 'comms',   count: counts.opportunities, isBadgeAlert: counts.opportunities > 0 },
+    { id: 'prospects',      label: 'CRM Prospects',   icon: Building2,      group: 'comms',   count: counts.prospects },
+    { id: 'profile',        label: 'Mon Profil',      icon: User,           group: 'account' },
   ];
 
   const handleSelectTab = (tabId) => {
@@ -41,41 +25,58 @@ export default function AdminMobileHeader({
     setIsOpen(false);
   };
 
+  const tabLabel = navItems.find(i => i.id === activeTab)?.label || 'Admin';
+
   return (
     <>
-      <header className="lg:hidden sticky top-0 z-40 bg-slate-950/90 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center justify-between shadow-lg">
+      {/* ── Sticky mobile topbar ── */}
+      <header
+        className="lg:hidden sticky top-0 z-40 px-4 py-3 flex items-center justify-between shadow-2xl"
+        style={{
+          background: 'rgba(3,7,15,0.92)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(255,255,255,0.07)',
+        }}
+      >
+        {/* Brand */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center font-black font-['Outfit'] text-white text-sm shadow-md shadow-blue-500/20">
+          <div
+            className="w-8 h-8 rounded-xl flex items-center justify-center font-black font-['Outfit'] text-white text-sm"
+            style={{
+              background: 'linear-gradient(135deg, #2563eb, #06b6d4)',
+              boxShadow: '0 0 16px rgba(6,182,212,0.4)',
+            }}
+          >
             7B
           </div>
           <div>
-            <h2 className="text-sm font-bold font-['Outfit'] text-white leading-tight">
-              Studio Admin
-            </h2>
-            <span className="text-[10px] font-semibold text-emerald-400 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Neon PostgreSQL
-            </span>
+            <h2 className="text-sm font-bold font-['Outfit'] text-white leading-tight">Studio Admin</h2>
+            <span className="text-[10px] font-semibold text-slate-500">{tabLabel}</span>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <a 
-            href="/" 
-            target="_blank" 
+          <a
+            href="/"
+            target="_blank"
             rel="noopener noreferrer"
-            className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors text-slate-400 hover:text-white"
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.08)' }}
             title="Voir le site"
           >
-            <Globe size={16} />
+            <Globe size={15} />
           </a>
 
-          {/* Bouton Hamburger */}
-          <button 
+          <button
             type="button"
             onClick={() => setIsOpen(prev => !prev)}
-            className="w-9 h-9 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 flex items-center justify-center transition-colors"
-            title="Menu"
+            className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors"
+            style={{
+              background: isOpen ? 'rgba(6,182,212,0.15)' : 'rgba(6,182,212,0.08)',
+              border: '1px solid rgba(6,182,212,0.25)',
+              color: '#67e8f9',
+            }}
             aria-label="Menu"
           >
             {isOpen ? <X size={18} /> : <Menu size={18} />}
@@ -83,38 +84,52 @@ export default function AdminMobileHeader({
         </div>
       </header>
 
-      {/* Drawer / Menu mobile coulissant */}
+      {/* ── Bottom sheet drawer ── */}
       {isOpen && (
-        <div 
-          className="lg:hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col justify-end animate-in fade-in duration-200"
+        <div
+          className="lg:hidden fixed inset-0 z-50 flex flex-col justify-end"
+          style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(8px)' }}
           onClick={() => setIsOpen(false)}
         >
-          <div 
-            className="w-full bg-slate-900 border-t border-white/15 rounded-t-3xl p-5 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
+          <div
+            className="w-full rounded-t-3xl p-5 shadow-2xl flex flex-col max-h-[85vh] overflow-y-auto"
+            style={{
+              background: 'rgba(5,10,25,0.97)',
+              backdropFilter: 'blur(24px)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderBottom: 'none',
+            }}
+            onClick={e => e.stopPropagation()}
           >
-            {/* Header du drawer */}
-            <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+            {/* Drag handle */}
+            <div className="w-10 h-1 rounded-full bg-white/20 mx-auto mb-4" />
+
+            {/* Drawer header */}
+            <div className="flex items-center justify-between pb-3 border-b border-white/8 mb-3">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center font-black font-['Outfit'] text-white text-xs">
+                <div
+                  className="w-9 h-9 rounded-xl flex items-center justify-center font-black font-['Outfit'] text-white text-sm"
+                  style={{ background: 'linear-gradient(135deg, #2563eb, #06b6d4)', boxShadow: '0 0 16px rgba(6,182,212,0.3)' }}
+                >
                   7B
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold font-['Outfit'] text-white">Menu Navigation</h3>
-                  <span className="text-[10px] text-slate-400 font-mono">{user?.email || '7bhilal.chitou7@gmail.com'}</span>
+                  <p className="text-sm font-bold text-white">Bhilal CHITOU</p>
+                  <p className="text-[10px] text-slate-500">{user?.email || '7bhilal.chitou7@gmail.com'}</p>
                 </div>
               </div>
-              <button 
+              <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white flex items-center justify-center"
+                className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+                style={{ background: 'rgba(255,255,255,0.05)' }}
               >
                 <X size={16} />
               </button>
             </div>
 
-            {/* Liste de navigation complète */}
-            <div className="flex flex-col gap-1 py-1">
+            {/* Nav */}
+            <div className="flex flex-col gap-0.5 py-1">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const isActive = activeTab === item.id;
@@ -123,41 +138,55 @@ export default function AdminMobileHeader({
                     type="button"
                     key={item.id}
                     onClick={() => handleSelectTab(item.id)}
-                    className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs font-semibold transition-all ${
-                      isActive
-                        ? 'bg-gradient-to-r from-blue-600/20 to-cyan-500/10 text-cyan-300 border border-cyan-500/30'
-                        : 'text-slate-300 hover:text-white hover:bg-white/5 border border-transparent'
-                    }`}
+                    className="w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-medium transition-all"
+                    style={isActive ? {
+                      background: 'linear-gradient(90deg, rgba(37,99,235,0.2) 0%, rgba(6,182,212,0.08) 100%)',
+                      border: '1px solid rgba(6,182,212,0.25)',
+                      color: '#67e8f9',
+                    } : {
+                      background: 'transparent',
+                      border: '1px solid transparent',
+                      color: '#94a3b8',
+                    }}
                   >
-                    <Icon size={16} className={isActive ? 'text-cyan-400' : 'text-slate-400'} />
+                    <Icon size={16} style={{ color: isActive ? '#22d3ee' : 'currentColor' }} />
                     <span className="flex-1 text-left">{item.label}</span>
                     {item.count !== undefined && item.count > 0 && (
-                      <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                        item.isBadgeAlert 
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse'
-                          : 'bg-white/10 text-slate-300'
-                      }`}>
+                      <span
+                        className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold ${item.isBadgeAlert ? 'animate-pulse' : ''}`}
+                        style={item.isBadgeAlert ? {
+                          background: 'rgba(245,158,11,0.15)',
+                          color: '#fcd34d',
+                          border: '1px solid rgba(245,158,11,0.3)',
+                        } : {
+                          background: 'rgba(255,255,255,0.08)',
+                          color: '#94a3b8',
+                        }}
+                      >
                         {item.count}
                       </span>
                     )}
+                    {isActive && <ChevronRight size={13} className="text-cyan-500/50" />}
                   </button>
                 );
               })}
             </div>
 
-            {/* Pied de drawer avec déconnexion */}
+            {/* Logout */}
             {onLogout && (
-              <div className="pt-3 mt-2 border-t border-white/10">
+              <div className="pt-3 mt-2 border-t border-white/8">
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsOpen(false);
-                    onLogout();
+                  onClick={() => { setIsOpen(false); onLogout(); }}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm font-semibold transition-all"
+                  style={{
+                    background: 'rgba(239,68,68,0.08)',
+                    border: '1px solid rgba(239,68,68,0.2)',
+                    color: '#fca5a5',
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-300 border border-rose-500/20 text-xs font-semibold transition-colors"
                 >
                   <LogOut size={14} />
-                  <span>Déconnexion</span>
+                  Déconnexion
                 </button>
               </div>
             )}

@@ -461,7 +461,15 @@ export default function AdminDashboard({ initialTab }) {
   const unreadCount = messages.filter(m => !m.read).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
+    <div className="min-h-screen text-slate-100 flex flex-col lg:flex-row font-sans selection:bg-cyan-500/20 selection:text-cyan-300 relative" style={{ background: '#03070f' }}>
+      {/* ── Ambient background blobs (fixed, non-interactive) ── */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-120px] left-[-80px] w-[500px] h-[500px] rounded-full opacity-[0.07] blur-[100px]" style={{ background: 'radial-gradient(circle, #2563eb, transparent)' }} />
+        <div className="absolute top-[30%] right-[-100px] w-[400px] h-[400px] rounded-full opacity-[0.06] blur-[100px]" style={{ background: 'radial-gradient(circle, #7c3aed, transparent)' }} />
+        <div className="absolute bottom-[-80px] left-[30%] w-[400px] h-[400px] rounded-full opacity-[0.05] blur-[100px]" style={{ background: 'radial-gradient(circle, #06b6d4, transparent)' }} />
+      </div>
+      {/* ── Content layer above blobs ── */}
+      <div className="relative z-10 flex flex-col lg:flex-row w-full min-h-screen">
       {/* Sidebar Desktop */}
       <AdminSidebar
         activeTab={activeTab}
@@ -620,7 +628,8 @@ export default function AdminDashboard({ initialTab }) {
         setFormData={setCertForm}
         onSubmit={handleSaveCert}
         isSubmitting={isSubmitting}
-      />
+      />{/* CertificationModal */}
+      </div>{/* /content z-10 wrapper */}
     </div>
   );
 }
