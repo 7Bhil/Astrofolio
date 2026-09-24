@@ -103,7 +103,7 @@ Je serais ravi d'échanger avec vous lors d'un court entretien pour vous présen
 
 Portfolio : https://7bhil.vercel.app
 GitHub : https://github.com/7Bhil
-LinkedIn : https://www.linkedin.com/in/bhilal-chitou/
+LinkedIn : https://www.linkedin.com/in/7bhil/
 
 Bien cordialement,
 Bhilal CHITOU
@@ -122,7 +122,7 @@ I would welcome the opportunity to discuss how my hands-on background can suppor
 
 Portfolio: https://7bhil.vercel.app
 GitHub: https://github.com/7Bhil
-LinkedIn: https://www.linkedin.com/in/bhilal-chitou/
+LinkedIn: https://www.linkedin.com/in/7bhil/
 
 Best regards,
 Bhilal CHITOU

@@ -108,7 +108,7 @@ Pour recevoir une estimation financière précise adaptée à votre besoin sous 
       contact: `Voici les coordonnées directes pour joindre Bhilal CHITOU :
 - **WhatsApp (Recommandé - Réponse immédiate) :** [Démarrer une conversation sur WhatsApp](https://wa.me/2290144242964?text=Bonjour%20Bhilal%2C%20je%20souhaite%20discuter%20d%27un%20projet.) (+229 01 44 24 29 64)
 - **Email professionnel :** \`7bhilal.chitou7@gmail.com\`
-- **LinkedIn :** [linkedin.com/in/bhilal-chitou](https://www.linkedin.com/in/bhilal-chitou/)
+- **LinkedIn :** [linkedin.com/in/7bhil](https://www.linkedin.com/in/7bhil/)
 - **GitHub :** [github.com/7Bhil](https://github.com/7Bhil/)
 
 Le canal WhatsApp reste le moyen le plus efficace pour obtenir un devis ou un créneau d'appel rapidement.`,
@@ -220,7 +220,7 @@ To receive an accurate cost and timeline estimate within 24 hours, contact Bhila
       contact: `Direct channels to connect with Bhilal CHITOU:
 - **WhatsApp (Recommended - Fastest response):** [Start WhatsApp Conversation](https://wa.me/2290144242964?text=Hello%20Bhilal%2C%20I%20would%20like%20to%20discuss%20a%20project.) (+229 01 44 24 29 64)
 - **Direct Email:** \`7bhilal.chitou7@gmail.com\`
-- **LinkedIn:** [linkedin.com/in/bhilal-chitou](https://www.linkedin.com/in/bhilal-chitou/)
+- **LinkedIn:** [linkedin.com/in/7bhil](https://www.linkedin.com/in/7bhil/)
 - **GitHub:** [github.com/7Bhil](https://github.com/7Bhil/)
 
 WhatsApp provides the fastest path to book an initial scoping call or review requirements.`,

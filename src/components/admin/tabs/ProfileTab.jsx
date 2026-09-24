@@ -97,9 +97,9 @@ export default function ProfileTab({ onAlert, user, onLogout }) {
 
             <div className="flex items-center gap-3 text-xs">
               <Linkedin size={14} className="text-cyan-400 shrink-0" />
-              <a href="https://www.linkedin.com/in/bhilal-chitou/" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.linkedin.com/in/7bhil/" target="_blank" rel="noopener noreferrer"
                 className="text-cyan-300 hover:text-cyan-200 font-medium flex items-center gap-1 transition-colors">
-                linkedin.com/in/bhilal-chitou
+                linkedin.com/in/7bhil
                 <ExternalLink size={11} />
               </a>
             </div>
