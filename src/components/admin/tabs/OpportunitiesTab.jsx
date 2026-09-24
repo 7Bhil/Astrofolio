@@ -20,7 +20,9 @@ import {
   Terminal,
   ShieldCheck,
   CheckCircle,
-  HelpCircle
+  HelpCircle,
+  Trash2,
+  Calendar
 } from 'lucide-react';
 import { opportunitiesApi } from '../../../services/api';
 
@@ -33,6 +35,9 @@ export default function OpportunitiesTab({ onAlert }) {
   const [loading, setLoading] = useState(false);
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
+  const [dateFilter, setDateFilter] = useState('ALL'); // 'ALL', 'TODAY', 'YESTERDAY', 'THIS_WEEK', 'CUSTOM'
+  const [customStartDate, setCustomStartDate] = useState('');
+  const [customEndDate, setCustomEndDate] = useState('');
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [messageDraft, setMessageDraft] = useState('');
   const [actionLoadingId, setActionLoadingId] = useState(null);
@@ -57,12 +62,26 @@ export default function OpportunitiesTab({ onAlert }) {
   const loadOpportunities = async () => {
     setLoading(true);
     try {
-      const data = await opportunitiesApi.getAll({ limit: 100 });
+      const data = await opportunitiesApi.getAll({ limit: 200 });
       setOpportunities(data?.opportunities || []);
     } catch (err) {
       if (onAlert) onAlert('danger', 'Impossible de charger les opportunités.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (oppId) => {
+    if (!window.confirm('Es-tu sûr de vouloir supprimer définitivement cette opportunité ?')) return;
+    setActionLoadingId(oppId);
+    try {
+      await opportunitiesApi.delete(oppId);
+      setOpportunities(prev => prev.filter(o => o.id !== oppId));
+      if (onAlert) onAlert('success', 'Opportunité supprimée définitivement.');
+    } catch (err) {
+      if (onAlert) onAlert('danger', 'Erreur lors de la suppression.');
+    } finally {
+      setActionLoadingId(null);
     }
   };
 
@@ -173,7 +192,38 @@ export default function OpportunitiesTab({ onAlert }) {
       (opp.role || '').toLowerCase().includes(query) ||
       (opp.company?.name || '').toLowerCase().includes(query) ||
       (opp.country || '').toLowerCase().includes(query);
-    return matchesStatus && matchesSearch;
+
+    // Filtrage temporel intelligent
+    let matchesDate = true;
+    if (dateFilter !== 'ALL') {
+      const oppDate = new Date(opp.createdAt);
+      const now = new Date();
+      
+      if (dateFilter === 'TODAY') {
+        matchesDate = oppDate.toDateString() === now.toDateString();
+      } else if (dateFilter === 'YESTERDAY') {
+        const yesterday = new Date();
+        yesterday.setDate(now.getDate() - 1);
+        matchesDate = oppDate.toDateString() === yesterday.toDateString();
+      } else if (dateFilter === 'THIS_WEEK') {
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(now.getDate() - 7);
+        matchesDate = oppDate >= oneWeekAgo;
+      } else if (dateFilter === 'CUSTOM') {
+        if (customStartDate) {
+          const start = new Date(customStartDate);
+          start.setHours(0, 0, 0, 0);
+          if (oppDate < start) matchesDate = false;
+        }
+        if (customEndDate) {
+          const end = new Date(customEndDate);
+          end.setHours(23, 59, 59, 999);
+          if (oppDate > end) matchesDate = false;
+        }
+      }
+    }
+
+    return matchesStatus && matchesSearch && matchesDate;
   });
 
   const getStatusBadge = (status) => {
@@ -309,6 +359,54 @@ export default function OpportunitiesTab({ onAlert }) {
                 <RefreshCw size={14} className={loading ? 'animate-spin text-cyan-400' : ''} />
               </button>
             </div>
+          </div>
+
+          {/* Date Filter Bar */}
+          <div className="flex flex-wrap items-center gap-2 p-2.5 bg-slate-900/40 border border-white/5 rounded-2xl text-xs">
+            <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1.5 pl-1 mr-1">
+              <Calendar size={13} className="text-cyan-400" />
+              <span>Date de détection :</span>
+            </span>
+
+            {[
+              { id: 'ALL', label: 'Toutes les dates' },
+              { id: 'TODAY', label: "Aujourd'hui" },
+              { id: 'YESTERDAY', label: 'Hier' },
+              { id: 'THIS_WEEK', label: '7 derniers jours' },
+              { id: 'CUSTOM', label: 'Personnalisée' }
+            ].map(df => (
+              <button
+                key={df.id}
+                onClick={() => setDateFilter(df.id)}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
+                  dateFilter === df.id
+                    ? 'bg-blue-600 text-white shadow-sm shadow-blue-500/30'
+                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                }`}
+              >
+                {df.label}
+              </button>
+            ))}
+
+            {dateFilter === 'CUSTOM' && (
+              <div className="flex items-center gap-2 ml-auto">
+                <input
+                  type="date"
+                  value={customStartDate}
+                  onChange={(e) => setCustomStartDate(e.target.value)}
+                  className="bg-slate-950 border border-white/10 rounded-lg px-2.5 py-1 text-[11px] text-white outline-none focus:border-cyan-500"
+                  placeholder="Du"
+                />
+                <span className="text-slate-500 text-[11px]">au</span>
+                <input
+                  type="date"
+                  value={customEndDate}
+                  onChange={(e) => setCustomEndDate(e.target.value)}
+                  className="bg-slate-950 border border-white/10 rounded-lg px-2.5 py-1 text-[11px] text-white outline-none focus:border-cyan-500"
+                  placeholder="Au"
+                />
+              </div>
+            )}
           </div>
 
           {/* Cards List */}
@@ -531,11 +629,36 @@ export default function OpportunitiesTab({ onAlert }) {
                           </>
                         )}
 
+                        {opp.status === 'REJECTED' && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs text-slate-500 font-medium">Ignoré</span>
+                            <button
+                              onClick={() => handleDelete(opp.id)}
+                              disabled={actionLoadingId === opp.id}
+                              className="px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/20 text-xs font-semibold transition-all flex items-center gap-1.5"
+                              title="Supprimer définitivement"
+                            >
+                              <Trash2 size={13} />
+                              <span>Supprimer définitivement</span>
+                            </button>
+                          </div>
+                        )}
+
                         {opp.status === 'SENT' && (
-                          <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                            <CheckCircle2 size={16} />
-                            <span>Candidature transmise</span>
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                              <CheckCircle2 size={16} />
+                              <span>Candidature transmise</span>
+                            </span>
+                            <button
+                              onClick={() => handleDelete(opp.id)}
+                              disabled={actionLoadingId === opp.id}
+                              className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-white/5 transition-all"
+                              title="Supprimer de l'historique"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
                         )}
                       </div>
                     </div>

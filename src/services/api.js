@@ -125,6 +125,7 @@ export const opportunitiesApi = {
   updateMessage: (id, content) => apiRequest(`/opportunities/${id}/message`, 'PATCH', { content }, true),
   approve: (id) => apiRequest(`/opportunities/${id}/approve`, 'POST', null, true),
   reject: (id) => apiRequest(`/opportunities/${id}/reject`, 'POST', null, true),
+  delete: (id) => apiRequest(`/opportunities/${id}`, 'DELETE', null, true),
   send: (id) => apiRequest(`/opportunities/${id}/send`, 'POST', null, true),
   reconcile: (id) => apiRequest(`/opportunities/${id}/reconcile`, 'POST', null, true),
   getLogs: (params = {}) => {
