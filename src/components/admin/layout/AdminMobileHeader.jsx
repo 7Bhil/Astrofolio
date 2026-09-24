@@ -101,7 +101,7 @@ export default function AdminMobileHeader({
                 </div>
                 <div>
                   <h3 className="text-sm font-bold font-['Outfit'] text-white">Menu Navigation</h3>
-                  <span className="text-[10px] text-slate-400 font-mono">{user?.email || 'admin@7bhil.com'}</span>
+                  <span className="text-[10px] text-slate-400 font-mono">{user?.email || '7bhilal.chitou7@gmail.com'}</span>
                 </div>
               </div>
               <button 

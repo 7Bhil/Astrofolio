@@ -526,7 +526,7 @@ Bhilal CHITOU
               <div>
                 <div className="flex items-center justify-between mb-1">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Corps du message (personnalisable)</label>
-                  <span className="text-[10px] text-slate-500 font-mono">Expéditeur : candidature@7bhil.com</span>
+                  <span className="text-[10px] text-slate-500 font-mono">Expéditeur : Bhilal CHITOU (via Resend)</span>
                 </div>
                 <textarea
                   rows={12}

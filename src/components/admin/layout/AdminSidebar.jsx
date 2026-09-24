@@ -88,7 +88,7 @@ export default function AdminSidebar({
         <div className="bg-slate-900/60 p-2.5 rounded-xl border border-white/5">
           <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">Administrateur</span>
           <span className="text-xs text-white font-semibold truncate block mt-0.5">
-            {user?.email || 'admin@7bhil.com'}
+            {user?.email || '7bhilal.chitou7@gmail.com'}
           </span>
         </div>
 

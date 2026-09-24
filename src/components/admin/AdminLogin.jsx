@@ -3,7 +3,7 @@ import { authApi, setAuthToken, getAuthToken, removeAuthToken } from '../../serv
 import { Lock, Mail, ArrowRight, AlertCircle } from 'lucide-react';
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState('admin@7bhil.com');
+  const [email, setEmail] = useState('7bhilal.chitou7@gmail.com');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -77,7 +77,7 @@ export default function AdminLogin() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full bg-slate-950/80 border border-white/10 focus:border-cyan-500/80 focus:ring-2 focus:ring-cyan-500/20 rounded-xl pl-10 pr-3.5 py-2.5 text-xs sm:text-sm text-white placeholder-slate-500 outline-none transition-all"
-                placeholder="admin@7bhil.com"
+                placeholder="7bhilal.chitou7@gmail.com"
                 autoComplete="email"
               />
             </div>
