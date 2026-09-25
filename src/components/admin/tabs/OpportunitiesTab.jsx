@@ -1,65 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { 
-  Building2, 
-  Globe, 
-  MapPin, 
-  CheckCircle2, 
-  Clock, 
-  Send, 
-  XCircle, 
-  Edit3, 
-  AlertTriangle, 
-  RefreshCw, 
-  Sparkles,
-  Search,
-  ExternalLink,
-  Mail,
-  Activity,
-  Server,
-  Database,
-  Terminal,
-  ShieldCheck,
-  CheckCircle,
-  HelpCircle,
-  Trash2,
-  Calendar
+  Building2, Globe, MapPin, CheckCircle2, Clock, Send, XCircle, Edit3, AlertTriangle, RefreshCw, Sparkles,
+  Search, ExternalLink, Mail, Activity, Server, Database, Terminal, ShieldCheck, CheckCircle,
+  HelpCircle, Trash2, Calendar, RotateCcw, MessageSquare
 } from 'lucide-react';
 import { opportunitiesApi } from '../../../services/api';
 
 export default function OpportunitiesTab({ onAlert }) {
-  // Navigation sous-onglets
-  const [subTab, setSubTab] = useState('opportunities'); // 'opportunities' | 'diagnostics' | 'guide'
-
-  // État Opportunités
+  const [subTab, setSubTab] = useState('opportunities');
   const [opportunities, setOpportunities] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [filterStatus, setFilterStatus] = useState('ALL');
   const [searchQuery, setSearchQuery] = useState('');
-  const [dateFilter, setDateFilter] = useState('ALL'); // 'ALL', 'TODAY', 'YESTERDAY', 'THIS_WEEK', 'CUSTOM'
+  const [dateFilter, setDateFilter] = useState('ALL');
   const [customStartDate, setCustomStartDate] = useState('');
   const [customEndDate, setCustomEndDate] = useState('');
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [messageDraft, setMessageDraft] = useState('');
   const [actionLoadingId, setActionLoadingId] = useState(null);
-
-  // État Diagnostics & Logs
   const [healthData, setHealthData] = useState(null);
   const [logs, setLogs] = useState([]);
   const [runs, setRuns] = useState([]);
-  const [logFilter, setLogFilter] = useState('ALL'); // 'ALL' | 'CRITICAL' | 'ERROR' | 'WARNING'
+  const [logFilter, setLogFilter] = useState('ALL');
   const [diagLoading, setDiagLoading] = useState(false);
 
-  useEffect(() => {
-    loadOpportunities();
-  }, []);
-
-  useEffect(() => {
-    if (subTab === 'diagnostics') {
-      loadDiagnostics();
-    }
-  }, [subTab, logFilter]);
-
-  const loadOpportunities = async () => {
+  const loadOpportunities = useCallback(async () => {
     setLoading(true);
     try {
       const data = await opportunitiesApi.getAll({ limit: 200 });
@@ -69,6 +35,27 @@ export default function OpportunitiesTab({ onAlert }) {
     } finally {
       setLoading(false);
     }
+  }, [onAlert]);
+
+  useEffect(() => {
+    loadOpportunities();
+  }, [loadOpportunities]);
+
+  // Auto-refresh every 5 minutes
+  useEffect(() => {
+    const interval = setInterval(() => loadOpportunities(), 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [loadOpportunities]);
+
+  useEffect(() => {
+    if (subTab === 'diagnostics') loadDiagnostics();
+  }, [subTab, logFilter]);
+
+  const handleManualRefresh = async () => {
+    setIsRefreshing(true);
+    await loadOpportunities();
+    setTimeout(() => setIsRefreshing(false), 1000);
+    if (onAlert) onAlert('success', 'Données mises à jour !');
   };
 
   const handleDelete = async (oppId) => {
@@ -80,6 +67,20 @@ export default function OpportunitiesTab({ onAlert }) {
       if (onAlert) onAlert('success', 'Opportunité supprimée définitivement.');
     } catch (err) {
       if (onAlert) onAlert('danger', 'Erreur lors de la suppression.');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleSetReplyStatus = async (oppId, newStatus) => {
+    setActionLoadingId(oppId);
+    try {
+      await opportunitiesApi.update(oppId, { status: newStatus });
+      setOpportunities(prev => prev.map(o => o.id === oppId ? { ...o, status: newStatus } : o));
+      const labels = { REPLIED: '💬 Réponse marquée', FOLLOW_UP: '📤 Relance notée', CLOSED: '✓ Fermé' };
+      if (onAlert) onAlert('success', labels[newStatus] || 'Statut mis à jour.');
+    } catch (err) {
+      if (onAlert) onAlert('danger', 'Erreur lors de la mise à jour du statut.');
     } finally {
       setActionLoadingId(null);
     }
@@ -336,7 +337,7 @@ export default function OpportunitiesTab({ onAlert }) {
             </div>
 
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 scrollbar-none">
-              {['ALL', 'READY', 'APPROVED', 'SEND_UNKNOWN', 'SENT', 'REJECTED'].map((st) => (
+              {['ALL', 'READY', 'APPROVED', 'SEND_UNKNOWN', 'SENT', 'REPLIED', 'FOLLOW_UP', 'CLOSED', 'REJECTED'].map((st) => (
                 <button
                   key={st}
                   onClick={() => setFilterStatus(st)}
@@ -346,17 +347,23 @@ export default function OpportunitiesTab({ onAlert }) {
                       : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
                   }`}
                 >
-                  {st === 'ALL' ? 'Toutes' : st}
+                  {st === 'ALL' ? 'Toutes' : st === 'FOLLOW_UP' ? 'Relance' : st === 'REPLIED' ? '💬 Réponse' : st === 'CLOSED' ? '✓ Fermé' : st}
                 </button>
               ))}
 
+              {/* Manual refresh button */}
               <button
-                onClick={loadOpportunities}
-                disabled={loading}
-                className="p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-white transition-all ml-1"
+                onClick={handleManualRefresh}
+                disabled={loading || isRefreshing}
+                className="p-2 rounded-xl border transition-all ml-1 flex items-center gap-1.5"
+                style={{
+                  background: isRefreshing ? 'rgba(6,182,212,0.15)' : 'rgba(255,255,255,0.05)',
+                  border: isRefreshing ? '1px solid rgba(6,182,212,0.4)' : '1px solid rgba(255,255,255,0.1)',
+                  color: isRefreshing ? '#22d3ee' : '#94a3b8',
+                }}
                 title="Actualiser"
               >
-                <RefreshCw size={14} className={loading ? 'animate-spin text-cyan-400' : ''} />
+                <RotateCcw size={14} className={isRefreshing ? 'animate-spin' : ''} />
               </button>
             </div>
           </div>
@@ -645,19 +652,42 @@ export default function OpportunitiesTab({ onAlert }) {
                         )}
 
                         {opp.status === 'SENT' && (
-                          <div className="flex items-center gap-3">
+                          <div className="flex flex-col gap-2">
                             <span className="text-xs font-bold text-emerald-400 flex items-center gap-1.5">
                               <CheckCircle2 size={16} />
                               <span>Candidature transmise</span>
                             </span>
-                            <button
-                              onClick={() => handleDelete(opp.id)}
-                              disabled={actionLoadingId === opp.id}
-                              className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-white/5 transition-all"
-                              title="Supprimer de l'historique"
-                            >
-                              <Trash2 size={14} />
-                            </button>
+                            {/* Reply status pills */}
+                            <div className="flex items-center gap-1.5 flex-wrap">
+                              <span className="text-[10px] text-slate-500 font-semibold">Suivi :</span>
+                              {[
+                                { status: 'REPLIED',   label: '💬 Réponse', color: '#22d3ee' },
+                                { status: 'FOLLOW_UP', label: '📤 Relance', color: '#f59e0b' },
+                                { status: 'CLOSED',    label: '✓ Fermer',   color: '#64748b' },
+                              ].map(({ status: s, label, color }) => (
+                                <button
+                                  key={s}
+                                  onClick={() => handleSetReplyStatus(opp.id, s)}
+                                  disabled={actionLoadingId === opp.id}
+                                  className="px-2 py-0.5 rounded-lg text-[10px] font-bold transition-all"
+                                  style={{
+                                    background: `${color}15`,
+                                    border: `1px solid ${color}35`,
+                                    color,
+                                  }}
+                                >
+                                  {label}
+                                </button>
+                              ))}
+                              <button
+                                onClick={() => handleDelete(opp.id)}
+                                disabled={actionLoadingId === opp.id}
+                                className="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 hover:bg-white/5 transition-all ml-auto"
+                                title="Supprimer de l'historique"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
                           </div>
                         )}
                       </div>

@@ -134,7 +134,22 @@ export const opportunitiesApi = {
   },
   getRuns: () => apiRequest('/opportunities/system/runs', 'GET', null, true),
   getSystemHealth: () => apiRequest('/opportunities/system/health', 'GET', null, true),
-  sendToProspect: (data) => apiRequest('/opportunities/prospect-send', 'POST', data, true)
+  sendToProspect: (data) => apiRequest('/opportunities/prospect-send', 'POST', data, true),
+  exportCsv: async () => {
+    const token = getAuthToken();
+    const res = await fetch(`${API_BASE_URL}/opportunities/export/csv`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) throw new Error('Export échoué');
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `opportunites_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  },
+  getActivityData: () => apiRequest('/opportunities/system/activity', 'GET', null, true)
 };
 
 

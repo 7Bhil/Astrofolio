@@ -1,6 +1,44 @@
-import React from 'react';
-import { FolderGit2, Wrench, Mail, Award, Plus, Sparkles, Briefcase, TrendingUp, Clock, Activity } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FolderGit2, Wrench, Mail, Award, Plus, Sparkles, Briefcase, TrendingUp, Clock, Activity, BarChart2 } from 'lucide-react';
 import KpiCard from '../ui/KpiCard';
+import { opportunitiesApi } from '../../../services/api';
+
+// ── CSS Activity Bar Chart ───────────────────────────────────
+function ActivityChart({ data }) {
+  const maxVal = Math.max(...data.map(d => d.created), 1);
+  return (
+    <div className="flex items-end gap-1.5 h-20 w-full">
+      {data.map((d, i) => {
+        const height = Math.max((d.created / maxVal) * 100, d.created > 0 ? 8 : 3);
+        return (
+          <div key={i} className="flex flex-col items-center gap-1 flex-1 group relative">
+            {/* Tooltip */}
+            <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 hidden group-hover:flex flex-col items-center z-10 pointer-events-none">
+              <div className="bg-slate-800 border border-white/10 rounded-lg px-2.5 py-1.5 text-[11px] text-white font-semibold whitespace-nowrap shadow-xl">
+                {d.created} trouvée{d.created !== 1 ? 's' : ''}
+                {d.sent > 0 && <span className="text-cyan-400 ml-1">· {d.sent} envoyée{d.sent !== 1 ? 's' : ''}</span>}
+              </div>
+              <div className="w-2 h-2 bg-slate-800 border-r border-b border-white/10 rotate-45 -mt-1" />
+            </div>
+            {/* Bar */}
+            <div
+              className="w-full rounded-t-md transition-all duration-500"
+              style={{
+                height: `${height}%`,
+                background: d.created > 0
+                  ? 'linear-gradient(180deg, #38bdf8, #2563eb)'
+                  : 'rgba(255,255,255,0.06)',
+                boxShadow: d.created > 0 ? '0 0 8px rgba(56,189,248,0.3)' : 'none',
+                minHeight: '3px',
+              }}
+            />
+            <span className="text-[9px] text-slate-500 capitalize truncate w-full text-center">{d.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -29,6 +67,26 @@ export default function OverviewTab({
   onOpenCertModal
 }) {
   const unreadCount = messages.filter(m => !m.read).length;
+
+  // ── Activity data ─────────────────────────────────────────
+  const [activityData, setActivityData] = useState([]);
+  const [activityLoading, setActivityLoading] = useState(true);
+
+  useEffect(() => {
+    opportunitiesApi.getActivityData()
+      .then(data => setActivityData(data))
+      .catch(() => {
+        // Fallback placeholder on error
+        const days = [];
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          days.push({ label: d.toLocaleDateString('fr-FR', { weekday: 'short' }), created: 0, sent: 0 });
+        }
+        setActivityData(days);
+      })
+      .finally(() => setActivityLoading(false));
+  }, []);
 
   return (
     <div className="w-full flex flex-col gap-6">
@@ -237,6 +295,33 @@ export default function OverviewTab({
             </span>
           </div>
         </div>
+      </div>
+
+      {/* ── Activity Graph ─────────────────────────────────── */}
+      <div
+        className="rounded-2xl p-5"
+        style={{ background: 'rgba(15,23,42,0.7)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.07)' }}
+      >
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <BarChart2 size={15} className="text-cyan-400" />
+            <h3 className="text-sm font-bold font-['Outfit'] text-white">Activité Pipeline — 7 derniers jours</h3>
+          </div>
+          <span className="flex items-center gap-1 text-[10px] text-slate-500">
+            <span className="w-2 h-2 rounded-sm inline-block" style={{ background: '#38bdf8' }} />Trouvées
+          </span>
+        </div>
+        {activityLoading ? (
+          <div className="h-20 flex items-center justify-center">
+            <span className="text-xs text-slate-500 animate-pulse">Chargement...</span>
+          </div>
+        ) : activityData.length === 0 || activityData.every(d => d.created === 0) ? (
+          <div className="h-20 flex items-center justify-center">
+            <span className="text-xs text-slate-500">Aucune activité cette semaine</span>
+          </div>
+        ) : (
+          <ActivityChart data={activityData} />
+        )}
       </div>
     </div>
   );

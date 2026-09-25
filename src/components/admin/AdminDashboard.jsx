@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ToastProvider, useToast } from '../../hooks/useToast.jsx';
 import { 
   authApi, 
   projectsApi, 
@@ -34,6 +36,15 @@ import ExperienceModal from './modals/ExperienceModal';
 import CertificationModal from './modals/CertificationModal';
 
 export default function AdminDashboard({ initialTab }) {
+  return (
+    <ToastProvider>
+      <AdminDashboardInner initialTab={initialTab} />
+    </ToastProvider>
+  );
+}
+
+function AdminDashboardInner({ initialTab }) {
+  const { toast } = useToast();
   const validTabs = ['overview', 'projects', 'skills', 'experiences', 'certifications', 'messages', 'opportunities', 'prospects', 'profile'];
 
   const getTabFromUrl = () => {
@@ -57,7 +68,6 @@ export default function AdminDashboard({ initialTab }) {
   const [user, setUser] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [initialLoaded, setInitialLoaded] = useState(false);
-  const [alert, setAlert] = useState(null);
 
   // Synchronisation activeTab → URL propre (/admin/dashboard/[tab]) sans recharger la page
   const handleSetActiveTab = (tab) => {
@@ -117,8 +127,9 @@ export default function AdminDashboard({ initialTab }) {
   });
 
   const showAlert = (type, message) => {
-    setAlert({ type, message });
-    setTimeout(() => setAlert(null), 4000);
+    if (type === 'success') toast.success(message);
+    else if (type === 'error') toast.error(message);
+    else toast.info(message);
   };
 
   const handleLogout = () => {
@@ -505,81 +516,89 @@ export default function AdminDashboard({ initialTab }) {
 
       {/* Main Content Area */}
       <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 overflow-y-auto max-w-7xl mx-auto w-full">
-        {/* Top Notification Banner */}
-        <AdminAlert alert={alert} />
 
-        {/* Tab Router */}
-        {activeTab === 'overview' && (
-          <OverviewTab
-            projects={projects}
-            skills={skills}
-            messages={messages}
-            experiences={experiences}
-            certifications={certifications}
-            initialLoaded={initialLoaded}
-            setActiveTab={handleSetActiveTab}
-            onOpenProjectModal={() => handleOpenProjectModal()}
-            onOpenSkillModal={() => handleOpenSkillModal()}
-            onOpenCertModal={() => handleOpenCertModal()}
-          />
-        )}
+        {/* Animated Tab Router */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            {activeTab === 'overview' && (
+              <OverviewTab
+                projects={projects}
+                skills={skills}
+                messages={messages}
+                experiences={experiences}
+                certifications={certifications}
+                initialLoaded={initialLoaded}
+                setActiveTab={handleSetActiveTab}
+                onOpenProjectModal={() => handleOpenProjectModal()}
+                onOpenSkillModal={() => handleOpenSkillModal()}
+                onOpenCertModal={() => handleOpenCertModal()}
+              />
+            )}
 
-        {activeTab === 'projects' && (
-          <ProjectsTab
-            projects={projects}
-            onOpenModal={() => handleOpenProjectModal()}
-            onEditProject={handleOpenProjectModal}
-            onDeleteProject={handleDeleteProject}
-            onReorderProjects={handleReorderProjects}
-          />
-        )}
+            {activeTab === 'projects' && (
+              <ProjectsTab
+                projects={projects}
+                onOpenModal={() => handleOpenProjectModal()}
+                onEditProject={handleOpenProjectModal}
+                onDeleteProject={handleDeleteProject}
+                onReorderProjects={handleReorderProjects}
+              />
+            )}
 
-        {activeTab === 'skills' && (
-          <SkillsTab
-            skills={skills}
-            onOpenModal={() => handleOpenSkillModal()}
-            onEditSkill={handleOpenSkillModal}
-            onDeleteSkill={handleDeleteSkill}
-          />
-        )}
+            {activeTab === 'skills' && (
+              <SkillsTab
+                skills={skills}
+                onOpenModal={() => handleOpenSkillModal()}
+                onEditSkill={handleOpenSkillModal}
+                onDeleteSkill={handleDeleteSkill}
+              />
+            )}
 
-        {activeTab === 'experiences' && (
-          <ExperiencesTab
-            experiences={experiences}
-            onOpenModal={() => handleOpenExpModal()}
-            onEditExp={handleOpenExpModal}
-            onDeleteExp={handleDeleteExp}
-          />
-        )}
+            {activeTab === 'experiences' && (
+              <ExperiencesTab
+                experiences={experiences}
+                onOpenModal={() => handleOpenExpModal()}
+                onEditExp={handleOpenExpModal}
+                onDeleteExp={handleDeleteExp}
+              />
+            )}
 
-        {activeTab === 'certifications' && (
-          <CertificationsTab
-            certifications={certifications}
-            onOpenModal={() => handleOpenCertModal()}
-            onEditCert={handleOpenCertModal}
-            onDeleteCert={handleDeleteCert}
-          />
-        )}
+            {activeTab === 'certifications' && (
+              <CertificationsTab
+                certifications={certifications}
+                onOpenModal={() => handleOpenCertModal()}
+                onEditCert={handleOpenCertModal}
+                onDeleteCert={handleDeleteCert}
+              />
+            )}
 
-        {activeTab === 'messages' && (
-          <MessagesTab
-            messages={messages}
-            onMarkRead={handleMarkMessageRead}
-            onDeleteMessage={handleDeleteMessage}
-          />
-        )}
+            {activeTab === 'messages' && (
+              <MessagesTab
+                messages={messages}
+                onMarkRead={handleMarkMessageRead}
+                onDeleteMessage={handleDeleteMessage}
+              />
+            )}
 
-        {activeTab === 'opportunities' && (
-          <OpportunitiesTab onAlert={showAlert} />
-        )}
+            {activeTab === 'opportunities' && (
+              <OpportunitiesTab onAlert={showAlert} />
+            )}
 
-        {activeTab === 'prospects' && (
-          <ProspectsCRM />
-        )}
+            {activeTab === 'prospects' && (
+              <ProspectsCRM />
+            )}
 
-        {activeTab === 'profile' && (
-          <ProfileTab onAlert={showAlert} user={user} onLogout={handleLogout} />
-        )}
+            {activeTab === 'profile' && (
+              <ProfileTab onAlert={showAlert} user={user} onLogout={handleLogout} />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Mobile Bottom Navigation */}
