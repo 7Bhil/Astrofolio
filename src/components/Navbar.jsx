@@ -56,8 +56,13 @@ const Navbar = ({ lang, translations }) => {
   return (
     <header className={`navbar-wrapper ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
-        <a href="#home" className={`logo ${isScrolled ? 'logo-scrolled' : ''}`}>
-          <span className="text-cyan">7</span>Bhil
+        <a href="#home" className={`logo flex items-center gap-2 ${isScrolled ? 'logo-scrolled' : ''}`}>
+          <img 
+            src="/branding/logo-symbol.png" 
+            alt="7Bhil" 
+            className="w-8 h-8 object-contain transition-transform duration-300 hover:rotate-12 hover:scale-110 drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]" 
+          />
+          <span><span className="text-cyan">7</span>Bhil</span>
         </a>
 
         {/* Desktop Navigation */}
