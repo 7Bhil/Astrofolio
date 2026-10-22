@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../hooks/use-outside-click";
 import { ExternalLink, Github, ArrowUpRight, Sparkles } from "lucide-react";
 import { projectsApi } from "../services/api";
+import { ProjectList, ProjectsHorizontal } from "./ProjectsShowcase";
 
 export function ExpandableProjects({ 
   projects: initialProjects = [], 
@@ -15,6 +16,7 @@ export function ExpandableProjects({
   const [active, setActive] = useState(null);
   const [projectList, setProjectList] = useState(initialProjects);
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [view, setView] = useState("list");
   const id = useId();
   const ref = useRef(null);
 
@@ -79,9 +81,10 @@ export function ExpandableProjects({
 
   useOutsideClick(ref, () => setActive(null));
 
-  const filteredProjects = selectedCategory === "all"
-    ? projectList
-    : projectList.filter((p) => p.category === selectedCategory);
+  const filteredProjects = useMemo(
+    () => (selectedCategory === "all" ? projectList : projectList.filter((p) => p.category === selectedCategory)),
+    [projectList, selectedCategory]
+  );
 
   const categoryEntries = Object.entries(categories);
 
@@ -154,14 +157,6 @@ export function ExpandableProjects({
             >
               {/* Modal Image Header with Browser frame */}
               <div className="relative overflow-hidden bg-neutral-900 border-b border-neutral-800 flex-shrink-0">
-                <div className="flex items-center gap-1.5 px-4 py-3 bg-neutral-900/90 border-b border-neutral-800/80">
-                  <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
-                  <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block" />
-                  <span className="w-3 h-3 rounded-full bg-green-500/80 inline-block" />
-                  <span className="ml-3 text-[11px] font-mono text-neutral-400 truncate">
-                    {active.liveUrl ? active.liveUrl.replace(/^https?:\/\//, '') : active.title}
-                  </span>
-                </div>
                 <motion.div layoutId={"image-" + active.title + "-" + id}>
                   <img
                     src={typeof active.image === 'string' ? active.image : (active.image?.src || active.image)}
@@ -177,7 +172,6 @@ export function ExpandableProjects({
                   <div>
                     {active.metric && (
                       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-950/60 text-emerald-400 border border-emerald-800/50 mb-3">
-                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                         {active.metric}
                       </span>
                     )}
@@ -255,147 +249,32 @@ export function ExpandableProjects({
         ) : null}
       </AnimatePresence>
 
-      {/* Projects List Grid */}
-      <div className="flex flex-col gap-10 lg:gap-14">
-        {filteredProjects.map((card, index) => {
-          const isReversed = index % 2 !== 0;
-
-          return (
-            <motion.div
-              layout
-              role="button"
-              tabIndex={0}
-              layoutId={"card-" + card.title + "-" + id}
-              key={card.id || card.title}
-              onClick={() => setActive(card)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" || event.key === " ") {
-                  event.preventDefault();
-                  setActive(card);
-                }
-              }}
-              className={`group relative rounded-3xl overflow-hidden cursor-pointer bg-neutral-900/50 border border-neutral-800/80 hover:border-cyan-500/50 hover:shadow-2xl hover:shadow-cyan-950/40 transition-all duration-500 flex flex-col ${
-                isReversed ? "lg:flex-row-reverse" : "lg:flex-row"
-              } items-stretch`}
+      {/* View switch */}
+      <div className="flex justify-center mb-10">
+        <div className="inline-flex rounded-full border border-neutral-800 p-1 text-xs font-mono">
+          {[
+            ["list", lang === "en" ? "Index" : "Index"],
+            ["scroll", lang === "en" ? "Showcase" : "Galerie"],
+          ].map(([key, label]) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => setView(key)}
+              className={`px-4 py-1.5 rounded-full transition-colors ${
+                view === key ? "bg-neutral-100 text-neutral-950" : "text-neutral-400 hover:text-neutral-200"
+              }`}
             >
-              {/* Image Preview with Browser Frame */}
-              <motion.div
-                layoutId={"image-" + card.title + "-" + id}
-                className="w-full lg:w-[54%] relative overflow-hidden bg-neutral-950 flex flex-col flex-shrink-0 border-b lg:border-b-0 border-neutral-800/70"
-              >
-                {/* Browser bar */}
-                <div className="flex items-center gap-1.5 px-4 py-2.5 bg-neutral-900/80 border-b border-neutral-800/70 z-10">
-                  <span className="w-2.5 h-2.5 rounded-full bg-red-500/80" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-yellow-500/80" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-green-500/80" />
-                  <span className="ml-3 text-[10px] font-mono text-neutral-400 truncate max-w-[240px]">
-                    {card.liveUrl ? card.liveUrl.replace(/^https?:\/\//, '') : card.title}
-                  </span>
-                </div>
-
-                <div className="h-[250px] sm:h-[300px] lg:h-[360px] relative overflow-hidden">
-                  <img
-                    src={typeof card.image === 'string' ? card.image : (card.image?.src || card.image)}
-                    alt={card.title}
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/80 via-transparent to-transparent lg:hidden" />
-                </div>
-              </motion.div>
-
-              {/* Card Content */}
-              <div className="w-full lg:w-[46%] p-6 sm:p-8 lg:p-9 flex flex-col justify-between gap-6">
-                <div className="space-y-4">
-                  {/* Category & Metric Chip */}
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="text-[10px] uppercase font-mono tracking-widest font-bold px-2.5 py-1 rounded-md bg-neutral-800 text-neutral-300 border border-neutral-700">
-                      {card.categoryLabel || "Projet"}
-                    </span>
-
-                    {card.metric && (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-950/40 px-2.5 py-0.5 rounded-full border border-emerald-800/40">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        {card.metric}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Title */}
-                  <motion.h3
-                    layoutId={"title-" + card.title + "-" + id}
-                    className="font-bold text-2xl sm:text-3xl text-neutral-100 group-hover:text-cyan-400 transition-colors tracking-tight"
-                  >
-                    {card.title}
-                  </motion.h3>
-
-                  {/* Description */}
-                  <p className="text-sm sm:text-base leading-relaxed text-neutral-300 line-clamp-3">
-                    {card.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {card.tags.slice(0, 4).map((tag, idx) => (
-                      <span 
-                        key={idx} 
-                        className="text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-neutral-800/70 text-cyan-400/90 border border-neutral-700/60"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Solved Highlight */}
-                  {card.solved && (
-                    <div className="p-3.5 rounded-xl bg-neutral-950/60 border border-neutral-800/80">
-                      <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-cyan-400/90 block mb-1">
-                        {lang === 'en' ? 'Solved Challenge' : 'Défi résolu'}
-                      </span>
-                      <p className="text-xs text-neutral-300 leading-relaxed line-clamp-2">
-                        {card.solved}
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                {/* Footer links */}
-                <div className="pt-3 flex items-center justify-between border-t border-neutral-800/60">
-                  <span className="text-xs sm:text-sm font-semibold text-cyan-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform duration-300">
-                    {labels.viewDetails || "Étude de cas complète"} 
-                    <ArrowUpRight size={16} />
-                  </span>
-
-                  <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                    {card.githubUrl && (
-                      <a
-                        href={card.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-300 hover:text-white transition-colors"
-                        title={labels.sourceCode || "Code source"}
-                      >
-                        <Github size={16} />
-                      </a>
-                    )}
-                    {card.liveUrl && (
-                      <a
-                        href={card.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500 hover:text-neutral-950 transition-colors"
-                        title={labels.liveDemo || "Démo"}
-                      >
-                        <ExternalLink size={16} />
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-              </div>
-            </motion.div>
-          );
-        })}
+              {label}
+            </button>
+          ))}
+        </div>
       </div>
+
+      {view === "list" ? (
+        <ProjectList key={"l-" + selectedCategory} projects={filteredProjects} onSelect={setActive} lang={lang} />
+      ) : (
+        <ProjectsHorizontal key={"h-" + selectedCategory} projects={filteredProjects} onSelect={setActive} lang={lang} />
+      )}
     </>
   );
 }
