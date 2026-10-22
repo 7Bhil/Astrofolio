@@ -2,7 +2,7 @@ export const collaborators = [
   {
     name: "Emmanuel AGBOTOEDO",
     role: "Full-Stack Engineer & Dev",
-    url: "https://emmanuelagbotoedo.netlify.app/",
+    url: "https://emmanuelagbotoedo.com/fr",
     avatar: "/images/collaborateurs/emmanuel_agbotoedo.webp"
   },
   {
