@@ -3,9 +3,15 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../hooks/use-outside-click";
-import { ExternalLink, Github, ArrowUpRight, Sparkles } from "lucide-react";
+import { ExternalLink, Github, ArrowUpRight, Sparkles, LayoutList, GalleryHorizontalEnd } from "lucide-react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projectsApi } from "../services/api";
 import { ProjectList, ProjectsHorizontal } from "./ProjectsShowcase";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export function ExpandableProjects({ 
   projects: initialProjects = [], 
@@ -19,6 +25,10 @@ export function ExpandableProjects({
   const [view, setView] = useState("list");
   const id = useId();
   const ref = useRef(null);
+
+  const categoryEntries = useMemo(() => {
+    return Object.entries(categories || {});
+  }, [categories]);
 
   const insightCards = [
     { key: "problem", label: lang === 'en' ? "Problem & Context" : "Contexte & Problème" },
@@ -86,13 +96,31 @@ export function ExpandableProjects({
     [projectList, selectedCategory]
   );
 
-  const categoryEntries = Object.entries(categories);
+  // Refresh ScrollTrigger when switching view or category
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [view, selectedCategory]);
+
+  const handleSelectCategory = (cat) => {
+    setSelectedCategory(cat);
+  };
+
+  const handleSelectView = (newView) => {
+    if (newView === view) return;
+    setView(newView);
+    requestAnimationFrame(() => {
+      ScrollTrigger.refresh();
+    });
+  };
 
   return (
     <>
       {/* Category filter pills */}
       {categoryEntries.length > 0 && (
-        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-12">
+        <div className="flex flex-wrap items-center justify-center gap-2.5 mb-10">
           {categoryEntries.map(([key, label]) => {
             const isSelected = selectedCategory === key;
             const count = key === "all" 
@@ -103,8 +131,8 @@ export function ExpandableProjects({
               <button
                 key={key}
                 type="button"
-                onClick={() => setSelectedCategory(key)}
-                className={`relative px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2 border ${
+                onClick={() => handleSelectCategory(key)}
+                className={`relative px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all duration-300 flex items-center gap-2 border cursor-pointer ${
                   isSelected
                     ? "bg-cyan-500/15 text-cyan-300 border-cyan-500/50 shadow-lg shadow-cyan-950/40"
                     : "bg-neutral-900/60 text-neutral-400 border-neutral-800 hover:text-neutral-200 hover:border-neutral-700"
@@ -251,20 +279,23 @@ export function ExpandableProjects({
 
       {/* View switch */}
       <div className="flex justify-center mb-10">
-        <div className="inline-flex rounded-full border border-neutral-800 p-1 text-xs font-mono">
+        <div className="inline-flex rounded-full border border-neutral-800 bg-neutral-900/60 p-1 text-xs font-mono backdrop-blur-sm">
           {[
-            ["list", lang === "en" ? "Index" : "Index"],
-            ["scroll", lang === "en" ? "Showcase" : "Galerie"],
-          ].map(([key, label]) => (
+            { key: "list", label: lang === "en" ? "Index" : "Index", icon: LayoutList },
+            { key: "scroll", label: lang === "en" ? "Gallery" : "Galerie", icon: GalleryHorizontalEnd },
+          ].map(({ key, label, icon: Icon }) => (
             <button
               key={key}
               type="button"
-              onClick={() => setView(key)}
-              className={`px-4 py-1.5 rounded-full transition-colors ${
-                view === key ? "bg-neutral-100 text-neutral-950" : "text-neutral-400 hover:text-neutral-200"
+              onClick={() => handleSelectView(key)}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-full transition-all duration-300 cursor-pointer ${
+                view === key
+                  ? "bg-neutral-100 text-neutral-950 font-semibold shadow-md"
+                  : "text-neutral-400 hover:text-neutral-200"
               }`}
             >
-              {label}
+              <Icon size={14} />
+              <span>{label}</span>
             </button>
           ))}
         </div>
