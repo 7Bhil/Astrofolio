@@ -7,6 +7,7 @@ interface Props {
 
 import ScrollProgress from '../components/ScrollProgress.jsx';
 import Chatbot from '../components/Chatbot.jsx';
+import BrandMotionIntro from '../components/BrandMotionIntro.jsx';
 
 const { 
 	title, 
@@ -167,6 +168,8 @@ const structuredData = [
 <html lang={lang} data-theme="dark">
 	<head>
 		<meta charset="UTF-8" />
+		<script is:inline>try{if(sessionStorage.getItem('brandIntroSeen'))document.documentElement.classList.add('intro-seen')}catch(e){}</script>
+		<style is:global>.intro-seen .brand-intro{display:none!important}</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/x-icon" href="/favicon.ico?v=7" />
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=7" />
@@ -273,6 +276,7 @@ const structuredData = [
 				}
 			</script>
 		)}
+		{!isAdminPage && !isAiPage && <BrandMotionIntro client:load />}
 		<ScrollProgress client:load />
 		<slot />
 		{!isAdminPage && !isAiPage && <Chatbot client:load lang={lang} />}

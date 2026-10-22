@@ -5,6 +5,9 @@ export default function BrandMotionIntro({ onComplete }) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
+    try {
+      if (sessionStorage.getItem('brandIntroSeen')) { setIsVisible(false); return; }
+    } catch (e) {}
     // Auto-dismiss intro after 2.6 seconds or skip on click
     const timer = setTimeout(() => {
       handleClose();
@@ -13,6 +16,7 @@ export default function BrandMotionIntro({ onComplete }) {
   }, []);
 
   const handleClose = () => {
+    try { sessionStorage.setItem('brandIntroSeen', '1'); } catch (e) {}
     setIsVisible(false);
     if (onComplete) onComplete();
   };
@@ -23,7 +27,7 @@ export default function BrandMotionIntro({ onComplete }) {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950 overflow-hidden cursor-pointer select-none"
+          className="brand-intro fixed inset-0 z-[10000] flex items-center justify-center bg-slate-950 overflow-hidden cursor-pointer select-none"
           onClick={handleClose}
         >
           {/* Ambient Rotating Pattern in background */}
