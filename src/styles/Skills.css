@@ -50,19 +50,21 @@
   border-radius: 1.5rem;
   padding: 2rem 2.25rem;
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: 1px solid var(--border-color);
-  background: var(--bg-primary);
-  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(10, 15, 30, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .skill-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(6, 182, 212, 0.5);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(6, 182, 212, 0.15);
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(14, 21, 40, 0.85);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
 }
 
 .bento-header {
@@ -79,69 +81,78 @@
 }
 
 .category-badge {
-  font-size: 0.7rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.68rem;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   font-weight: 700;
-  color: var(--accent-primary);
+  opacity: 0.9;
 }
 
 .bento-titles h3 {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--text-primary);
+  font-size: 1.3rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  color: #f8fafc;
   margin: 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .icon-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 52px;
-  height: 52px;
-  min-width: 52px;
-  border-radius: 16px;
-  color: white;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.skill-card:hover .icon-wrapper {
+  border-color: var(--cat-accent, rgba(255, 255, 255, 0.2));
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .skill-icon {
-  width: 26px;
-  height: 26px;
-  color: white;
+  width: 22px;
+  height: 22px;
+  color: #cbd5e1;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.skill-card:hover .skill-icon {
+  color: var(--cat-accent, #ffffff);
+  transform: scale(1.05);
 }
 
 .skill-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.65rem;
+  gap: 0.6rem;
 }
 
 .skill-tag {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0.95rem;
+  gap: 0.55rem;
+  padding: 0.45rem 0.85rem;
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--border-color);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 9999px;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
-  color: var(--text-secondary);
-  transition: 
-    opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-    transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
-    border-color 0.25s ease,
-    background 0.25s ease,
-    color 0.25s ease,
-    box-shadow 0.25s ease;
+  color: #94a3b8;
+  transition: all 0.2s ease;
   will-change: transform, opacity;
 }
 
 .skill-tag.reveal {
   opacity: 0;
-  transform: translateY(14px) scale(0.96);
+  transform: translateY(12px) scale(0.97);
 }
 
 .skill-tag.reveal.active {
@@ -150,40 +161,41 @@
 }
 
 .tech-logo {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
   object-fit: contain;
-  filter: grayscale(20%);
-  transition: filter 0.3s ease, transform 0.3s ease;
+  opacity: 0.75;
+  transition: all 0.2s ease;
 }
 
 .skill-tag:hover {
-  border-color: rgba(6, 182, 212, 0.4);
-  background: rgba(6, 182, 212, 0.12);
-  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(6, 182, 212, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .skill-tag:hover .tech-logo {
-  filter: grayscale(0%);
+  opacity: 1;
   transform: scale(1.1);
 }
 
-.bento-bg-glow {
+.bento-subtle-glow {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.03;
-  transition: opacity 0.5s ease;
+  width: 180px;
+  height: 180px;
+  background: radial-gradient(circle at 100% 0%, var(--cat-accent, rgba(255,255,255,0.05)), transparent 70%);
+  opacity: 0.04;
+  transition: opacity 0.4s ease;
   pointer-events: none;
   z-index: 0;
 }
 
-.skill-card:hover .bento-bg-glow {
-  opacity: 0.18;
+.skill-card:hover .bento-subtle-glow {
+  opacity: 0.12;
 }
 
 .bento-content {
@@ -201,12 +213,12 @@
     margin-bottom: 1.25rem;
   }
   .icon-wrapper {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
     border-radius: 12px;
   }
   .bento-titles h3 {
-    font-size: 1.2rem;
+    font-size: 1.15rem;
   }
 }

@@ -239,3 +239,9 @@
     display: flex;
   }
 }
+
+/* Brand lockup — swaps with theme */
+.logo-img { height: 34px; width: auto; display: block; }
+.logo-img-light { display: none; }
+[data-theme="light"] .logo-img-dark { display: none; }
+[data-theme="light"] .logo-img-light { display: block; }
