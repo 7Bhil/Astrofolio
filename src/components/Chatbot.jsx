@@ -7,9 +7,9 @@ import '../styles/Chatbot.css';
 
 const AI_DATA = {
   fr: {
-    badge: "7Bhil AI v2.4",
-    modelName: "Bhilal-GPT (Conseiller Technique & Projets)",
-    status: "En ligne",
+    badge: "7Bhil AI v3.0 (OpenRouter / DeepSeek Engine)",
+    modelName: "Bhilal-AI (Architecte Technique & Conseiller Projets)",
+    status: "En ligne • Prêt à répondre",
     placeholder: "Posez votre question ou détaillez votre besoin...",
     quickPrompts: [
       { label: "Discuter sur WhatsApp", query: "Je veux échanger directement sur WhatsApp" },
@@ -119,9 +119,9 @@ Le plus simple est d'en discuter directement avec lui sur [WhatsApp](https://wa.
     }
   },
   en: {
-    badge: "7Bhil AI v2.4",
-    modelName: "Bhilal-GPT (Technical Advisor & Project Agent)",
-    status: "Online",
+    badge: "7Bhil AI v3.0 (OpenRouter / DeepSeek Engine)",
+    modelName: "Bhilal-AI (Technical Architect & Project Advisor)",
+    status: "Online • Ready to assist",
     placeholder: "Ask a question or explain your requirements...",
     quickPrompts: [
       { label: "Chat on WhatsApp", query: "I want to chat directly on WhatsApp" },
@@ -467,12 +467,27 @@ const Chatbot = ({ lang = 'fr', standalone = false }) => {
   };
 
   const formatText = (text) => {
+    if (!text) return '';
     let formatted = text
+      // Headers ###, ##, #
+      .replace(/^### (.*$)/gim, '<h4 class="ai-msg-h4">$1</h4>')
+      .replace(/^## (.*$)/gim, '<h3 class="ai-msg-h3">$1</h3>')
+      .replace(/^# (.*$)/gim, '<h2 class="ai-msg-h2">$1</h2>')
+      // Code blocks ```code```
+      .replace(/```([a-z0-9_-]*)\n([\s\S]*?)```/gim, '<pre class="ai-code-block"><code>$2</code></pre>')
+      // Bold & Italic
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*([^\*]+)\*/g, '<em>$1</em>')
+      // Inline code
+      .replace(/`([^`]+)`/g, '<code class="ai-inline-code">$1</code>')
+      // Markdown links
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+      // Bullet points
+      .replace(/^\s*[-•]\s+(.*$)/gim, '<li class="ai-list-item">$1</li>')
+      // Numbered points
+      .replace(/^\s*(\d+)\.\s+(.*$)/gim, '<li class="ai-list-item ai-list-ordered"><span class="ai-num-bullet">$1.</span> $2</li>')
+      // Paragraphs & breaks
       .replace(/\n\n/g, '<br/><br/>')
-      .replace(/\n- /g, '<br/>• ')
       .replace(/\n/g, '<br/>');
     return formatted;
   };
