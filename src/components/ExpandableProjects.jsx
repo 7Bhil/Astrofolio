@@ -22,7 +22,7 @@ export function ExpandableProjects({
   const [active, setActive] = useState(null);
   const [projectList, setProjectList] = useState(initialProjects);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [view, setView] = useState("list");
+  const [view, setView] = useState("scroll");
   const id = useId();
   const ref = useRef(null);
 

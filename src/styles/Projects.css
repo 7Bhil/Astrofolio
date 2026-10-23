@@ -1,10 +1,12 @@
 .projects-section {
   position: relative;
+  padding-top: 3.5rem;
+  padding-bottom: 3rem;
 }
 
 .section-header {
   text-align: center;
-  margin-bottom: 4rem;
+  margin-bottom: 2.5rem;
 }
 
 .section-header .section-title::after {

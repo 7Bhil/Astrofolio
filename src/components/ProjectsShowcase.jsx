@@ -236,205 +236,164 @@ export function ProjectList({ projects, onSelect, lang = "fr" }) {
   );
 }
 
-/* ───────────── Horizontal scroll: pinned on desktop, native swipe on mobile ───────────── */
+/* ───────────── Infinite Dual-Row Marquee Carousel (Opposite directions) ───────────── */
 export function ProjectsHorizontal({ projects, onSelect, lang = "fr" }) {
-  const wrapRef = useRef(null);
-  const trackRef = useRef(null);
-  const barRef = useRef(null);
-  const counterRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const containerRef = useRef(null);
+  const row1Ref = useRef(null);
+  const row2Ref = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
 
-  useLayoutEffect(() => {
-    const mm = gsap.matchMedia();
+  // Split projects into two balanced rows
+  const half = Math.ceil(projects.length / 2);
+  const row1Original = projects.slice(0, half);
+  const row2Original = projects.slice(half);
 
-    mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-      const track = trackRef.current;
-      const wrap = wrapRef.current;
-      if (!track || !wrap) return;
+  // If a row is too small, duplicate to ensure continuous seamless scroll
+  const duplicate = (arr) => {
+    if (!arr || arr.length === 0) return [];
+    let res = [...arr];
+    while (res.length < 6) {
+      res = [...res, ...arr];
+    }
+    return res;
+  };
 
-      const totalCards = projects.length;
-      const distance = () => Math.max(0, track.scrollWidth - wrap.clientWidth);
-      const cards = gsap.utils.toArray(".horizontal-project-card");
-      const cardImages = gsap.utils.toArray(".horizontal-project-image");
+  const row1List = duplicate(row1Original);
+  const row2List = duplicate(row2Original.length > 0 ? row2Original : row1Original);
 
-      // Set initial states for cards
-      cards.forEach((card, idx) => {
-        gsap.set(card, {
-          scale: idx === 0 ? 1 : 0.94,
-          opacity: idx === 0 ? 1 : 0.65,
-        });
-      });
+  // Triple to allow infinite seamless looping in GSAP
+  const row1Items = [...row1List, ...row1List, ...row1List];
+  const row2Items = [...row2List, ...row2List, ...row2List];
 
-      // Horizontal track scrolling timeline
-      const st = ScrollTrigger.create({
-        trigger: wrap,
-        start: "top top+=80",
-        end: () => "+=" + distance(),
-        pin: true,
-        scrub: 1,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
+  useEffect(() => {
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
 
-          // Smooth progress bar
-          if (barRef.current) {
-            gsap.set(barRef.current, { scaleX: progress });
-          }
+    const r1 = row1Ref.current;
+    const r2 = row2Ref.current;
+    if (!r1 || !r2) return;
 
-          // Active card index computation
-          const currentIdx = Math.min(
-            totalCards - 1,
-            Math.floor(progress * totalCards + 0.3)
-          );
-          setActiveIndex(currentIdx);
-
-          // Card focus effect: active card scales to 1, others slightly smaller & dimmed
-          cards.forEach((card, idx) => {
-            const cardCenterProgress = totalCards > 1 ? idx / (totalCards - 1) : 0;
-            const distFromCenter = Math.abs(progress - cardCenterProgress);
-            const factor = Math.max(0, 1 - distFromCenter * 2.2);
-
-            gsap.to(card, {
-              scale: 0.94 + 0.06 * factor,
-              opacity: 0.6 + 0.4 * factor,
-              duration: 0.25,
-              overwrite: "auto",
-              ease: "power1.out",
-            });
-          });
-        },
-      });
-
-      // Main translation tween
-      gsap.to(track, {
-        x: () => -distance(),
-        ease: "none",
-        scrollTrigger: st,
-      });
-
-      // Parallax effect on card images during horizontal scroll
-      cardImages.forEach((img) => {
-        gsap.fromTo(
-          img,
-          { xPercent: -12, scale: 1.15 },
-          {
-            xPercent: 12,
-            scale: 1.15,
-            ease: "none",
-            scrollTrigger: {
-              trigger: wrap,
-              start: "top top+=80",
-              end: () => "+=" + distance(),
-              scrub: 1,
-              invalidateOnRefresh: true,
-            },
-          }
-        );
-      });
+    // Row 1: Right to Left (0% to -33.333%)
+    const tween1 = gsap.to(r1, {
+      xPercent: -33.3333,
+      duration: Math.max(25, row1List.length * 7),
+      ease: "none",
+      repeat: -1,
     });
 
-    return () => mm.revert();
-  }, [projects]);
+    // Row 2: Left to Right (-33.333% to 0%)
+    gsap.set(r2, { xPercent: -33.3333 });
+    const tween2 = gsap.to(r2, {
+      xPercent: 0,
+      duration: Math.max(25, row2List.length * 7),
+      ease: "none",
+      repeat: -1,
+    });
+
+    if (isPaused) {
+      tween1.pause();
+      tween2.pause();
+    } else {
+      tween1.play();
+      tween2.play();
+    }
+
+    return () => {
+      tween1.kill();
+      tween2.kill();
+    };
+  }, [row1List.length, row2List.length, isPaused]);
 
   return (
-    <div ref={wrapRef} className="relative py-4">
-      {/* Horizontal showcase container */}
-      <div className="overflow-x-auto lg:overflow-hidden snap-x snap-mandatory lg:snap-none pb-6 -mx-4 px-4 lg:mx-0 lg:px-0">
-        <div ref={trackRef} className="flex gap-6 lg:gap-10 w-max items-center">
-          {projects.map((p, i) => (
-            <button
-              key={p.id || p.title}
-              type="button"
-              onClick={() => onSelect(p)}
-              className="horizontal-project-card group snap-center shrink-0 w-[86vw] sm:w-[62vw] lg:w-[48vw] max-w-[760px] text-left transform-gpu transition-all duration-300 cursor-pointer"
-            >
-              {/* Media card */}
-              <div className="relative overflow-hidden rounded-2xl border border-neutral-800 bg-neutral-950 h-[46vh] lg:h-[52vh] group-hover:border-cyan-500/50 shadow-2xl transition-all">
-                <img
-                  src={imgSrc(p.image)}
-                  alt={p.title}
-                  loading="lazy"
-                  className="horizontal-project-image w-full h-full object-cover object-top will-change-transform group-hover:scale-105 transition-transform duration-700"
-                />
+    <div 
+      ref={containerRef}
+      className="relative w-full overflow-hidden py-4 space-y-6 select-none"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Edge gradient fade masks */}
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-neutral-950 to-transparent z-10" />
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-neutral-950 to-transparent z-10" />
 
-                {/* Subtle vignette overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/20 to-transparent opacity-80" />
-
-                {/* Index badge */}
-                <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className="font-mono text-xs px-3 py-1 rounded-full bg-neutral-900/80 backdrop-blur-md text-neutral-200 border border-neutral-700">
-                    {pad(i)} / {pad(projects.length - 1)}
-                  </span>
-                  <span className="hidden sm:inline-block font-mono text-[11px] px-2.5 py-1 rounded-full bg-cyan-950/70 border border-cyan-800/50 text-cyan-300">
-                    {p.categoryLabel}
-                  </span>
-                </div>
-
-                {/* Hover CTA hint */}
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0 hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-cyan-500 text-neutral-950 font-medium text-xs shadow-lg">
-                  <span>{lang === "en" ? "Explore" : "Découvrir"}</span>
-                  <ArrowUpRight size={14} />
-                </div>
-              </div>
-
-              {/* Information footer */}
-              <div className="mt-4 flex items-start justify-between gap-4 px-1">
-                <div className="min-w-0">
-                  <h3 className="text-xl lg:text-2xl font-bold tracking-tight text-neutral-100 group-hover:text-cyan-400 transition-colors">
-                    {p.title}
-                  </h3>
-                  <p className="mt-1.5 text-sm text-neutral-400 line-clamp-2">
-                    {p.metric}
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {(p.tags || []).slice(0, 4).map((tag, tIdx) => (
-                      <span
-                        key={tIdx}
-                        className="text-[11px] font-mono px-2 py-0.5 rounded bg-neutral-900 text-neutral-400 border border-neutral-800"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="w-10 h-10 rounded-full border border-neutral-800 group-hover:border-cyan-400 group-hover:bg-cyan-500/10 flex items-center justify-center shrink-0 transition-colors">
-                  <ArrowUpRight
-                    size={20}
-                    className="text-neutral-500 group-hover:text-cyan-400 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  />
-                </div>
-              </div>
-            </button>
+      {/* Row 1: Right to Left */}
+      <div className="flex overflow-hidden">
+        <div ref={row1Ref} className="flex gap-5 sm:gap-6 shrink-0 will-change-transform">
+          {row1Items.map((p, idx) => (
+            <ProjectCard key={`r1-${idx}`} project={p} onSelect={onSelect} lang={lang} />
           ))}
         </div>
       </div>
 
-      {/* Interactive visual progress tracker */}
-      <div className="hidden lg:flex items-center justify-between gap-6 mt-8">
-        <div className="flex-1 h-1 bg-neutral-800 rounded-full overflow-hidden">
-          <div
-            ref={barRef}
-            className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 origin-left"
-            style={{ transform: "scaleX(0)" }}
-          />
-        </div>
-        <div
-          ref={counterRef}
-          className="font-mono text-xs text-neutral-400 shrink-0 flex items-center gap-2"
-        >
-          <span className="text-cyan-400 font-bold">{pad(activeIndex)}</span>
-          <span className="text-neutral-600">/</span>
-          <span>{pad(projects.length - 1)}</span>
+      {/* Row 2: Left to Right */}
+      <div className="flex overflow-hidden">
+        <div ref={row2Ref} className="flex gap-5 sm:gap-6 shrink-0 will-change-transform">
+          {row2Items.map((p, idx) => (
+            <ProjectCard key={`r2-${idx}`} project={p} onSelect={onSelect} lang={lang} />
+          ))}
         </div>
       </div>
 
-      <p className="mt-3 text-xs font-mono text-neutral-500 text-center">
-        {lang === "en"
-          ? "Scroll horizontally or use your wheel to explore"
-          : "Faites défiler pour explorer la galerie de projets"}
-      </p>
+      <div className="flex items-center justify-center gap-2 pt-2 text-xs font-mono text-neutral-500">
+        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+        <span>
+          {lang === "en"
+            ? "Hover any card to pause & explore details"
+            : "Survolez une carte pour figer le défilement et inspecter"}
+        </span>
+      </div>
     </div>
+  );
+}
+
+function ProjectCard({ project, onSelect, lang }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(project)}
+      className="group relative shrink-0 w-[290px] sm:w-[360px] md:w-[410px] text-left rounded-2xl bg-neutral-900/80 border border-neutral-800 hover:border-cyan-500/50 p-3.5 sm:p-4 transition-all duration-300 hover:shadow-xl hover:shadow-cyan-950/30 hover:-translate-y-1.5 cursor-pointer backdrop-blur-sm"
+    >
+      <div className="relative h-44 sm:h-52 w-full overflow-hidden rounded-xl bg-neutral-950">
+        <img
+          src={imgSrc(project.image)}
+          alt={project.title}
+          loading="lazy"
+          className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/90 via-neutral-950/20 to-transparent" />
+        
+        {/* Category tag */}
+        <span className="absolute top-2.5 left-2.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-neutral-900/85 backdrop-blur-md text-cyan-300 border border-cyan-800/40">
+          {project.categoryLabel || "Web"}
+        </span>
+
+        {/* Hover action icon */}
+        <div className="absolute top-2.5 right-2.5 w-7 h-7 rounded-full bg-neutral-900/80 backdrop-blur-md border border-neutral-700 flex items-center justify-center text-neutral-300 group-hover:bg-cyan-500 group-hover:text-neutral-950 group-hover:border-cyan-400 transition-all">
+          <ArrowUpRight size={14} />
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <div className="flex items-center justify-between gap-2">
+          <h4 className="font-bold text-sm sm:text-base text-neutral-100 group-hover:text-cyan-300 transition-colors truncate">
+            {project.title}
+          </h4>
+        </div>
+        <p className="mt-1 text-xs text-neutral-400 line-clamp-1">
+          {project.metric}
+        </p>
+
+        {/* Tags */}
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
+          {(project.tags || []).slice(0, 3).map((tag, i) => (
+            <span
+              key={i}
+              className="px-2 py-0.5 text-[10px] font-mono rounded bg-neutral-950 text-neutral-400 border border-neutral-800"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+    </button>
   );
 }
