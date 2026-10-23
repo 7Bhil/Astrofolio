@@ -8,6 +8,7 @@ import About from '../sections/About.astro';
 import Skills from '../sections/Skills.astro';
 import Projects from '../sections/Projects.astro';
 import Certifications from '../components/Certifications.jsx';
+import Collaborators from '../sections/Collaborators.astro';
 import Contact from '../sections/Contact.astro';
 import { translations } from '../constants/translations';
 
@@ -29,6 +30,7 @@ const footerText = translations[lang].footer.rights;
 		<Skills lang={lang} />
 		<Projects lang={lang} />
 		<Certifications client:load t={translations[lang].certifications} />
+		<Collaborators lang={lang} />
 		<Contact lang={lang} />
 	</main>
 	

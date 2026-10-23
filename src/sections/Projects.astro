@@ -9,6 +9,7 @@ import vitchImg from '../assets/images/vitch.webp';
 import busolaImg from '../assets/images/Busola.png';
 import omnisintImg from '../assets/images/OMNISINT.png';
 import bhilCoursImg from '../assets/images/cours.webp';
+import immobuildImg from '../assets/images/immobuild.webp';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
@@ -109,6 +110,21 @@ const featuredProjects = [
     image: bhilCoursImg,
     githubUrl: 'https://github.com/7Bhil/Cours-front',
     liveUrl: 'https://bhilcours.netlify.app/'
+  },
+  {
+    id: 'immobuild',
+    category: 'web',
+    categoryLabel: lang === 'en' ? 'Construction & Civil Engineering' : 'BTP & Génie Civil',
+    metric: lang === 'en' ? '< 1s Load Time · High Conversion' : '< 1s Chargement · Haute Conversion',
+    title: t('projects.immobuild.title'),
+    description: t('projects.immobuild.description'),
+    problem: t('projects.immobuild.problem'),
+    decision: t('projects.immobuild.decision'),
+    impact: t('projects.immobuild.impact'),
+    solved: t('projects.immobuild.solved'),
+    tags: ['React', 'Tailwind CSS', 'Vite', 'BIM / 3D', 'SEO'],
+    image: immobuildImg,
+    liveUrl: 'https://fonico.emmanuelagbotoedo.com/'
   }
 ];
 

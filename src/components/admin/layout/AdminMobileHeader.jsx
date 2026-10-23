@@ -44,12 +44,10 @@ export default function AdminMobileHeader({ activeTab, setActiveTab, user, count
           <div
             className="w-8 h-8 rounded-xl flex items-center justify-center font-black font-['Outfit'] text-white text-sm"
             style={{
-              background: 'linear-gradient(135deg, #2563eb, #06b6d4)',
+              background: 'rgba(255,255,255,0.06)',
               boxShadow: '0 0 16px rgba(6,182,212,0.4)',
             }}
-          >
-            7B
-          </div>
+          ><img src="/branding/logo-symbol.png" alt="7Bhil" className="w-full h-full object-contain p-1.5" /></div>
           <div>
             <h2 className="text-sm font-bold font-['Outfit'] text-white leading-tight">Studio Admin</h2>
             <span className="text-[10px] font-semibold text-slate-500">{tabLabel}</span>
@@ -109,10 +107,8 @@ export default function AdminMobileHeader({ activeTab, setActiveTab, user, count
               <div className="flex items-center gap-2.5">
                 <div
                   className="w-9 h-9 rounded-xl flex items-center justify-center font-black font-['Outfit'] text-white text-sm"
-                  style={{ background: 'linear-gradient(135deg, #2563eb, #06b6d4)', boxShadow: '0 0 16px rgba(6,182,212,0.3)' }}
-                >
-                  7B
-                </div>
+                  style={{ background: 'rgba(255,255,255,0.06)', boxShadow: '0 0 16px rgba(6,182,212,0.3)' }}
+                ><img src="/branding/logo-symbol.png" alt="7Bhil" className="w-full h-full object-contain p-1.5" /></div>
                 <div>
                   <p className="text-sm font-bold text-white">Bhilal CHITOU</p>
                   <p className="text-[10px] text-slate-500">{user?.email || '7bhilal.chitou7@gmail.com'}</p>

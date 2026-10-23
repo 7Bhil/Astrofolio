@@ -418,7 +418,12 @@ export default function OpportunitiesTab({ onAlert }) {
 
           {/* Cards List */}
           <div className="flex flex-col gap-4">
-            {filteredOpportunities.length === 0 ? (
+            {loading ? (
+              <div className="p-12 text-center bg-slate-900/40 border border-white/10 rounded-3xl flex flex-col items-center justify-center gap-3">
+                <RefreshCw size={24} className="text-cyan-400 animate-spin" />
+                <p className="text-xs text-slate-400 font-medium">Chargement des opportunités qualifiées...</p>
+              </div>
+            ) : filteredOpportunities.length === 0 ? (
               <div className="p-12 text-center bg-slate-900/40 border border-white/10 rounded-3xl text-slate-400 text-xs">
                 Aucune opportunité trouvée avec ces critères.
               </div>

@@ -8,6 +8,7 @@ import {
   experiencesApi, 
   certificationsApi,
   messagesApi, 
+  opportunitiesApi,
   getAuthToken,
   removeAuthToken 
 } from '../../services/api';
@@ -96,6 +97,7 @@ function AdminDashboardInner({ initialTab }) {
   const [experiences, setExperiences] = useState([]);
   const [certifications, setCertifications] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [opportunitiesCount, setOpportunitiesCount] = useState(0);
 
   // Modals & Forms State
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -158,18 +160,20 @@ function AdminDashboardInner({ initialTab }) {
           skillsApi.getAll().catch(() => []),
           experiencesApi.getAll().catch(() => []),
           certificationsApi.getAll().catch(() => []),
-          messagesApi.getAll().catch(() => [])
+          messagesApi.getAll().catch(() => []),
+          opportunitiesApi.getAll({ status: 'READY', limit: 1 }).catch(() => ({ total: 0 }))
         ])
       ]);
 
       if (userData && userData.user) {
         setUser(userData.user);
-        const [projRes, skillRes, expRes, certRes, msgRes] = dashData;
+        const [projRes, skillRes, expRes, certRes, msgRes, oppRes] = dashData;
         if (Array.isArray(projRes)) setProjects(projRes);
         if (Array.isArray(skillRes)) setSkills(skillRes);
         if (Array.isArray(expRes)) setExperiences(expRes);
         if (Array.isArray(certRes)) setCertifications(certRes);
         if (Array.isArray(msgRes)) setMessages(msgRes);
+        if (oppRes && typeof oppRes.total === 'number') setOpportunitiesCount(oppRes.total);
       } else {
         removeAuthToken();
         window.location.replace('/admin');
@@ -198,12 +202,13 @@ function AdminDashboardInner({ initialTab }) {
   const refreshData = async () => {
     setIsSyncing(true);
     try {
-      const [projRes, skillRes, expRes, certRes, msgRes] = await Promise.all([
+      const [projRes, skillRes, expRes, certRes, msgRes, oppRes] = await Promise.all([
         projectsApi.getAll().catch(() => []),
         skillsApi.getAll().catch(() => []),
         experiencesApi.getAll().catch(() => []),
         certificationsApi.getAll().catch(() => []),
-        messagesApi.getAll().catch(() => [])
+        messagesApi.getAll().catch(() => []),
+        opportunitiesApi.getAll({ status: 'READY', limit: 1 }).catch(() => ({ total: 0 }))
       ]);
 
       if (Array.isArray(projRes)) setProjects(projRes);
@@ -211,6 +216,7 @@ function AdminDashboardInner({ initialTab }) {
       if (Array.isArray(expRes)) setExperiences(expRes);
       if (Array.isArray(certRes)) setCertifications(certRes);
       if (Array.isArray(msgRes)) setMessages(msgRes);
+      if (oppRes && typeof oppRes.total === 'number') setOpportunitiesCount(oppRes.total);
       showAlert('success', 'Données actualisées !');
     } catch (err) {
       showAlert('danger', 'Erreur lors de l\'actualisation.');
@@ -492,6 +498,7 @@ function AdminDashboardInner({ initialTab }) {
           experiences: experiences.length,
           certifications: certifications.length,
           unreadMessages: unreadCount,
+          opportunities: opportunitiesCount,
           prospects: 34
         }}
         onLogout={handleLogout}
@@ -508,7 +515,7 @@ function AdminDashboardInner({ initialTab }) {
           experiences: experiences.length,
           certifications: certifications.length,
           unreadMessages: unreadCount,
-          opportunities: 0,
+          opportunities: opportunitiesCount,
           prospects: 34
         }}
         onLogout={handleLogout}

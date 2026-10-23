@@ -57,7 +57,8 @@ const Navbar = ({ lang, translations }) => {
     <header className={`navbar-wrapper ${isScrolled ? 'scrolled' : ''}`}>
       <div className="container nav-container">
         <a href="#home" className={`logo ${isScrolled ? 'logo-scrolled' : ''}`}>
-          <span className="text-cyan">7</span>Bhil
+          <img src="/branding/logo-on-dark.png" alt="7Bhil" className="logo-img logo-img-dark" />
+          <img src="/branding/logo-on-light.png" alt="" aria-hidden="true" className="logo-img logo-img-light" />
         </a>
 
         {/* Desktop Navigation */}

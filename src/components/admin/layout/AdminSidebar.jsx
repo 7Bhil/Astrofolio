@@ -77,11 +77,11 @@ export default function AdminSidebar({
           <div
             className="w-12 h-12 rounded-2xl flex items-center justify-center font-black font-['Outfit'] text-white text-lg relative overflow-hidden shadow-xl"
             style={{
-              background: 'linear-gradient(135deg, #2563eb 0%, #06b6d4 100%)',
+              background: 'rgba(255,255,255,0.06)',
               boxShadow: '0 0 24px rgba(6,182,212,0.35)',
             }}
           >
-            <span className="relative z-10">7B</span>
+            <img src="/branding/logo-symbol.png" alt="7Bhil" className="w-full h-full object-contain p-1.5" />
             <div className="absolute inset-0 bg-white/10 rounded-2xl" />
           </div>
 

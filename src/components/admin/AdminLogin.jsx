@@ -56,10 +56,8 @@ export default function AdminLogin() {
         <div className="flex items-center gap-3">
           <div
             className="w-12 h-12 rounded-2xl flex items-center justify-center font-black font-['Outfit'] text-white text-lg"
-            style={{ background: 'linear-gradient(135deg, #2563eb, #06b6d4)', boxShadow: '0 0 28px rgba(6,182,212,0.4)' }}
-          >
-            7B
-          </div>
+            style={{ background: 'rgba(255,255,255,0.06)', boxShadow: '0 0 28px rgba(6,182,212,0.4)' }}
+          ><img src="/branding/logo-symbol.png" alt="7Bhil" className="w-full h-full object-contain p-1.5" /></div>
           <div>
             <p className="text-sm font-bold text-white font-['Outfit']">Studio Admin</p>
             <a href="/" className="text-[11px] text-cyan-400/60 hover:text-cyan-300 flex items-center gap-1 transition-colors">
@@ -116,10 +114,8 @@ export default function AdminLogin() {
         <div className="lg:hidden flex items-center gap-3 mb-8">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center font-black font-['Outfit'] text-white text-sm"
-            style={{ background: 'linear-gradient(135deg, #2563eb, #06b6d4)', boxShadow: '0 0 20px rgba(6,182,212,0.4)' }}
-          >
-            7B
-          </div>
+            style={{ background: 'rgba(255,255,255,0.06)', boxShadow: '0 0 20px rgba(6,182,212,0.4)' }}
+          ><img src="/branding/logo-symbol.png" alt="7Bhil" className="w-full h-full object-contain p-1.5" /></div>
           <span className="text-base font-bold text-white font-['Outfit']">Studio Admin</span>
         </div>
 

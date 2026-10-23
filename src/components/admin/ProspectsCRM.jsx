@@ -17,7 +17,11 @@ import {
   X, 
   Edit3,
   Check,
-  AlertCircle
+  AlertCircle,
+  RefreshCw,
+  Database,
+  Bot,
+  Compass
 } from 'lucide-react';
 import { opportunitiesApi } from '../../services/api';
 
@@ -35,6 +39,11 @@ export default function ProspectsCRM() {
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedId, setExpandedId] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showAiModal, setShowAiModal] = useState(false);
+  const [isSyncingOpps, setIsSyncingOpps] = useState(false);
+  const [isDiscoveringAi, setIsDiscoveringAi] = useState(false);
+  const [aiSector, setAiSector] = useState('Fintech & SaaS B2B');
+  const [aiRegion, setAiRegion] = useState('Afrique & Remote International');
   const [sendingId, setSendingId] = useState(null);
   const [alert, setAlert] = useState(null);
 
@@ -192,6 +201,70 @@ Bhilal CHITOU
     showAlert('success', `${created.name} ajouté aux cibles CRM.`);
   };
 
+  // Option A : Synchroniser depuis les entreprises détectées par le scraper
+  const handleSyncOpportunities = async () => {
+    setIsSyncingOpps(true);
+    try {
+      const res = await opportunitiesApi.syncFromOpportunities();
+      const newItems = res?.prospects || [];
+      if (newItems.length === 0) {
+        showAlert('info', 'Aucune nouvelle entreprise à importer depuis les opportunités actuelles.');
+        return;
+      }
+
+      // Éviter les doublons par rapport à la liste actuelle (par nom)
+      const existingNames = new Set(prospects.map(p => (p.name || '').toLowerCase().trim()));
+      const toAdd = newItems.filter(p => !existingNames.has((p.name || '').toLowerCase().trim()));
+
+      if (toAdd.length === 0) {
+        showAlert('info', 'Toutes les entreprises détectées sont déjà dans votre CRM.');
+      } else {
+        const updated = [...toAdd, ...prospects];
+        saveProspects(updated);
+        showAlert('success', `🎉 ${toAdd.length} nouvelle(s) entreprise(s) importée(s) directement depuis le scraping !`);
+      }
+    } catch (err) {
+      console.error(err);
+      showAlert('danger', 'Erreur lors de la synchronisation des opportunités.');
+    } finally {
+      setIsSyncingOpps(false);
+    }
+  };
+
+  // Option B : Chasse IA autonome via Gemini
+  const handleDiscoverAiProspects = async (e) => {
+    if (e) e.preventDefault();
+    setIsDiscoveringAi(true);
+    try {
+      const res = await opportunitiesApi.discoverAiProspects({
+        region: aiRegion,
+        sector: aiSector
+      });
+      const newItems = res?.prospects || [];
+      if (newItems.length === 0) {
+        showAlert('danger', 'Aucun nouveau prospect trouvé par l\'IA pour ces critères.');
+        return;
+      }
+
+      const existingNames = new Set(prospects.map(p => (p.name || '').toLowerCase().trim()));
+      const toAdd = newItems.filter(p => !existingNames.has((p.name || '').toLowerCase().trim()));
+
+      if (toAdd.length === 0) {
+        showAlert('info', 'Les entreprises suggérées sont déjà dans votre CRM.');
+      } else {
+        const updated = [...toAdd, ...prospects];
+        saveProspects(updated);
+        setShowAiModal(false);
+        showAlert('success', `✨ ${toAdd.length} nouveaux prospects générés et qualifiés par l'IA Gemini !`);
+      }
+    } catch (err) {
+      console.error(err);
+      showAlert('danger', err.message || 'Erreur lors de la découverte IA.');
+    } finally {
+      setIsDiscoveringAi(false);
+    }
+  };
+
   const stats = {
     total: prospects.length,
     sent: prospects.filter(p => p.status === 'SENT').length,
@@ -245,13 +318,38 @@ Bhilal CHITOU
           </p>
         </div>
 
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-semibold shadow-md shadow-cyan-500/20 transition-all active:scale-95 shrink-0"
-        >
-          <Plus size={15} />
-          <span>Nouvelle cible</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2.5">
+          {/* Bouton A : Sync depuis les Opportunités du Scraping */}
+          <button
+            onClick={handleSyncOpportunities}
+            disabled={isSyncingOpps || isDiscoveringAi}
+            title="Importer les entreprises détectées lors des derniers scrapings d'offres"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-slate-900 border border-cyan-500/30 hover:border-cyan-500/60 text-cyan-300 hover:text-cyan-200 text-xs font-semibold shadow-md shadow-cyan-950 transition-all active:scale-95 disabled:opacity-50"
+          >
+            <Database size={14} className={isSyncingOpps ? 'animate-spin text-cyan-400' : 'text-cyan-400'} />
+            <span>{isSyncingOpps ? 'Extraction...' : 'Importer du Scraping'}</span>
+          </button>
+
+          {/* Bouton B : Chasse IA autonome Gemini */}
+          <button
+            onClick={() => setShowAiModal(true)}
+            disabled={isSyncingOpps || isDiscoveringAi}
+            title="Demander à l'IA Gemini de chasser 5 nouvelles entreprises tech adaptées à votre profil"
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600/30 to-purple-600/30 border border-violet-500/40 hover:border-violet-500/80 text-violet-200 hover:text-white text-xs font-semibold shadow-md transition-all active:scale-95 disabled:opacity-50"
+          >
+            <Sparkles size={14} className="text-violet-400" />
+            <span>Chasser avec l'IA</span>
+          </button>
+
+          {/* Bouton Manuel */}
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-semibold shadow-md shadow-cyan-500/20 transition-all active:scale-95 shrink-0"
+          >
+            <Plus size={14} />
+            <span>Nouvelle cible</span>
+          </button>
+        </div>
       </div>
 
       {/* STATS BENTO */}
@@ -654,6 +752,103 @@ Bhilal CHITOU
                   className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white text-xs font-semibold shadow-lg shadow-cyan-500/20"
                 >
                   Enregistrer la cible
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL B : CHASSE IA AUTONOME GEMINI */}
+      {showAiModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in duration-200">
+          <div className="bg-slate-900 border border-violet-500/30 rounded-3xl max-w-lg w-full p-6 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-36 h-36 bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-violet-500/15 border border-violet-500/30 text-violet-300">
+                  <Sparkles size={18} />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold font-['Outfit'] text-white">Chasse IA de Nouveaux Prospects</h3>
+                  <p className="text-[11px] text-slate-400">Gemini analyse le marché et déniche 5 entreprises sur votre profil</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setShowAiModal(false)}
+                className="text-slate-400 hover:text-white p-1"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleDiscoverAiProspects} className="flex flex-col gap-4 text-xs">
+              <div>
+                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block mb-1">
+                  Secteur cible
+                </label>
+                <select
+                  value={aiSector}
+                  onChange={(e) => setAiSector(e.target.value)}
+                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-violet-500"
+                >
+                  <option value="Fintech & Paiements Digitaux">Fintech & Paiements Digitaux (APIs, Wallets, EOR)</option>
+                  <option value="SaaS B2B & Outils Développeurs">SaaS B2B & Outils Développeurs (DevTools, Cloud)</option>
+                  <option value="Santé Digitale (HealthTech) & EdTech">Santé Digitale (HealthTech) & EdTech</option>
+                  <option value="Web3, DeFi & Infrastructure Crypto">Web3, DeFi & Infrastructure Crypto</option>
+                  <option value="E-Commerce & Logistique Internationale">E-Commerce & Logistique Internationale</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider block mb-1">
+                  Zone géographique & Mode de travail
+                </label>
+                <select
+                  value={aiRegion}
+                  onChange={(e) => setAiRegion(e.target.value)}
+                  className="w-full bg-slate-950 border border-white/10 rounded-xl px-3.5 py-2.5 text-xs text-white outline-none focus:border-violet-500"
+                >
+                  <option value="Afrique & Remote International">Afrique & Remote International (Nigéria, Ghana, Kenya, Sénégal, Bénin)</option>
+                  <option value="Europe Francophone & Remote (France, Belgique, Suisse)">Europe Francophone (France, Belgique, Suisse)</option>
+                  <option value="Amérique du Nord Remote-First (USA, Canada)">Amérique du Nord Remote-First (USA, Canada)</option>
+                  <option value="Mondial 100% Remote (Global)">Mondial 100% Remote (Global)</option>
+                </select>
+              </div>
+
+              <div className="p-3 bg-violet-950/20 border border-violet-500/20 rounded-xl text-[11px] text-violet-300 flex items-start gap-2">
+                <Compass size={16} className="shrink-0 mt-0.5" />
+                <span>
+                  L'IA va extraire pour chaque entreprise : nom, site web officiel, coordonnées de contact, stack technique et une explication claire de votre fit.
+                </span>
+              </div>
+
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setShowAiModal(false)}
+                  disabled={isDiscoveringAi}
+                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white"
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  disabled={isDiscoveringAi}
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 text-white text-xs font-semibold shadow-lg shadow-violet-500/25 active:scale-95 disabled:opacity-50"
+                >
+                  {isDiscoveringAi ? (
+                    <>
+                      <RefreshCw size={14} className="animate-spin" />
+                      <span>Recherche IA en cours...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={14} />
+                      <span>Lancer la recherche</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>

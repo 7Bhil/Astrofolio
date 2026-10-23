@@ -58,6 +58,14 @@ export const translations = {
         impact: "Accelerated student progression by 3x and centralized fragmented learning paths into a single scalable platform.",
         solved: "Fragmented onboarding and high abandonment in technical training."
       },
+      immobuild: {
+        title: "ImmoBuild — Construction & Civil Engineering",
+        description: "Modern, high-performance web platform for a licensed general contractor in construction, 3D BIM modeling, civil engineering, and turnkey renovations.",
+        problem: "Construction companies frequently suffer from slow, unoptimized websites that fail to convert high-ticket commercial & residential construction leads.",
+        decision: "Engineered an ultra-responsive, SEO-optimized web platform with instant quote requests, interactive service showcases, and fast asset delivery.",
+        impact: "Sub-second load times, seamless lead capture, and polished brand credibility for multi-million dollar engineering projects.",
+        solved: "Complex project estimation requests, slow loading times, and poor mobile accessibility."
+      },
       arrondissement: {
         title: "Arrondissement Digital Portal",
         description: "High-traffic institutional web portal serving thousands of citizens with secure administrative workflows.",
@@ -92,10 +100,10 @@ export const translations = {
         solved: "Transaction fraud risks and sluggish checkout experiences."
       },
       goreparr: {
-        title: "GoRéparr — Artisan Marketplace & PWA",
-        description: "Progressive Web App connecting clients with certified local artisans, featuring real-time quotes, offline mode, and direct chat.",
+        title: "GoRéparr — CTO & Lead Architect",
+        description: "CTO & Lead Architect: Spearheading tech vision, end-to-end architecture, and engineering of the GoRéparr artisan marketplace & offline-first PWA.",
         problem: "Finding vetted artisans quickly was unreliable, with no transparent quotes, no offline access, and severe payment dispute risks.",
-        decision: "Built an offline-first PWA with Laravel REST API, React/Tailwind frontend, strict role authorization, and real-time push notifications.",
+        decision: "Architected an offline-first PWA with Laravel 11 REST API, React/Tailwind frontend, strict role authorization (RBAC), and real-time push notifications.",
         impact: "100% offline-ready PWA, standardized quote generation, and automated artisan dispatch workflows.",
         solved: "Informal service friction, lack of transparent artisan pricing and offline accessibility."
       },
@@ -223,6 +231,14 @@ export const translations = {
         impact: "Multiplication par 3 de la régularité d'apprentissage et centralisation de parcours autrefois éparpillés sur un seul portail scalable.",
         solved: "Élimination des frictions d'apprentissage et du taux d'abandon chez les apprenants."
       },
+      immobuild: {
+        title: "ImmoBuild — BTP & Génie Civil",
+        description: "Plateforme web haute performance pour une entreprise générale de construction certifiée : modélisation BIM 3D, gros œuvre béton et rénovations clés en main.",
+        problem: "Les acteurs du BTP souffrent souvent de sites lents et peu optimisés, freinant la conversion de prospects à fort budget sur mobile.",
+        decision: "Conception d'une interface responsive et ultra-rapide avec demande de devis instantanée, galerie de chantiers et optimisation SEO locale poussée.",
+        impact: "Temps de chargement inférieur à la seconde, crédibilité accrue pour les appels d'offres et parcours fluide de demande d'estimation.",
+        solved: "Friction dans la demande d'estimation de travaux, temps de chargement et mauvaise expérience mobile."
+      },
       arrondissement: {
         title: "Portail Citoyen d'Arrondissement",
         description: "Application institutionnelle à fort trafic conçue pour moderniser la diffusion publique et les initiatives locales.",
@@ -257,10 +273,10 @@ export const translations = {
         solved: "Prévention des failles de sécurité transactionnelles et fluidification des flux de paiement."
       },
       goreparr: {
-        title: "GoRéparr — Marketplace & PWA Artisans",
-        description: "Progressive Web App de mise en relation client-artisan avec devis automatisés, mode hors-ligne et messagerie intégrée.",
+        title: "GoRéparr — CTO & Architecte Lead",
+        description: "CTO & Architecte Lead : Direction technique, architecture globale et ingénierie de la marketplace & PWA offline-first GoRéparr.",
         problem: "Trouver des artisans qualifiés était risqué, sans grille tarifaire transparente ni accès fiable en zone à connectivité instable.",
-        decision: "Architecture PWA offline-first avec backend Laravel, interface React moderne, calcul de devis instantané et notifications push.",
+        decision: "Conception de l'architecture PWA offline-first avec backend Laravel 11, interface React moderne, calcul de devis instantané et notifications push.",
         impact: "Disponibilité continue même hors-ligne (PWA Service Workers), standardisation des devis et suivi transparent des interventions.",
         solved: "Frictions de mise en relation, absence de traçabilité des prix et indisponibilité réseau."
       },
