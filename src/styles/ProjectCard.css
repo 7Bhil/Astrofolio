@@ -12,8 +12,8 @@
 
 .project-card:hover {
   transform: translateY(-15px) scale(1.03) rotateZ(1deg);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 40px var(--accent-glow);
-  border-color: var(--accent-primary);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.7), 0 0 35px var(--accent-neon-red-glow);
+  border-color: var(--accent-neon-red);
   z-index: 10;
 }
 
@@ -99,11 +99,11 @@
 }
 
 .project-link-btn:hover {
-  background: var(--accent-primary);
+  background: var(--accent-neon-red);
   color: white;
   transform: scale(1.2) rotate(10deg);
-  box-shadow: 0 0 30px var(--accent-primary);
-  border-color: var(--accent-primary);
+  box-shadow: 0 0 28px var(--accent-neon-red-glow);
+  border-color: var(--accent-neon-red);
 }
 
 .project-link-btn:nth-child(2) {

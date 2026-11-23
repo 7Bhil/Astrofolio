@@ -111,12 +111,13 @@
 
 .nav-link:hover {
   opacity: 1;
-  color: white;
+  color: var(--accent-neon-red);
+  text-shadow: 0 0 10px var(--accent-neon-red-glow);
 }
 
 /* Specific light mode fix for hovered link on the floating pill */
 .navbar-wrapper.scrolled .nav-link:hover {
-  color: var(--accent-primary);
+  color: var(--accent-neon-red);
 }
 
 .nav-actions-desktop {

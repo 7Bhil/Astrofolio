@@ -11,7 +11,7 @@
 
 .scroll-progress-bar {
   height: 100%;
-  background: var(--accent-gradient);
+  background: linear-gradient(90deg, var(--accent-primary) 0%, var(--accent-cyan) 75%, var(--accent-neon-red) 100%);
   width: 0%;
   position: relative;
   transition: width 0.1s cubic-bezier(0.4, 0, 0.2, 1);
@@ -26,7 +26,7 @@
   width: 20px;
   height: 100%;
   background: #fff;
-  box-shadow: 0 0 10px 4px var(--accent-primary), 0 0 20px 8px var(--accent-primary);
-  opacity: 0.8;
+  box-shadow: 0 0 10px 3px var(--accent-neon-red), 0 0 20px 6px var(--accent-neon-red-glow);
+  opacity: 0.9;
   border-radius: 50%;
 }

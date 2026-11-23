@@ -66,6 +66,30 @@ export const translations = {
         impact: "Sub-second load times, seamless lead capture, and polished brand credibility for multi-million dollar engineering projects.",
         solved: "Complex project estimation requests, slow loading times, and poor mobile accessibility."
       },
+      repeto: {
+        title: "Répéto — Private Tutoring Marketplace",
+        description: "Web platform connecting parents with qualified private tutors near them, with frictionless search by subject, grade level, city, and monthly budget (FCFA).",
+        problem: "Finding a trustworthy, qualified private tutor locally often relies on word-of-mouth with no transparency on rates, subjects, or availability.",
+        decision: "Built an intuitive multi-criteria search engine allowing parents to browse tutor profiles without mandatory sign-up, alongside a dedicated onboarding flow for teachers.",
+        impact: "Instant matching between families and local educators with transparent FCFA/month pricing and zero-friction discovery.",
+        solved: "Fragmented tutor discovery, lack of pricing transparency, and slow contact workflows."
+      },
+      guesthouse: {
+        title: "Ange Gabriella Guest House — Luxury Hospitality",
+        description: "Premium hospitality & booking web platform for Ange Gabriella Guest House in Parakou, showcasing luxury suites, fine dining, pool amenities, and online stay reservations.",
+        problem: "Boutique guesthouses often rely solely on phone calls or social media, missing direct online bookings and failing to reflect their high-end standing.",
+        decision: "Crafted an editorial, high-conversion hospitality showcase with clear room & restaurant discovery and a streamlined stay booking CTA.",
+        impact: "Elevated brand prestige in Parakou, smoother guest inquiry conversion, and fast mobile-first browsing for travelers.",
+        solved: "Lack of online booking presence and inconsistent brand presentation for premium hospitality."
+      },
+      sqlmaster: {
+        title: "SQL Master — Ultimate Academy & RPG",
+        description: "Interactive terminal RPG & SQL learning academy featuring 35 progressive levels A–Z, boss battles, 10 illustrated chapters with live demos, triggers, stored procedures, and a sandbox mode.",
+        problem: "Learning advanced SQL (joins, triggers, stored procedures) from static docs feels dry and makes it hard to build real query reflexes.",
+        decision: "Engineered a gamified CLI experience with player accounts, coin rewards, boss fights, an interactive academy, and an instant sandbox to practice real SQL queries.",
+        impact: "Turns SQL mastery into an engaging 35-level RPG progression covering fundamentals up to triggers and procedures.",
+        solved: "Low engagement and steep learning curve when practicing complex relational database queries."
+      },
       arrondissement: {
         title: "Arrondissement Digital Portal",
         description: "High-traffic institutional web portal serving thousands of citizens with secure administrative workflows.",
@@ -238,6 +262,30 @@ export const translations = {
         decision: "Conception d'une interface responsive et ultra-rapide avec demande de devis instantanée, galerie de chantiers et optimisation SEO locale poussée.",
         impact: "Temps de chargement inférieur à la seconde, crédibilité accrue pour les appels d'offres et parcours fluide de demande d'estimation.",
         solved: "Friction dans la demande d'estimation de travaux, temps de chargement et mauvaise expérience mobile."
+      },
+      repeto: {
+        title: "Répéto — Mise en relation Parents & Enseignants",
+        description: "Plateforme EdTech permettant aux parents de trouver un répétiteur qualifié près de chez eux selon la matière, le niveau, la ville et le budget (FCFA/mois).",
+        problem: "Trouver un enseignant fiable à domicile repose souvent sur le bouche-à-oreille, sans transparence sur les tarifs, les matières ou la disponibilité.",
+        decision: "Conception d'un moteur de recherche multicritères fluide permettant de consulter les profils librement sans inscription, couplé à un parcours dédié pour devenir enseignant.",
+        impact: "Mise en relation rapide entre familles et enseignants locaux avec filtrage instantané par budget en FCFA et zéro friction d'accès.",
+        solved: "Recherche dispersée de répétiteurs, manque de transparence tarifaire et lenteur de prise de contact."
+      },
+      guesthouse: {
+        title: "Ange Gabriella Guest House — Hôtellerie de Prestige",
+        description: "Plateforme web vitrine et réservation pour la maison d'hôtes Ange Gabriella à Parakou : chambres de prestige, restaurant, piscine et réservation de séjour en ligne.",
+        problem: "Les établissements hôteliers de standing dépendent souvent uniquement du téléphone ou des réseaux sociaux, limitant les réservations directes.",
+        decision: "Création d'une expérience éditoriale élégante et responsive mettant en valeur les chambres, la gastronomie et un parcours direct de réservation de séjour.",
+        impact: "Image de marque haut de gamme renforcée à Parakou, parcours de réservation fluidifié et navigation rapide sur mobile.",
+        solved: "Absence de vitrine digitale premium et friction dans la réservation directe de séjours."
+      },
+      sqlmaster: {
+        title: "SQL Master — Académie & RPG Terminal",
+        description: "Jeu RPG et académie interactive en ligne de commande pour maîtriser SQL de A à Z : 35 niveaux, combats de boss, 10 chapitres illustrés avec démo live, triggers, procédures stockées et mode Sandbox.",
+        problem: "Apprendre le SQL avancé (jointures, triggers, procédures) uniquement sur de la documentation statique reste abstrait et peu motivant.",
+        decision: "Développement d'une interface CLI gamifiée avec comptes joueurs, système de récompenses (Coins), combats de boss et sandbox SQL temps réel.",
+        impact: "Transforme l'apprentissage SQL en aventure progressive de 35 niveaux, des bases jusqu'aux triggers et procédures stockées.",
+        solved: "Manque d'engagement et difficulté à pratiquer des requêtes relationnelles complexes."
       },
       arrondissement: {
         title: "Portail Citoyen d'Arrondissement",
