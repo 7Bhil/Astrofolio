@@ -47,6 +47,21 @@
   }
 }
 
+@property --beam-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes skill-border-beam {
+  from {
+    --beam-angle: 0deg;
+  }
+  to {
+    --beam-angle: 360deg;
+  }
+}
+
 .skill-card {
   position: relative;
   border-radius: 1.5rem;
@@ -62,11 +77,46 @@
   -webkit-backdrop-filter: blur(16px);
 }
 
+/* Animated Border Beam */
+.skill-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 1.5px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--beam-angle),
+    transparent 0deg,
+    transparent 255deg,
+    var(--cat-accent, #06b6d4) 310deg,
+    var(--accent-neon-red, #ff2a5f) 348deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.7;
+  animation: skill-border-beam 6s linear infinite;
+  transition: opacity 0.3s ease;
+}
+
+.skill-card:nth-of-type(2)::before { animation-delay: -1.2s; animation-duration: 6.8s; }
+.skill-card:nth-of-type(3)::before { animation-delay: -2.6s; animation-duration: 5.8s; }
+.skill-card:nth-of-type(4)::before { animation-delay: -3.9s; animation-duration: 7.2s; }
+.skill-card:nth-of-type(5)::before { animation-delay: -5.1s; animation-duration: 6.4s; }
+
+.skill-card:hover::before {
+  opacity: 1;
+}
+
 .skill-card:hover {
   transform: translateY(-4px);
   border-color: rgba(255, 255, 255, 0.16);
   background: rgba(14, 21, 40, 0.85);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6), 0 0 24px -8px var(--accent-neon-red-glow, rgba(255, 42, 95, 0.25));
 }
 
 .bento-header {

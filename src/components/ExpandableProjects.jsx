@@ -3,7 +3,7 @@
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useOutsideClick } from "../hooks/use-outside-click";
-import { ExternalLink, Github, ArrowUpRight, Sparkles, LayoutList, GalleryHorizontalEnd } from "lucide-react";
+import { ExternalLink, Github, ArrowUpRight, Sparkles, LayoutList, GalleryHorizontalEnd, Layers } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projectsApi } from "../services/api";
@@ -22,7 +22,7 @@ export function ExpandableProjects({
   const [active, setActive] = useState(null);
   const [projectList, setProjectList] = useState(initialProjects);
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [view, setView] = useState("scroll");
+  const [view, setView] = useState("stack");
   const id = useId();
   const ref = useRef(null);
 
@@ -281,6 +281,7 @@ export function ExpandableProjects({
       <div className="flex justify-center mb-10">
         <div className="inline-flex rounded-full border border-neutral-800 bg-neutral-900/60 p-1 text-xs font-mono backdrop-blur-sm">
           {[
+            { key: "stack", label: lang === "en" ? "Stack" : "Empilé", icon: Layers },
             { key: "list", label: lang === "en" ? "Index" : "Index", icon: LayoutList },
             { key: "scroll", label: lang === "en" ? "Gallery" : "Galerie", icon: GalleryHorizontalEnd },
           ].map(({ key, label, icon: Icon }) => (
@@ -301,7 +302,9 @@ export function ExpandableProjects({
         </div>
       </div>
 
-      {view === "list" ? (
+      {view === "stack" ? (
+        <ProjectsStickyStack key={"s-" + selectedCategory} projects={filteredProjects} onSelect={setActive} lang={lang} />
+      ) : view === "list" ? (
         <ProjectList key={"l-" + selectedCategory} projects={filteredProjects} onSelect={setActive} lang={lang} />
       ) : (
         <ProjectsHorizontal key={"h-" + selectedCategory} projects={filteredProjects} onSelect={setActive} lang={lang} />
@@ -309,6 +312,98 @@ export function ExpandableProjects({
     </>
   );
 }
+
+const ProjectsStickyStack = ({ projects = [], onSelect, lang = 'fr' }) => {
+  return (
+    <div className="projects-sticky-stack">
+      {projects.map((project, index) => {
+        const imgSrc = typeof project.image === 'string' ? project.image : (project.image?.src || project.image);
+        return (
+          <article
+            key={project.id || project.title}
+            className="project-stack-card"
+            style={{
+              top: `calc(6.25rem + ${index * 18}px)`,
+              zIndex: index + 1,
+            }}
+            onClick={() => onSelect(project)}
+          >
+            <div className="project-stack-visual">
+              <img
+                src={imgSrc}
+                alt={project.title}
+                className="project-stack-img"
+                loading="lazy"
+              />
+              <span className="project-stack-index">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+            </div>
+
+            <div className="project-stack-body">
+              <div className="project-stack-top">
+                {project.categoryLabel && (
+                  <span className="project-stack-cat">{project.categoryLabel}</span>
+                )}
+                {project.metric && (
+                  <span className="project-stack-metric">{project.metric}</span>
+                )}
+              </div>
+
+              <h3 className="project-stack-title">{project.title}</h3>
+              {project.description && (
+                <p className="project-stack-desc">{project.description}</p>
+              )}
+
+              {Array.isArray(project.tags) && project.tags.length > 0 && (
+                <div className="project-stack-tags">
+                  {project.tags.slice(0, 5).map((tag, i) => (
+                    <span key={i} className="project-stack-tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+
+              <div className="project-stack-actions" onClick={(e) => e.stopPropagation()}>
+                <button
+                  type="button"
+                  className="project-stack-cta"
+                  onClick={() => onSelect(project)}
+                >
+                  <span>{lang === 'en' ? 'Case study' : 'Étude de cas'}</span>
+                  <ArrowUpRight size={16} />
+                </button>
+                <div className="project-stack-links">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-stack-icon-btn"
+                      aria-label="GitHub"
+                    >
+                      <Github size={17} />
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="project-stack-icon-btn"
+                      aria-label="Demo Live"
+                    >
+                      <ExternalLink size={17} />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </article>
+        );
+      })}
+    </div>
+  );
+};
 
 const CloseIcon = () => {
   return (

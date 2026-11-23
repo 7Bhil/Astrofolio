@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
 import { 
   Award, 
   ShieldCheck, 
@@ -11,7 +12,10 @@ import {
   Eye, 
   CheckCircle2,
   Sparkles,
-  Layers
+  Layers,
+  ChevronLeft,
+  ChevronRight,
+  MoveHorizontal
 } from 'lucide-react';
 import '../styles/Certifications.css';
 
@@ -130,9 +134,142 @@ const categories = [
   { id: 'systems', label: 'Systèmes & C' }
 ];
 
+const SWIPE_THRESHOLD = 75;
+
+const StackCard = ({ cert, stackPosition, total, swipeDirection, onSwipe, onOpenModal }) => {
+  const isFront = stackPosition === 0;
+  const x = useMotionValue(0);
+  const rotateDrag = useTransform(x, [-240, 0, 240], [-14, 0, 14]);
+  const [wasDragged, setWasDragged] = useState(false);
+
+  const scale = 1 - stackPosition * 0.055;
+  const offsetX = stackPosition * 18;
+  const offsetY = stackPosition * 14;
+  const baseRotate = stackPosition * 3;
+  const opacity = Math.max(0.25, 1 - stackPosition * 0.22);
+
+  const handleDragStart = () => {
+    setWasDragged(true);
+  };
+
+  const handleDragEnd = (_, info) => {
+    const swipedLeft = info.offset.x < -SWIPE_THRESHOLD || info.velocity.x < -400;
+    const swipedRight = info.offset.x > SWIPE_THRESHOLD || info.velocity.x > 400;
+
+    if (swipedLeft) {
+      onSwipe(1);
+    } else if (swipedRight) {
+      onSwipe(-1);
+    }
+
+    setTimeout(() => setWasDragged(false), 120);
+  };
+
+  const handleClick = () => {
+    if (isFront && !wasDragged) {
+      onOpenModal(cert);
+    }
+  };
+
+  return (
+    <motion.div
+      className={`cert-stack-card ${isFront ? 'is-front' : ''}`}
+      custom={swipeDirection}
+      style={{
+        '--card-accent': cert.accentColor,
+        zIndex: 20 - stackPosition,
+        x: isFront ? x : offsetX,
+        rotate: isFront ? rotateDrag : baseRotate,
+        cursor: isFront ? (total > 1 ? 'grab' : 'pointer') : 'default',
+      }}
+      initial={(dir) => ({
+        scale: dir < 0 && isFront ? 1 : 0.88,
+        opacity: 0,
+        x: dir < 0 && isFront ? 240 : offsetX + 16,
+        y: dir < 0 && isFront ? 0 : offsetY + 14,
+        rotate: dir < 0 && isFront ? 12 : baseRotate + 3,
+      })}
+      animate={{
+        scale,
+        opacity,
+        x: isFront ? 0 : offsetX,
+        y: offsetY,
+        rotate: isFront ? 0 : baseRotate,
+      }}
+      exit={(dir) => ({
+        x: dir >= 0 ? -280 : 280,
+        opacity: 0,
+        rotate: dir >= 0 ? -16 : 16,
+        transition: { duration: 0.24 },
+      })}
+      transition={{
+        type: 'spring',
+        stiffness: 280,
+        damping: 26,
+      }}
+      drag={isFront && total > 1 ? 'x' : false}
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.9}
+      whileDrag={{ cursor: 'grabbing', scale: 1.02 }}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onClick={handleClick}
+    >
+      <div className="cert-top-glow" />
+
+      <div className="cert-stack-image-wrap">
+        <img
+          src={cert.image}
+          alt={`Diplôme ${cert.title}`}
+          className="cert-stack-image"
+          draggable={false}
+          loading="lazy"
+        />
+        <div className="cert-stack-image-fade" />
+      </div>
+
+      <div className="cert-stack-card-meta">
+        <span className="cert-stack-badge">{cert.badgeText}</span>
+        <div className="cert-verified-badge" title="Diplôme / Attestation vérifiée">
+          <ShieldCheck size={13} />
+          <span>Vérifié</span>
+        </div>
+      </div>
+
+      {isFront && total > 1 && (
+        <div className="cert-swipe-hint" aria-hidden="true">
+          <MoveHorizontal size={13} />
+          <span>Glisser</span>
+        </div>
+      )}
+    </motion.div>
+  );
+};
+
 const Certifications = ({ t = {} }) => {
   const [selectedCert, setSelectedCert] = useState(null);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState(1);
+
+  const filteredCerts = activeCategory === 'all'
+    ? certificationsList
+    : certificationsList.filter(c => c.categoryKey === activeCategory);
+
+  const safeIndex = filteredCerts.length > 0 ? activeIndex % filteredCerts.length : 0;
+  const activeCert = filteredCerts[safeIndex];
+
+  const handleCategoryChange = (catId) => {
+    setActiveCategory(catId);
+    setActiveIndex(0);
+    setSwipeDirection(1);
+  };
+
+  const handleSwipe = useCallback((direction) => {
+    if (filteredCerts.length <= 1) return;
+    setSwipeDirection(direction);
+    setActiveIndex((prev) => (prev + direction + filteredCerts.length) % filteredCerts.length);
+  }, [filteredCerts.length]);
 
   useEffect(() => {
     if (selectedCert) {
@@ -145,16 +282,19 @@ const Certifications = ({ t = {} }) => {
     };
   }, [selectedCert]);
 
-  // Handle escape key to close modal
+  // Handle escape key to close modal, and left/right arrows for stack navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         setSelectedCert(null);
+      } else if (!selectedCert) {
+        if (e.key === 'ArrowRight') handleSwipe(1);
+        if (e.key === 'ArrowLeft') handleSwipe(-1);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [selectedCert, handleSwipe]);
 
   const openModal = (cert, e) => {
     if (e) e.stopPropagation();
@@ -165,9 +305,17 @@ const Certifications = ({ t = {} }) => {
     setSelectedCert(null);
   };
 
-  const filteredCerts = activeCategory === 'all'
-    ? certificationsList
-    : certificationsList.filter(c => c.categoryKey === activeCategory);
+  // Build visible stack (up to 4 cards)
+  const visibleCount = Math.min(4, filteredCerts.length);
+  const stackCards = Array.from({ length: visibleCount }, (_, i) => {
+    const certIndex = (safeIndex + i) % filteredCerts.length;
+    return {
+      cert: filteredCerts[certIndex],
+      stackPosition: i,
+    };
+  });
+
+  const ActiveIcon = activeCert?.icon || Award;
 
   return (
     <section id="certifications" className="certifications-section">
@@ -196,7 +344,7 @@ const Certifications = ({ t = {} }) => {
               key={cat.id}
               type="button"
               className={`certs-filter-btn ${activeCategory === cat.id ? 'active' : ''}`}
-              onClick={() => setActiveCategory(cat.id)}
+              onClick={() => handleCategoryChange(cat.id)}
             >
               {cat.id === 'all' ? <Layers size={14} /> : null}
               {cat.label}
@@ -204,63 +352,109 @@ const Certifications = ({ t = {} }) => {
           ))}
         </div>
 
-        {/* Certifications Cards Grid */}
-        <div className="certifications-grid">
-          {filteredCerts.map((cert, index) => {
-            const IconComponent = cert.icon;
-            return (
-              <div 
-                key={cert.id} 
-                className="cert-card reveal" 
-                style={{ 
-                  transitionDelay: `${index * 0.05}s`,
-                  '--card-accent': cert.accentColor 
-                }}
-                onClick={() => openModal(cert)}
-                tabIndex={0}
-                role="button"
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') openModal(cert); }}
-                aria-label={`Voir le certificat ${cert.title}`}
-              >
-                {/* Subtle top indicator bar */}
-                <div className="cert-top-glow" />
+        {/* Interactive Card Stack + Synchronized Details Panel */}
+        {activeCert && (
+          <div className="certs-showcase reveal">
+            {/* Left: Interactive Card Stack */}
+            <div className="certs-stack-stage" aria-label="Pile interactive de certifications">
+              <AnimatePresence initial={false} custom={swipeDirection}>
+                {stackCards.slice().reverse().map(({ cert, stackPosition }) => (
+                  <StackCard
+                    key={cert.id}
+                    cert={cert}
+                    stackPosition={stackPosition}
+                    total={filteredCerts.length}
+                    swipeDirection={swipeDirection}
+                    onSwipe={handleSwipe}
+                    onOpenModal={openModal}
+                  />
+                ))}
+              </AnimatePresence>
+            </div>
 
-                {/* Card Header: Icon + Verified Badge */}
-                <div className="cert-card-header">
-                  <div className="cert-icon-wrapper">
-                    <IconComponent size={22} className="cert-main-icon" />
+            {/* Right: Synchronized Info Panel */}
+            <div className="certs-details-panel">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeCert.id}
+                  className="certs-details-content"
+                  style={{ '--card-accent': activeCert.accentColor }}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -14 }}
+                  transition={{ duration: 0.24, ease: 'easeOut' }}
+                >
+                  <div className="certs-details-top">
+                    <div className="cert-icon-wrapper">
+                      <ActiveIcon size={22} className="cert-main-icon" />
+                    </div>
+                    <div className="certs-details-badges">
+                      <span className="cert-category-tag">{activeCert.category}</span>
+                      <span className="cert-badge-pill">{activeCert.badgeText}</span>
+                    </div>
                   </div>
-                  <div className="cert-verified-badge" title="Diplôme / Attestation vérifiée">
-                    <ShieldCheck size={14} />
-                    <span>Vérifié</span>
+
+                  <h3 className="certs-details-title">{activeCert.title}</h3>
+                  <p className="certs-details-issuer">{activeCert.issuer}</p>
+                  <p className="certs-details-description">{activeCert.description}</p>
+
+                  <div className="certs-details-actions">
+                    <button
+                      type="button"
+                      className="cert-view-btn certs-details-view-btn"
+                      onClick={(e) => openModal(activeCert, e)}
+                    >
+                      <Eye size={16} />
+                      <span>{t.viewFull || 'Voir le diplôme'}</span>
+                    </button>
                   </div>
-                </div>
+                </motion.div>
+              </AnimatePresence>
 
-                {/* Card Body: Title, Issuer, Category */}
-                <div className="cert-card-body">
-                  <span className="cert-category-tag">{cert.category}</span>
-                  <h3 className="cert-title">{cert.title}</h3>
-                  <p className="cert-issuer">{cert.issuer}</p>
-                  <p className="cert-description">{cert.description}</p>
-                </div>
+              {/* Controls: Prev / Dots + Counter / Next */}
+              {filteredCerts.length > 1 && (
+                <div className="certs-stack-controls">
+                  <div className="certs-nav-buttons">
+                    <button
+                      type="button"
+                      className="certs-nav-btn"
+                      onClick={() => handleSwipe(-1)}
+                      aria-label="Certification précédente"
+                    >
+                      <ChevronLeft size={18} />
+                    </button>
+                    <button
+                      type="button"
+                      className="certs-nav-btn"
+                      onClick={() => handleSwipe(1)}
+                      aria-label="Certification suivante"
+                    >
+                      <ChevronRight size={18} />
+                    </button>
+                  </div>
 
-                {/* Card Footer: Subtle preview link & modal trigger */}
-                <div className="cert-card-footer">
-                  <span className="cert-badge-pill">{cert.badgeText}</span>
-                  <button 
-                    type="button"
-                    className="cert-view-btn"
-                    onClick={(e) => openModal(cert, e)}
-                    aria-label={`Aperçu du diplôme ${cert.title}`}
-                  >
-                    <Eye size={15} />
-                    <span>{t.viewFull || 'Voir le diplôme'}</span>
-                  </button>
+                  <div className="certs-dots" role="tablist" aria-label="Sélectionner une certification">
+                    {filteredCerts.map((c, idx) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={idx === safeIndex}
+                        aria-label={`Afficher ${c.title}`}
+                        className={`certs-dot ${idx === safeIndex ? 'active' : ''}`}
+                        onClick={() => setActiveIndex(idx)}
+                      />
+                    ))}
+                  </div>
+
+                  <span className="certs-counter">
+                    {String(safeIndex + 1).padStart(2, '0')} / {String(filteredCerts.length).padStart(2, '0')}
+                  </span>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Enhanced Modal Dialog */}
