@@ -12,7 +12,7 @@ const skillCategories = [
     title: t('skills.systems_lang'),
     badge: lang === 'en' ? 'Core Engineering' : 'Cœur d\'ingénierie',
     icon: Terminal,
-    gradient: 'linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%)',
+    accent: '#38bdf8',
     bentoClass: 'bento-large',
     skills: [
       { name: 'Go (Golang)', icon: 'go' },
@@ -28,7 +28,7 @@ const skillCategories = [
     title: t('skills.backend'),
     badge: lang === 'en' ? 'Scalable & High Concurrency' : 'Scalable & Haute Dispo',
     icon: Server,
-    gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+    accent: '#10b981',
     bentoClass: 'bento-medium',
     skills: [
       { name: 'NestJS', icon: 'nestjs' },
@@ -45,7 +45,7 @@ const skillCategories = [
     title: t('skills.frontend'),
     badge: lang === 'en' ? 'Fluid UI/UX & Speed' : 'Interfaces & Réactivité',
     icon: Code2,
-    gradient: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)',
+    accent: '#818cf8',
     bentoClass: 'bento-medium',
     skills: [
       { name: 'TypeScript', icon: 'typescript' },
@@ -61,7 +61,7 @@ const skillCategories = [
     title: t('skills.mobile'),
     badge: lang === 'en' ? 'Offline First' : 'Offline First & PWA',
     icon: Smartphone,
-    gradient: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+    accent: '#fbbf24',
     bentoClass: 'bento-small',
     skills: [
       { name: 'React Native', icon: 'react' },
@@ -75,7 +75,7 @@ const skillCategories = [
     title: t('skills.tools_security'),
     badge: lang === 'en' ? 'DevSecOps & Audit' : 'DevSecOps & Audit',
     icon: ShieldCheck,
-    gradient: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
+    accent: '#f87171',
     bentoClass: 'bento-small',
     skills: [
       { name: 'Docker', icon: 'docker' },
@@ -106,11 +106,11 @@ const getIconUrl = (slug) => `https://cdn.simpleicons.org/${slug}`;
         >
           <div class="bento-content">
             <div class="bento-header">
-              <div class="icon-wrapper" style={`background: ${category.gradient}`}>
+              <div class="icon-wrapper" style={`--cat-accent: ${category.accent}`}>
                 <category.icon class="skill-icon" />
               </div>
               <div class="bento-titles">
-                <span class="category-badge">{category.badge}</span>
+                <span class="category-badge" style={`color: ${category.accent}`}>{category.badge}</span>
                 <h3>{category.title}</h3>
               </div>
             </div>
@@ -132,7 +132,7 @@ const getIconUrl = (slug) => `https://cdn.simpleicons.org/${slug}`;
               ))}
             </div>
           </div>
-          <div class="bento-bg-glow" style={`background: radial-gradient(circle at top right, ${category.gradient}, transparent 70%)`}></div>
+          <div class="bento-subtle-glow" style={`--cat-accent: ${category.accent}`}></div>
         </div>
       ))}
     </div>

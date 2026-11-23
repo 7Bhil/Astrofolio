@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { AnimatePresence, motion } from 'motion/react';
+import { ToastProvider, useToast } from '../../hooks/useToast.jsx';
 import { 
   authApi, 
   projectsApi, 
@@ -6,6 +8,7 @@ import {
   experiencesApi, 
   certificationsApi,
   messagesApi, 
+  opportunitiesApi,
   getAuthToken,
   removeAuthToken 
 } from '../../services/api';
@@ -34,6 +37,15 @@ import ExperienceModal from './modals/ExperienceModal';
 import CertificationModal from './modals/CertificationModal';
 
 export default function AdminDashboard({ initialTab }) {
+  return (
+    <ToastProvider>
+      <AdminDashboardInner initialTab={initialTab} />
+    </ToastProvider>
+  );
+}
+
+function AdminDashboardInner({ initialTab }) {
+  const { toast } = useToast();
   const validTabs = ['overview', 'projects', 'skills', 'experiences', 'certifications', 'messages', 'opportunities', 'prospects', 'profile'];
 
   const getTabFromUrl = () => {
@@ -57,7 +69,6 @@ export default function AdminDashboard({ initialTab }) {
   const [user, setUser] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [initialLoaded, setInitialLoaded] = useState(false);
-  const [alert, setAlert] = useState(null);
 
   // Synchronisation activeTab → URL propre (/admin/dashboard/[tab]) sans recharger la page
   const handleSetActiveTab = (tab) => {
@@ -86,6 +97,7 @@ export default function AdminDashboard({ initialTab }) {
   const [experiences, setExperiences] = useState([]);
   const [certifications, setCertifications] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [opportunitiesCount, setOpportunitiesCount] = useState(0);
 
   // Modals & Forms State
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -117,8 +129,9 @@ export default function AdminDashboard({ initialTab }) {
   });
 
   const showAlert = (type, message) => {
-    setAlert({ type, message });
-    setTimeout(() => setAlert(null), 4000);
+    if (type === 'success') toast.success(message);
+    else if (type === 'error') toast.error(message);
+    else toast.info(message);
   };
 
   const handleLogout = () => {
@@ -147,18 +160,20 @@ export default function AdminDashboard({ initialTab }) {
           skillsApi.getAll().catch(() => []),
           experiencesApi.getAll().catch(() => []),
           certificationsApi.getAll().catch(() => []),
-          messagesApi.getAll().catch(() => [])
+          messagesApi.getAll().catch(() => []),
+          opportunitiesApi.getAll({ status: 'READY', limit: 1 }).catch(() => ({ total: 0 }))
         ])
       ]);
 
       if (userData && userData.user) {
         setUser(userData.user);
-        const [projRes, skillRes, expRes, certRes, msgRes] = dashData;
+        const [projRes, skillRes, expRes, certRes, msgRes, oppRes] = dashData;
         if (Array.isArray(projRes)) setProjects(projRes);
         if (Array.isArray(skillRes)) setSkills(skillRes);
         if (Array.isArray(expRes)) setExperiences(expRes);
         if (Array.isArray(certRes)) setCertifications(certRes);
         if (Array.isArray(msgRes)) setMessages(msgRes);
+        if (oppRes && typeof oppRes.total === 'number') setOpportunitiesCount(oppRes.total);
       } else {
         removeAuthToken();
         window.location.replace('/admin');
@@ -187,12 +202,13 @@ export default function AdminDashboard({ initialTab }) {
   const refreshData = async () => {
     setIsSyncing(true);
     try {
-      const [projRes, skillRes, expRes, certRes, msgRes] = await Promise.all([
+      const [projRes, skillRes, expRes, certRes, msgRes, oppRes] = await Promise.all([
         projectsApi.getAll().catch(() => []),
         skillsApi.getAll().catch(() => []),
         experiencesApi.getAll().catch(() => []),
         certificationsApi.getAll().catch(() => []),
-        messagesApi.getAll().catch(() => [])
+        messagesApi.getAll().catch(() => []),
+        opportunitiesApi.getAll({ status: 'READY', limit: 1 }).catch(() => ({ total: 0 }))
       ]);
 
       if (Array.isArray(projRes)) setProjects(projRes);
@@ -200,6 +216,7 @@ export default function AdminDashboard({ initialTab }) {
       if (Array.isArray(expRes)) setExperiences(expRes);
       if (Array.isArray(certRes)) setCertifications(certRes);
       if (Array.isArray(msgRes)) setMessages(msgRes);
+      if (oppRes && typeof oppRes.total === 'number') setOpportunitiesCount(oppRes.total);
       showAlert('success', 'Données actualisées !');
     } catch (err) {
       showAlert('danger', 'Erreur lors de l\'actualisation.');
@@ -461,7 +478,15 @@ export default function AdminDashboard({ initialTab }) {
   const unreadCount = messages.filter(m => !m.read).length;
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row font-sans selection:bg-cyan-500/20 selection:text-cyan-300">
+    <div className="min-h-screen text-slate-100 flex flex-col lg:flex-row font-sans selection:bg-cyan-500/20 selection:text-cyan-300 relative" style={{ background: '#03070f' }}>
+      {/* ── Ambient background blobs (fixed, non-interactive) ── */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div className="absolute top-[-120px] left-[-80px] w-[500px] h-[500px] rounded-full opacity-[0.07] blur-[100px]" style={{ background: 'radial-gradient(circle, #2563eb, transparent)' }} />
+        <div className="absolute top-[30%] right-[-100px] w-[400px] h-[400px] rounded-full opacity-[0.06] blur-[100px]" style={{ background: 'radial-gradient(circle, #7c3aed, transparent)' }} />
+        <div className="absolute bottom-[-80px] left-[30%] w-[400px] h-[400px] rounded-full opacity-[0.05] blur-[100px]" style={{ background: 'radial-gradient(circle, #06b6d4, transparent)' }} />
+      </div>
+      {/* ── Content layer above blobs ── */}
+      <div className="relative z-10 flex flex-col lg:flex-row w-full min-h-screen">
       {/* Sidebar Desktop */}
       <AdminSidebar
         activeTab={activeTab}
@@ -473,6 +498,7 @@ export default function AdminDashboard({ initialTab }) {
           experiences: experiences.length,
           certifications: certifications.length,
           unreadMessages: unreadCount,
+          opportunities: opportunitiesCount,
           prospects: 34
         }}
         onLogout={handleLogout}
@@ -489,7 +515,7 @@ export default function AdminDashboard({ initialTab }) {
           experiences: experiences.length,
           certifications: certifications.length,
           unreadMessages: unreadCount,
-          opportunities: 0,
+          opportunities: opportunitiesCount,
           prospects: 34
         }}
         onLogout={handleLogout}
@@ -497,81 +523,89 @@ export default function AdminDashboard({ initialTab }) {
 
       {/* Main Content Area */}
       <main className="flex-1 p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8 overflow-y-auto max-w-7xl mx-auto w-full">
-        {/* Top Notification Banner */}
-        <AdminAlert alert={alert} />
 
-        {/* Tab Router */}
-        {activeTab === 'overview' && (
-          <OverviewTab
-            projects={projects}
-            skills={skills}
-            messages={messages}
-            experiences={experiences}
-            certifications={certifications}
-            initialLoaded={initialLoaded}
-            setActiveTab={handleSetActiveTab}
-            onOpenProjectModal={() => handleOpenProjectModal()}
-            onOpenSkillModal={() => handleOpenSkillModal()}
-            onOpenCertModal={() => handleOpenCertModal()}
-          />
-        )}
+        {/* Animated Tab Router */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+          >
+            {activeTab === 'overview' && (
+              <OverviewTab
+                projects={projects}
+                skills={skills}
+                messages={messages}
+                experiences={experiences}
+                certifications={certifications}
+                initialLoaded={initialLoaded}
+                setActiveTab={handleSetActiveTab}
+                onOpenProjectModal={() => handleOpenProjectModal()}
+                onOpenSkillModal={() => handleOpenSkillModal()}
+                onOpenCertModal={() => handleOpenCertModal()}
+              />
+            )}
 
-        {activeTab === 'projects' && (
-          <ProjectsTab
-            projects={projects}
-            onOpenModal={() => handleOpenProjectModal()}
-            onEditProject={handleOpenProjectModal}
-            onDeleteProject={handleDeleteProject}
-            onReorderProjects={handleReorderProjects}
-          />
-        )}
+            {activeTab === 'projects' && (
+              <ProjectsTab
+                projects={projects}
+                onOpenModal={() => handleOpenProjectModal()}
+                onEditProject={handleOpenProjectModal}
+                onDeleteProject={handleDeleteProject}
+                onReorderProjects={handleReorderProjects}
+              />
+            )}
 
-        {activeTab === 'skills' && (
-          <SkillsTab
-            skills={skills}
-            onOpenModal={() => handleOpenSkillModal()}
-            onEditSkill={handleOpenSkillModal}
-            onDeleteSkill={handleDeleteSkill}
-          />
-        )}
+            {activeTab === 'skills' && (
+              <SkillsTab
+                skills={skills}
+                onOpenModal={() => handleOpenSkillModal()}
+                onEditSkill={handleOpenSkillModal}
+                onDeleteSkill={handleDeleteSkill}
+              />
+            )}
 
-        {activeTab === 'experiences' && (
-          <ExperiencesTab
-            experiences={experiences}
-            onOpenModal={() => handleOpenExpModal()}
-            onEditExp={handleOpenExpModal}
-            onDeleteExp={handleDeleteExp}
-          />
-        )}
+            {activeTab === 'experiences' && (
+              <ExperiencesTab
+                experiences={experiences}
+                onOpenModal={() => handleOpenExpModal()}
+                onEditExp={handleOpenExpModal}
+                onDeleteExp={handleDeleteExp}
+              />
+            )}
 
-        {activeTab === 'certifications' && (
-          <CertificationsTab
-            certifications={certifications}
-            onOpenModal={() => handleOpenCertModal()}
-            onEditCert={handleOpenCertModal}
-            onDeleteCert={handleDeleteCert}
-          />
-        )}
+            {activeTab === 'certifications' && (
+              <CertificationsTab
+                certifications={certifications}
+                onOpenModal={() => handleOpenCertModal()}
+                onEditCert={handleOpenCertModal}
+                onDeleteCert={handleDeleteCert}
+              />
+            )}
 
-        {activeTab === 'messages' && (
-          <MessagesTab
-            messages={messages}
-            onMarkRead={handleMarkMessageRead}
-            onDeleteMessage={handleDeleteMessage}
-          />
-        )}
+            {activeTab === 'messages' && (
+              <MessagesTab
+                messages={messages}
+                onMarkRead={handleMarkMessageRead}
+                onDeleteMessage={handleDeleteMessage}
+              />
+            )}
 
-        {activeTab === 'opportunities' && (
-          <OpportunitiesTab onAlert={showAlert} />
-        )}
+            {activeTab === 'opportunities' && (
+              <OpportunitiesTab onAlert={showAlert} />
+            )}
 
-        {activeTab === 'prospects' && (
-          <ProspectsCRM />
-        )}
+            {activeTab === 'prospects' && (
+              <ProspectsCRM />
+            )}
 
-        {activeTab === 'profile' && (
-          <ProfileTab onAlert={showAlert} user={user} onLogout={handleLogout} />
-        )}
+            {activeTab === 'profile' && (
+              <ProfileTab onAlert={showAlert} user={user} onLogout={handleLogout} />
+            )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Mobile Bottom Navigation */}
@@ -620,7 +654,8 @@ export default function AdminDashboard({ initialTab }) {
         setFormData={setCertForm}
         onSubmit={handleSaveCert}
         isSubmitting={isSubmitting}
-      />
+      />{/* CertificationModal */}
+      </div>{/* /content z-10 wrapper */}
     </div>
   );
 }

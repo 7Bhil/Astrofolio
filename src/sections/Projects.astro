@@ -9,6 +9,10 @@ import vitchImg from '../assets/images/vitch.webp';
 import busolaImg from '../assets/images/Busola.png';
 import omnisintImg from '../assets/images/OMNISINT.png';
 import bhilCoursImg from '../assets/images/cours.webp';
+import immobuildImg from '../assets/images/immobuild.webp';
+import repetoImg from '../assets/images/repeto.png';
+import guesthouseImg from '../assets/images/guesthouse.png';
+import sqlMasterImg from '../assets/images/sql.jpg';
 
 const { lang = 'fr' } = Astro.props;
 const t = getTranslations(lang);
@@ -109,6 +113,67 @@ const featuredProjects = [
     image: bhilCoursImg,
     githubUrl: 'https://github.com/7Bhil/Cours-front',
     liveUrl: 'https://bhilcours.netlify.app/'
+  },
+  {
+    id: 'immobuild',
+    category: 'web',
+    categoryLabel: lang === 'en' ? 'Construction & Civil Engineering' : 'BTP & Génie Civil',
+    metric: lang === 'en' ? '< 1s Load Time · High Conversion' : '< 1s Chargement · Haute Conversion',
+    title: t('projects.immobuild.title'),
+    description: t('projects.immobuild.description'),
+    problem: t('projects.immobuild.problem'),
+    decision: t('projects.immobuild.decision'),
+    impact: t('projects.immobuild.impact'),
+    solved: t('projects.immobuild.solved'),
+    tags: ['React', 'Tailwind CSS', 'Vite', 'BIM / 3D', 'SEO'],
+    image: immobuildImg,
+    liveUrl: 'https://fonico.emmanuelagbotoedo.com/'
+  },
+  {
+    id: 'repeto',
+    category: 'web',
+    categoryLabel: lang === 'en' ? 'EdTech & Marketplace' : 'EdTech & Marketplace',
+    metric: lang === 'en' ? 'Multi-Criteria Search · Zero-Friction' : 'Recherche Multicritères · Sans Inscription',
+    title: t('projects.repeto.title'),
+    description: t('projects.repeto.description'),
+    problem: t('projects.repeto.problem'),
+    decision: t('projects.repeto.decision'),
+    impact: t('projects.repeto.impact'),
+    solved: t('projects.repeto.solved'),
+    tags: ['React', 'Supabase', 'Tailwind CSS', 'EdTech', 'Marketplace'],
+    image: repetoImg,
+    githubUrl: 'https://github.com/marcel-tode/repeto',
+    liveUrl: 'https://repeto.vercel.app/'
+  },
+  {
+    id: 'guesthouse',
+    category: 'web',
+    categoryLabel: lang === 'en' ? 'Luxury Hospitality' : 'Hôtellerie de Prestige',
+    metric: lang === 'en' ? 'Direct Booking · Parakou' : 'Réservation Directe · Parakou',
+    title: t('projects.guesthouse.title'),
+    description: t('projects.guesthouse.description'),
+    problem: t('projects.guesthouse.problem'),
+    decision: t('projects.guesthouse.decision'),
+    impact: t('projects.guesthouse.impact'),
+    solved: t('projects.guesthouse.solved'),
+    tags: ['React', 'Laravel', 'Tailwind CSS', 'Hospitality', 'Booking'],
+    image: guesthouseImg,
+    liveUrl: 'https://angella-gabrielle-guesthouses.vercel.app/'
+  },
+  {
+    id: 'sqlmaster',
+    category: 'systems',
+    categoryLabel: lang === 'en' ? 'CLI RPG & Databases' : 'CLI RPG & Bases de Données',
+    metric: lang === 'en' ? '35 Levels A–Z · Boss Battles & Sandbox' : '35 Niveaux A–Z · Boss & Sandbox',
+    title: t('projects.sqlmaster.title'),
+    description: t('projects.sqlmaster.description'),
+    problem: t('projects.sqlmaster.problem'),
+    decision: t('projects.sqlmaster.decision'),
+    impact: t('projects.sqlmaster.impact'),
+    solved: t('projects.sqlmaster.solved'),
+    tags: ['SQL', 'Node.js', 'CLI', 'Triggers & Procedures', 'Gamification'],
+    image: sqlMasterImg,
+    githubUrl: 'https://github.com/7Bhil/SQL'
   }
 ];
 

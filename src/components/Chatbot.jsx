@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   Sparkles, X, Bot, User, CornerDownLeft, 
-  RefreshCw, ArrowRight
+  RefreshCw, ArrowRight, MessageCircle
 } from 'lucide-react';
 import '../styles/Chatbot.css';
 
 const AI_DATA = {
   fr: {
-    badge: "7Bhil AI v2.4",
-    modelName: "Bhilal-GPT (Conseiller Technique & Projets)",
-    status: "En ligne",
+    badge: "7Bhil AI v3.0 (OpenRouter / DeepSeek Engine)",
+    modelName: "Bhilal-AI (Architecte Technique & Conseiller Projets)",
+    status: "En ligne • Prêt à répondre",
     placeholder: "Posez votre question ou détaillez votre besoin...",
     quickPrompts: [
       { label: "Discuter sur WhatsApp", query: "Je veux échanger directement sur WhatsApp" },
@@ -119,9 +119,9 @@ Le plus simple est d'en discuter directement avec lui sur [WhatsApp](https://wa.
     }
   },
   en: {
-    badge: "7Bhil AI v2.4",
-    modelName: "Bhilal-GPT (Technical Advisor & Project Agent)",
-    status: "Online",
+    badge: "7Bhil AI v3.0 (OpenRouter / DeepSeek Engine)",
+    modelName: "Bhilal-AI (Technical Architect & Project Advisor)",
+    status: "Online • Ready to assist",
     placeholder: "Ask a question or explain your requirements...",
     quickPrompts: [
       { label: "Chat on WhatsApp", query: "I want to chat directly on WhatsApp" },
@@ -467,32 +467,143 @@ const Chatbot = ({ lang = 'fr', standalone = false }) => {
   };
 
   const formatText = (text) => {
+    if (!text) return '';
     let formatted = text
+      // Headers ###, ##, #
+      .replace(/^### (.*$)/gim, '<h4 class="ai-msg-h4">$1</h4>')
+      .replace(/^## (.*$)/gim, '<h3 class="ai-msg-h3">$1</h3>')
+      .replace(/^# (.*$)/gim, '<h2 class="ai-msg-h2">$1</h2>')
+      // Code blocks ```code```
+      .replace(/```([a-z0-9_-]*)\n([\s\S]*?)```/gim, '<pre class="ai-code-block"><code>$2</code></pre>')
+      // Bold & Italic
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*([^\*]+)\*/g, '<em>$1</em>')
+      // Inline code
+      .replace(/`([^`]+)`/g, '<code class="ai-inline-code">$1</code>')
+      // Markdown links
       .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>')
+      // Bullet points
+      .replace(/^\s*[-•]\s+(.*$)/gim, '<li class="ai-list-item">$1</li>')
+      // Numbered points
+      .replace(/^\s*(\d+)\.\s+(.*$)/gim, '<li class="ai-list-item ai-list-ordered"><span class="ai-num-bullet">$1.</span> $2</li>')
+      // Paragraphs & breaks
       .replace(/\n\n/g, '<br/><br/>')
-      .replace(/\n- /g, '<br/>• ')
       .replace(/\n/g, '<br/>');
     return formatted;
   };
 
   const aiPageUrl = lang === 'fr' ? '/ai' : '/en/ai';
 
-  // Si on est en mode bouton flottant sur les autres pages, le clic redirige directement vers la page dédiée
+  // Dwell detection for proactive discreet popup
+  const [showPrompt, setShowPrompt] = useState(false);
+  const [promptDismissed, setPromptDismissed] = useState(false);
+
+  useEffect(() => {
+    if (standalone) return;
+
+    let dwellTimer = null;
+
+    const resetDwell = () => {
+      if (promptDismissed) return;
+      if (dwellTimer) clearTimeout(dwellTimer);
+      dwellTimer = setTimeout(() => {
+        setShowPrompt(true);
+      }, 7000); // Trigger after 7s of interest/dwelling on current section
+    };
+
+    resetDwell();
+    window.addEventListener('scroll', resetDwell, { passive: true });
+
+    return () => {
+      if (dwellTimer) clearTimeout(dwellTimer);
+      window.removeEventListener('scroll', resetDwell);
+    };
+  }, [standalone, promptDismissed]);
+
+  const handleDismissPrompt = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    setShowPrompt(false);
+    setPromptDismissed(true);
+  };
+
+  const whatsappUrl = lang === 'en'
+    ? "https://wa.me/2290144242964?text=Hello%20Bhilal%2C%20I%20am%20looking%20for%20a%20digital%20solution%20and%20would%20like%20to%20discuss%20my%20project."
+    : "https://wa.me/2290144242964?text=Bonjour%20Bhilal%2C%20je%20suis%20%C3%A0%20la%20recherche%20d%27une%20solution%20digitale%20et%20je%20souhaite%20%C3%A9changer%20sur%20mon%20projet.";
+
+  // Mode bouton flottant discret sur les pages publiques avec logo rotatif et bulle d'appel à l'action
   if (!standalone) {
     return (
-      <div className="ai-interface-container">
-        <a 
-          href={aiPageUrl}
-          className="ai-launcher-btn"
-          aria-label="Accéder à la Console IA"
-        >
-          <div className="ai-launcher-inner">
-            <Sparkles size={18} className="ai-sparkle-icon" />
-            <span className="ai-launcher-label">{t.badge}</span>
+      <div className="brand-floating-widget" aria-label="Assistant & Contact">
+        {/* Discreet Callout bubble when dwelling on a section */}
+        {showPrompt && !promptDismissed && (
+          <div className="brand-prompt-callout">
+            <button 
+              type="button" 
+              className="brand-prompt-close"
+              onClick={handleDismissPrompt}
+              aria-label="Fermer la suggestion"
+            >
+              <X size={13} />
+            </button>
+
+            <div className="brand-prompt-content">
+              <div className="brand-prompt-header">
+                <span className="brand-prompt-dot"></span>
+                <span className="brand-prompt-title">
+                  {lang === 'en' ? "Need a digital solution?" : "Vous cherchez une solution digitale ?"}
+                </span>
+              </div>
+              <p className="brand-prompt-desc">
+                {lang === 'en'
+                  ? "Let's turn your vision into an architecture in production."
+                  : "Concevons ensemble une architecture prête pour la production."}
+              </p>
+              <div className="brand-prompt-actions">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="brand-prompt-btn-whatsapp"
+                >
+                  <MessageCircle size={14} />
+                  <span>{lang === 'en' ? "Chat on WhatsApp" : "Me contacter par WhatsApp"}</span>
+                </a>
+                <a 
+                  href={aiPageUrl}
+                  className="brand-prompt-btn-ai"
+                >
+                  <Sparkles size={13} />
+                  <span>{lang === 'en' ? "AI Scoper" : "Estimer avec l'IA"}</span>
+                </a>
+              </div>
+            </div>
           </div>
-        </a>
+        )}
+
+        {/* Floating rotating brand logo button */}
+        <button
+          type="button"
+          onClick={() => {
+            if (!showPrompt) {
+              setShowPrompt(true);
+              setPromptDismissed(false);
+            } else {
+              setShowPrompt(false);
+            }
+          }}
+          className="brand-rotating-btn"
+          aria-label={lang === 'en' ? "Open contact & digital solutions" : "Ouvrir contact & solutions digitales"}
+        >
+          <div className="brand-rotating-ring"></div>
+          <img
+            src="/branding/logo-symbol.png"
+            alt="7Bhil Emblème"
+            className="brand-rotating-logo"
+            width="34"
+            height="34"
+          />
+        </button>
       </div>
     );
   }

@@ -57,9 +57,7 @@ export default function ProfileTab({ onAlert, user, onLogout }) {
         <div className="p-5 sm:p-6 rounded-2xl border border-white/10 bg-slate-900/60 shadow-xl flex flex-col gap-5">
           {/* Avatar + Nom */}
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center text-white text-2xl font-black font-['Outfit'] shadow-lg shadow-blue-500/25 shrink-0">
-              7B
-            </div>
+            <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center text-white text-2xl font-black font-['Outfit'] shadow-lg shadow-blue-500/25 shrink-0"><img src="/branding/logo-symbol.png" alt="7Bhil" className="w-full h-full object-contain p-1.5" /></div>
             <div className="flex-1 min-w-0">
               <h3 className="text-base font-bold font-['Outfit'] text-white">Bhilal CHITOU</h3>
               <p className="text-xs text-slate-400 mt-0.5">Développeur Full-Stack & Mobile</p>
