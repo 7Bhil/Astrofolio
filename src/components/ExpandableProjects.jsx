@@ -63,7 +63,16 @@ export function ExpandableProjects({
               order: p.order || 0
             };
           });
-          setProjectList(formatted);
+          const apiIds = new Set(formatted.map((p) => String(p.id).toLowerCase()));
+          const apiTitles = new Set(formatted.map((p) => String(p.title).toLowerCase().trim()));
+          const apiUrls = new Set(formatted.map((p) => p.liveUrl).filter(Boolean));
+          const extraStatic = initialProjects.filter((p) => {
+            const idMatch = apiIds.has(String(p.id).toLowerCase());
+            const titleMatch = apiTitles.has(String(p.title).toLowerCase().trim());
+            const urlMatch = p.liveUrl && apiUrls.has(p.liveUrl);
+            return !idMatch && !titleMatch && !urlMatch;
+          });
+          setProjectList([...formatted, ...extraStatic]);
         }
       } catch (err) {
         console.warn("Using fallback static projects:", err);

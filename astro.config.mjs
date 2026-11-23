@@ -43,11 +43,22 @@ export default defineConfig({
       ]
     },
     workbox: {
-      globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,jpg,jpeg}'],
+      cleanupOutdatedCaches: true,
+      skipWaiting: true,
+      clientsClaim: true,
+      globPatterns: ['**/*.{js,css,ico,png,svg,webp,jpg,jpeg}'],
       globIgnores: ['**/admin/**', '**/admin*'],
       navigateFallback: null,
       navigateFallbackDenylist: [/^\/admin/],
       runtimeCaching: [
+        {
+          urlPattern: ({ request }) => request.mode === 'navigate',
+          handler: 'NetworkFirst',
+          options: {
+            cacheName: 'pages-cache',
+            networkTimeoutSeconds: 3
+          }
+        },
         {
           urlPattern: /^\/admin/,
           handler: 'NetworkOnly'
